@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://djynyygwvjdsr"]
+
+[ext_resource type="PackedScene" uid="uid://bnn25qyul31ya" path="res://terrain/voxel_terrain.tscn" id="1_nvsdb"]
+[ext_resource type="PackedScene" uid="uid://cxytg2y538dbb" path="res://player/player.tscn" id="2_0o4as"]
+
+[sub_resource type="Environment" id="Environment_ltp37"]
+background_mode = 1
+background_color = Color(0.333333, 0.392157, 0.470588, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.760784, 0.745098, 0.635294, 1)
+glow_strength = 2.0
+
+[node name="Game" type="Node3D"]
+
+[node name="VoxelTerrain" parent="." instance=ExtResource("1_nvsdb")]
+
+[node name="Player" parent="." instance=ExtResource("2_0o4as")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ltp37")

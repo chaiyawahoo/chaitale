@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=3 uid="uid://bnn25qyul31ya"]
+
+[ext_resource type="VoxelBlockyLibrary" uid="uid://dxeianmodrghp" path="res://blocks/block_library.tres" id="1_u6ubo"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4h054"]
+
+[sub_resource type="VoxelGeneratorNoise" id="VoxelGeneratorNoise_maq7l"]
+channel = 0
+noise = SubResource("FastNoiseLite_4h054")
+height_range = 64.0
+
+[sub_resource type="VoxelMesherBlocky" id="VoxelMesherBlocky_haaa0"]
+library = ExtResource("1_u6ubo")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eyyjb"]
+vertex_color_use_as_albedo = true
+
+[node name="VoxelTerrain" type="VoxelTerrain"]
+generator = SubResource("VoxelGeneratorNoise_maq7l")
+mesher = SubResource("VoxelMesherBlocky_haaa0")
+material_override = SubResource("StandardMaterial3D_eyyjb")
