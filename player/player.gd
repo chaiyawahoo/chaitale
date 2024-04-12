@@ -282,15 +282,17 @@ func get_terrain_origin_y() -> int:
 
 func update_voxel_position_under_player() -> void:
 	# TODO: update to use weights, and/or update with array of highest voxels. potentially split functions
-	highest_voxel_position_under_player = Game.voxel_tool.raycast(global_position, Vector3.DOWN).position
+	var raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(global_position, Vector3.DOWN)
+	if raycast_result:
+		highest_voxel_position_under_player = raycast_result.position
 	var count: int = 16
 	for i in range(count):
 		var raycast_origin: Vector3 = global_position
 		var angle: float = 2 * i * PI / count
 		raycast_origin.x += cos(angle) * 0.44
 		raycast_origin.z += sin(angle) * 0.44
-		if raycast_origin == global_position:
+		raycast_result = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN)
+		if not raycast_result:
 			continue
-		var raycast_hit_voxel_position = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN).position
-		if raycast_hit_voxel_position.y > highest_voxel_position_under_player.y:
-			highest_voxel_position_under_player = raycast_hit_voxel_position
+		if raycast_result.position.y > highest_voxel_position_under_player.y:
+			highest_voxel_position_under_player = raycast_result.position
