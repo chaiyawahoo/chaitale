@@ -10,10 +10,14 @@ extends CharacterBody3D
 @export var third_person_camera_distance: float = 5.0
 @export var fov_change_time: float = 0.1
 @export var sprint_fov_modifier: float = 0.2
+@export var sneak_height_decrement: float = 0.2
 @export var reach = 6.0
 
 var gravity_constant: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var gravity_axis: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
+
+var invisible_wall: StaticBody3D = null
+var highest_voxel_position_under_player: Vector3i = Vector3i()
 
 var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
@@ -32,6 +36,8 @@ var standing: bool = false
 @onready var camera: Camera3D = $SpringArm3D/Camera3D
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var default_fov: float = camera.fov
+@onready var default_camera_height: float = camera.position.y
+@onready var player_area: AABB = collider.shape.get_debug_mesh().get_aabb()
 
 
 func _ready() -> void:
@@ -54,6 +60,9 @@ func _process(delta: float) -> void:
 	var fov_tween = create_tween()
 	
 	do_tween(camera, "fov", default_fov, fov_change_time, fov_tween)
+	camera.position.y = default_camera_height
+	
+	player_area.position = position - player_area.size / 2
 	
 	falling = not is_on_floor()
 	
@@ -64,9 +73,11 @@ func _process(delta: float) -> void:
 		do_tween(camera, "fov", default_fov * (1 + sprint_fov_modifier), fov_change_time, fov_tween)
 	elif sneaking:
 		speed = walk_speed * sneak_speed_modifier
+		camera.position.y = default_camera_height - sneak_height_decrement
 	else:
 		walking = true
 		speed = walk_speed
+		camera.position.y = default_camera_height
 	
 	if velocity == Vector3.ZERO:
 		walking = false
@@ -76,18 +87,58 @@ func _process(delta: float) -> void:
 	if velocity.x == 0 and velocity.z == 0:
 		sprinting = false
 	
+	update_voxel_position_under_player()
+	
+	if not sneaking or falling:
+		if invisible_wall:
+			invisible_wall.queue_free()
+		invisible_wall = null
+	
 	# gravity gets updated every physics step
 
 
 func _physics_process(delta: float) -> void:
-	velocity.x = input_direction.x * speed
-	velocity.z = input_direction.z * speed
+	var input_vector: Vector3 = input_direction * speed
+	velocity.x = input_vector.x
+	velocity.z = input_vector.z
 	if falling:
 		velocity += gravity_axis * gravity_constant * delta
 	elif jumping:
 		velocity.y = jump_speed
 	else:
 		velocity.y = 0
+	
+	if sneaking and not falling:
+		if invisible_wall:
+			invisible_wall.queue_free()
+		invisible_wall = StaticBody3D.new()
+		var wall_positions: Array[Vector3] = [
+			Vector3.RIGHT * 1.7,
+			Vector3.RIGHT * -1.7,
+			Vector3.FORWARD * 1.7,
+			Vector3.FORWARD * -1.7
+		]
+		var wall_sizes: Array[Vector3] = [
+			Vector3(1, 2, 3),
+			Vector3(1, 2, 3),
+			Vector3(3, 2, 1),
+			Vector3(3, 2, 1)
+		]
+		var voxel_neighbors: Array[Vector3i] = [
+			Vector3i.RIGHT,
+			Vector3i.LEFT,
+			Vector3i.FORWARD,
+			Vector3i.BACK
+		]
+		for i in range(4):
+			var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+			invisible_wall_collider.shape = BoxShape3D.new()
+			invisible_wall_collider.shape.size = wall_sizes[i]
+			invisible_wall_collider.position = wall_positions[i]
+			if not Game.voxel_tool.get_voxel(highest_voxel_position_under_player + voxel_neighbors[i]):
+				invisible_wall.add_child(invisible_wall_collider)
+			invisible_wall.position = Vector3(highest_voxel_position_under_player) + Vector3.ONE * 0.5
+		get_parent().add_child(invisible_wall)
 	
 	move_and_slide()
 
@@ -139,7 +190,7 @@ func _handle_process_input() -> void:
 			walking = false
 
 
-func do_tween(object: Object, property: String, new_value: float, duration: float, tween: Tween) -> void:
+func do_tween(object: Object, property: String, new_value: Variant, duration: float, tween: Tween) -> void:
 	if tween:
 		tween.kill()
 	tween = create_tween()
@@ -160,8 +211,7 @@ func remove_voxel_at(voxel_position: Vector3i) -> void:
 
 func add_voxel_at(voxel_position: Vector3i) -> void:
 	var voxel_area: AABB = AABB(voxel_position, Vector3.ONE)
-	var player_area: AABB = collider.shape.get_debug_mesh().get_aabb()
-	player_area.position = position - player_area.size / 2
+	
 	if voxel_area.intersects(player_area):
 		print("Placing overlaps player!")
 		return
@@ -175,3 +225,16 @@ func get_terrain_origin_y() -> int:
 		if voxel:
 			return i
 	return int(terrain_bounds.position.y + terrain_bounds.size.y)
+
+
+func update_voxel_position_under_player() -> void:
+	highest_voxel_position_under_player = Game.voxel_tool.raycast(global_position, Vector3.DOWN).position
+	for i in range(9):
+		var raycast_origin: Vector3 = global_position
+		raycast_origin.x += (i % 3 - 1) * 0.4
+		raycast_origin.z += (i / 3 - 1) * 0.4
+		if raycast_origin == global_position:
+			continue
+		var raycast_hit_voxel_position = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN).position
+		if raycast_hit_voxel_position.y > highest_voxel_position_under_player.y:
+			highest_voxel_position_under_player = raycast_hit_voxel_position

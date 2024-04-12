@@ -10,6 +10,7 @@
 script = ExtResource("1_y5rwf")
 
 [node name="VoxelTerrain" parent="." instance=ExtResource("1_nvsdb")]
+gi_mode = 2
 bounds = AABB(-5.36871e+08, -256, -5.36871e+08, 1.07374e+09, 512, 1.07374e+09)
 
 [node name="Player" parent="." instance=ExtResource("2_0o4as")]
@@ -20,6 +21,7 @@ bounds = AABB(-5.36871e+08, -256, -5.36871e+08, 1.07374e+09, 512, 1.07374e+09)
 transform = Transform3D(0.984808, -0.122788, 0.122788, 0, 0.707107, 0.707107, -0.173648, -0.696364, 0.696364, 0, 0, 0)
 light_color = Color(1, 0.980392, 0.839216, 1)
 light_energy = 0.5
+light_volumetric_fog_energy = 5.0
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
