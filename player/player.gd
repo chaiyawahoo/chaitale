@@ -7,7 +7,7 @@ extends CharacterBody3D
 @export var sprint_speed_modifier: float = 1.3
 @export var jump_speed: float = 9.0
 @export var mouse_sensitivity: float = 0.1
-@export var third_person_camera_distance: float = 5.0
+@export var third_person_camera_distance: float = 3.0
 @export var fov_change_time: float = 0.1
 @export var sprint_fov_modifier: float = 0.2
 @export var sneak_height_decrement: float = 0.2
@@ -17,7 +17,7 @@ var gravity_constant: float = ProjectSettings.get_setting("physics/3d/default_gr
 var gravity_axis: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 
 var invisible_wall: StaticBody3D = null
-var highest_voxel_position_under_player: Vector3i = Vector3i()
+var highest_voxel_position_under_player: Vector3i = Vector3i.ZERO
 
 var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
@@ -34,7 +34,7 @@ var standing: bool = false
 
 @onready var spring_arm: SpringArm3D = $SpringArm3D
 @onready var camera: Camera3D = $SpringArm3D/Camera3D
-@onready var collider: CollisionShape3D = $CollisionShape3D
+@onready var collider: CollisionShape3D = $Body
 @onready var default_fov: float = camera.fov
 @onready var default_camera_height: float = camera.position.y
 @onready var player_area: AABB = collider.shape.get_debug_mesh().get_aabb()
@@ -94,6 +94,90 @@ func _process(delta: float) -> void:
 			invisible_wall.queue_free()
 		invisible_wall = null
 	
+	if sneaking and not falling and Engine.get_process_frames() % 2:
+		if invisible_wall:
+			invisible_wall.queue_free()
+		invisible_wall = StaticBody3D.new()
+		var neighbors: Array[int] = []
+		var wall_distance = 1.75
+		var shape_size = Vector3(1, 2, 1)
+		# TODO: get other highest voxel positions, and check if on top of any of those
+		for i in range(9):
+			var neighbor_transform: Vector3i = Vector3i.ZERO
+			var neighbor_value: int = 0
+			neighbor_transform.x += (i % 3) - 1
+			neighbor_transform.z += (i / 3) - 1
+			neighbor_value = Game.voxel_tool.get_voxel(highest_voxel_position_under_player + neighbor_transform)
+			neighbors.append(neighbor_value)
+			if neighbor_value or not i % 2:
+				continue
+			var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+			invisible_wall_collider.shape = BoxShape3D.new()
+			invisible_wall_collider.shape.size = shape_size
+			invisible_wall_collider.position = neighbor_transform * wall_distance
+			invisible_wall.add_child(invisible_wall_collider)
+		# TODO: optimize
+		# draw corners...
+		for i in range(9):
+			if neighbors[i]:
+				continue
+			
+			match i:
+				0:
+					if not neighbors[1]:
+						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+						invisible_wall_collider.shape = BoxShape3D.new()
+						invisible_wall_collider.shape.size = shape_size
+						invisible_wall_collider.position = Vector3.FORWARD * wall_distance + Vector3.LEFT
+						invisible_wall.add_child(invisible_wall_collider)
+					if not neighbors[3]:
+						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+						invisible_wall_collider.shape = BoxShape3D.new()
+						invisible_wall_collider.shape.size = shape_size
+						invisible_wall_collider.position = Vector3.LEFT * wall_distance + Vector3.FORWARD
+						invisible_wall.add_child(invisible_wall_collider)
+				2:
+					if not neighbors[1]:
+						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+						invisible_wall_collider.shape = BoxShape3D.new()
+						invisible_wall_collider.shape.size = shape_size
+						invisible_wall_collider.position = Vector3.FORWARD * wall_distance + Vector3.RIGHT
+						invisible_wall.add_child(invisible_wall_collider)
+					if not neighbors[5]:
+						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+						invisible_wall_collider.shape = BoxShape3D.new()
+						invisible_wall_collider.shape.size = shape_size
+						invisible_wall_collider.position = Vector3.RIGHT * wall_distance + Vector3.FORWARD
+						invisible_wall.add_child(invisible_wall_collider)
+				6:
+					if not neighbors[3]:
+						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+						invisible_wall_collider.shape = BoxShape3D.new()
+						invisible_wall_collider.shape.size = shape_size
+						invisible_wall_collider.position = Vector3.LEFT * wall_distance + Vector3.BACK
+						invisible_wall.add_child(invisible_wall_collider)
+					if not neighbors[7]:
+						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+						invisible_wall_collider.shape = BoxShape3D.new()
+						invisible_wall_collider.shape.size = shape_size
+						invisible_wall_collider.position = Vector3.BACK * wall_distance + Vector3.LEFT
+						invisible_wall.add_child(invisible_wall_collider)
+				8:
+					if not neighbors[7]:
+						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+						invisible_wall_collider.shape = BoxShape3D.new()
+						invisible_wall_collider.shape.size = shape_size
+						invisible_wall_collider.position = Vector3.BACK * wall_distance + Vector3.RIGHT
+						invisible_wall.add_child(invisible_wall_collider)
+					if not neighbors[5]:
+						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
+						invisible_wall_collider.shape = BoxShape3D.new()
+						invisible_wall_collider.shape.size = shape_size
+						invisible_wall_collider.position = Vector3.RIGHT * wall_distance + Vector3.BACK
+						invisible_wall.add_child(invisible_wall_collider)
+		invisible_wall.position = Vector3(highest_voxel_position_under_player) + Vector3.ONE * 0.5
+		get_parent().add_child(invisible_wall)
+	
 	# gravity gets updated every physics step
 
 
@@ -107,38 +191,6 @@ func _physics_process(delta: float) -> void:
 		velocity.y = jump_speed
 	else:
 		velocity.y = 0
-	
-	if sneaking and not falling:
-		if invisible_wall:
-			invisible_wall.queue_free()
-		invisible_wall = StaticBody3D.new()
-		var wall_positions: Array[Vector3] = [
-			Vector3.RIGHT * 1.7,
-			Vector3.RIGHT * -1.7,
-			Vector3.FORWARD * 1.7,
-			Vector3.FORWARD * -1.7
-		]
-		var wall_sizes: Array[Vector3] = [
-			Vector3(1, 2, 3),
-			Vector3(1, 2, 3),
-			Vector3(3, 2, 1),
-			Vector3(3, 2, 1)
-		]
-		var voxel_neighbors: Array[Vector3i] = [
-			Vector3i.RIGHT,
-			Vector3i.LEFT,
-			Vector3i.FORWARD,
-			Vector3i.BACK
-		]
-		for i in range(4):
-			var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-			invisible_wall_collider.shape = BoxShape3D.new()
-			invisible_wall_collider.shape.size = wall_sizes[i]
-			invisible_wall_collider.position = wall_positions[i]
-			if not Game.voxel_tool.get_voxel(highest_voxel_position_under_player + voxel_neighbors[i]):
-				invisible_wall.add_child(invisible_wall_collider)
-			invisible_wall.position = Vector3(highest_voxel_position_under_player) + Vector3.ONE * 0.5
-		get_parent().add_child(invisible_wall)
 	
 	move_and_slide()
 
@@ -198,7 +250,7 @@ func do_tween(object: Object, property: String, new_value: Variant, duration: fl
 
 
 func get_looking_raycast_result() -> VoxelRaycastResult:
-	var result: VoxelRaycastResult = Game.voxel_tool.raycast(spring_arm.global_position, -spring_arm.global_transform.basis.z, reach)
+	var result: VoxelRaycastResult = Game.voxel_tool.raycast(camera.global_position, -camera.global_transform.basis.z, reach + spring_arm.spring_length)
 	return result
 
 
@@ -211,7 +263,7 @@ func remove_voxel_at(voxel_position: Vector3i) -> void:
 
 func add_voxel_at(voxel_position: Vector3i) -> void:
 	var voxel_area: AABB = AABB(voxel_position, Vector3.ONE)
-	
+	print(voxel_position)
 	if voxel_area.intersects(player_area):
 		print("Placing overlaps player!")
 		return
@@ -228,11 +280,14 @@ func get_terrain_origin_y() -> int:
 
 
 func update_voxel_position_under_player() -> void:
+	# TODO: update to use weights, and/or update with array of highest voxels. potentially split functions
 	highest_voxel_position_under_player = Game.voxel_tool.raycast(global_position, Vector3.DOWN).position
-	for i in range(9):
+	var count: int = 16
+	for i in range(count):
 		var raycast_origin: Vector3 = global_position
-		raycast_origin.x += (i % 3 - 1) * 0.4
-		raycast_origin.z += (i / 3 - 1) * 0.4
+		var angle: float = 2 * i * PI / count
+		raycast_origin.x += cos(angle) * 0.44
+		raycast_origin.z += sin(angle) * 0.44
 		if raycast_origin == global_position:
 			continue
 		var raycast_hit_voxel_position = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN).position
