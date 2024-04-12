@@ -11,7 +11,8 @@ extends CharacterBody3D
 @export var fov_change_time: float = 0.1
 @export var sprint_fov_modifier: float = 0.2
 @export var sneak_height_decrement: float = 0.2
-@export var reach = 6.0
+@export var reach: float = 6.0
+@export var sneaking_prevents_falling: bool = false
 
 var gravity_constant: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var gravity_axis: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
@@ -89,12 +90,12 @@ func _process(delta: float) -> void:
 	
 	update_voxel_position_under_player()
 	
-	if not sneaking or falling:
+	if not sneaking or falling and sneaking_prevents_falling:
 		if invisible_wall:
 			invisible_wall.queue_free()
 		invisible_wall = null
 	
-	if sneaking and not falling and Engine.get_process_frames() % 2:
+	if sneaking and not falling and Engine.get_process_frames() % 2 and sneaking_prevents_falling:
 		if invisible_wall:
 			invisible_wall.queue_free()
 		invisible_wall = StaticBody3D.new()
