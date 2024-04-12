@@ -1,13 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://csjhovnrq48t7"]
+[gd_scene load_steps=6 format=3 uid="uid://csjhovnrq48t7"]
 
 [ext_resource type="VoxelBlockyLibrary" uid="uid://dxeianmodrghp" path="res://blocks/block_library.tres" id="1_u6ubo"]
+[ext_resource type="Script" path="res://terrain/voxel_terrain.gd" id="2_764gb"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h5ush"]
 
 [sub_resource type="VoxelGeneratorNoise" id="VoxelGeneratorNoise_cu8aa"]
 channel = 0
 noise = SubResource("FastNoiseLite_h5ush")
-height_range = 64.0
+height_range = 128.0
 
 [sub_resource type="VoxelMesherBlocky" id="VoxelMesherBlocky_8cho8"]
 library = ExtResource("1_u6ubo")
@@ -15,3 +16,6 @@ library = ExtResource("1_u6ubo")
 [node name="VoxelTerrain" type="VoxelTerrain"]
 generator = SubResource("VoxelGeneratorNoise_cu8aa")
 mesher = SubResource("VoxelMesherBlocky_8cho8")
+bounds = AABB(-5.36871e+08, -256, -5.36871e+08, 1.07374e+09, 512, 1.07374e+09)
+max_view_distance = 256
+script = ExtResource("2_764gb")

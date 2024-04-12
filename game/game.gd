@@ -2,9 +2,10 @@ class_name Game
 extends Node3D
 
 
-signal terrain_meshed
-
 static var terrain: VoxelTerrain
+static var voxel_tool: VoxelTool
+static var player: Player
+
 static var menu_opened: bool = false
 
 
