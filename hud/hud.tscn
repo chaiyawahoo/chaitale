@@ -45,3 +45,9 @@ layout_mode = 2
 [node name="PositionLabel" type="Label" parent="Debug/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="BlockSelector" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

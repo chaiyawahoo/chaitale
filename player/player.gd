@@ -13,9 +13,11 @@ extends CharacterBody3D
 @export var sneak_height_decrement: float = 0.2
 @export var reach: float = 6.0
 @export var sneaking_prevents_falling: bool = false
+@export var maximize_fps: bool = true
 
 var gravity_constant: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var gravity_axis: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
+var starting_physics_ticks: float = ProjectSettings.get_setting("physics/common/physics_ticks_per_second")
 
 var invisible_wall: StaticBody3D = null
 var highest_voxel_position_under_player: Vector3i = Vector3i.ZERO
@@ -32,6 +34,8 @@ var sneaking: bool = false
 var sprinting: bool = false
 var walking: bool = false
 var standing: bool = false
+
+var selected_voxel_type: int = 1
 
 @onready var spring_arm: SpringArm3D = $SpringArm3D
 @onready var camera: Camera3D = $SpringArm3D/Camera3D
@@ -54,6 +58,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if maximize_fps:
+		Engine.set_physics_ticks_per_second(max(Engine.get_frames_per_second(), starting_physics_ticks))
 	if Game.menu_opened:
 		speed = 0
 		return
@@ -241,6 +247,10 @@ func _handle_process_input() -> void:
 			sprinting = true
 			sneaking = false
 			walking = false
+	if Input.is_action_just_pressed("select_1"):
+		selected_voxel_type = 1
+	if Input.is_action_just_pressed("select_2"):
+		selected_voxel_type = 2
 
 
 func do_tween(object: Object, property: String, new_value: Variant, duration: float, tween: Tween) -> void:
@@ -268,7 +278,7 @@ func add_voxel_at(voxel_position: Vector3i) -> void:
 	if voxel_area.intersects(player_area):
 		print("Placing overlaps player!")
 		return
-	Game.voxel_tool.set_voxel(voxel_position, 1)
+	Game.voxel_tool.set_voxel(voxel_position, selected_voxel_type)
 
 
 func get_terrain_origin_y() -> int:

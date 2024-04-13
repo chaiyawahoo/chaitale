@@ -4,6 +4,8 @@
 [ext_resource type="Script" path="res://terrain/voxel_terrain.gd" id="2_764gb"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h5ush"]
+seed = 1004
+metadata/_preview_in_3d_space_ = true
 
 [sub_resource type="VoxelGeneratorNoise" id="VoxelGeneratorNoise_cu8aa"]
 channel = 0

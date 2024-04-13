@@ -1,0 +1,7 @@
+[gd_resource type="VoxelBlockyModelCube" load_steps=2 format=3 uid="uid://qastm3k6rkmc"]
+
+[ext_resource type="Material" uid="uid://dqg0nluhek7fs" path="res://blocks/solid_material.tres" id="1_lljsi"]
+
+[resource]
+color = Color(0.419608, 1, 0.788235, 1)
+material_override_0 = ExtResource("1_lljsi")
