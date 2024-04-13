@@ -6,15 +6,21 @@ signal meshed
 var loaded: bool = false
 var requested: bool = false
 
+var save_name: String = "world"
+
 
 func _ready() -> void:
+	stream = VoxelStreamSQLite.new()
+	if FileAccess.file_exists("saves/%s.sql" % save_name):
+		print("loading %s" % save_name)
+	stream.database_path = "saves/%s.sql" % save_name
 	if not Game.terrain:
 		Game.terrain = self
 	if not Game.voxel_tool:
 		Game.voxel_tool = get_voxel_tool()
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if loaded:
 		return
 	# SLOW
@@ -26,4 +32,7 @@ func _process(delta: float) -> void:
 			meshed.emit()
 	if get_statistics().time_request_blocks_to_load > 0:
 		requested = true
-		
+
+
+func _exit_tree() -> void:
+	save_modified_blocks()

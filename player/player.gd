@@ -14,6 +14,8 @@ extends CharacterBody3D
 @export var reach: float = 6.0
 @export var sneaking_prevents_falling: bool = false
 @export var maximize_fps: bool = true
+@export var place_voxel_delay: float = 0.2
+@export var break_voxel_delay: float = 0.2
 
 var gravity_constant: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var gravity_axis: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
@@ -33,8 +35,14 @@ var sneaking: bool = false
 var sprinting: bool = false
 var walking: bool = false
 var standing: bool = false
+var placing: bool = false
+var breaking: bool = false
 
 var selected_voxel_type: int = 1
+var can_place_voxel: bool = true
+var can_break_voxel: bool = true
+var place_voxel_timer: SceneTreeTimer
+var break_voxel_timer: SceneTreeTimer
 
 @onready var spring_arm: SpringArm3D = $SpringArm3D
 @onready var camera: Camera3D = $SpringArm3D/Camera3D
@@ -45,6 +53,8 @@ var selected_voxel_type: int = 1
 
 
 func _ready() -> void:
+	if maximize_fps:
+		Engine.set_physics_ticks_per_second(max(DisplayServer.screen_get_refresh_rate(), starting_physics_ticks))
 	Game.player = self
 	set_physics_process(false)
 	set_process(false)
@@ -56,10 +66,7 @@ func _ready() -> void:
 	position.z = 0.5
 
 
-@warning_ignore("unused_parameter")
-func _process(delta: float) -> void:
-	if maximize_fps:
-		Engine.set_physics_ticks_per_second(max(Engine.get_frames_per_second(), starting_physics_ticks))
+func _process(_delta: float) -> void:
 	if Game.menu_opened:
 		speed = 0
 		return
@@ -85,6 +92,12 @@ func _process(delta: float) -> void:
 		walking = true
 		speed = walk_speed
 		camera.position.y = default_camera_height
+	
+	if placing:
+		place_voxel()
+	
+	if breaking:
+		break_voxel()
 	
 	if velocity == Vector3.ZERO:
 		walking = false
@@ -118,8 +131,7 @@ func _process(delta: float) -> void:
 			var neighbor_transform: Vector3i = Vector3i.ZERO
 			var neighbor_value: int = 0
 			neighbor_transform.x += (i % 3) - 1
-			@warning_ignore("integer_division")
-			neighbor_transform.z += (i / 3) - 1
+			neighbor_transform.z += int(i / 3.0) - 1
 			neighbor_value = Game.voxel_tool.get_voxel(highest_voxel_position_under_player + neighbor_transform)
 			neighbors.append(neighbor_value)
 			if neighbor_value or not i % 2:
@@ -199,16 +211,6 @@ func _input(event) -> void:
 		sneaking = event.is_pressed()
 		sprinting = false if sneaking else sprinting
 		walking = false if sneaking else walking
-	if event.is_action("left_click"):
-		if event.is_pressed():
-			var result: VoxelRaycastResult = get_looking_raycast_result()
-			if result:
-				remove_voxel_at(result.position)
-	if event.is_action("right_click"):
-		if event.is_pressed():
-			var result: VoxelRaycastResult = get_looking_raycast_result()
-			if result:
-				add_voxel_at(result.previous_position)
 	if event is InputEventMouseMotion:
 		if Game.menu_opened:
 			return
@@ -235,6 +237,10 @@ func _handle_process_input() -> void:
 			sprinting = true
 			sneaking = false
 			walking = false
+	if Input.is_action_pressed("left_click"):
+		breaking = true
+	if Input.is_action_pressed("right_click"):
+		placing = true
 	if Input.is_action_just_pressed("select_1"):
 		selected_voxel_type = 1
 	if Input.is_action_just_pressed("select_2"):
@@ -266,6 +272,30 @@ func add_voxel_at(voxel_position: Vector3i) -> void:
 		print("Placing overlaps player!")
 		return
 	Game.voxel_tool.set_voxel(voxel_position, selected_voxel_type)
+
+
+func break_voxel() -> void:
+	breaking = false
+	if break_voxel_timer:
+		if break_voxel_timer.time_left > 0:
+			return
+	var result: VoxelRaycastResult = get_looking_raycast_result()
+	if not result:
+		return
+	remove_voxel_at(result.position)
+	break_voxel_timer = get_tree().create_timer(break_voxel_delay)
+
+
+func place_voxel() -> void:
+	placing = false
+	if place_voxel_timer:
+		if place_voxel_timer.time_left > 0:
+			return
+	var result: VoxelRaycastResult = get_looking_raycast_result()
+	if not result:
+		return
+	add_voxel_at(result.previous_position)
+	place_voxel_timer = get_tree().create_timer(place_voxel_delay)
 
 
 func get_terrain_origin_y() -> int:
