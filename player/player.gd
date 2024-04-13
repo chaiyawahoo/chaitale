@@ -20,7 +20,6 @@ var gravity_axis: Vector3 = ProjectSettings.get_setting("physics/3d/default_grav
 var starting_physics_ticks: float = ProjectSettings.get_setting("physics/common/physics_ticks_per_second")
 
 var invisible_wall: StaticBody3D = null
-var highest_voxel_position_under_player: Vector3i = Vector3i.ZERO
 
 var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
@@ -57,6 +56,7 @@ func _ready() -> void:
 	position.z = 0.5
 
 
+@warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	if maximize_fps:
 		Engine.set_physics_ticks_per_second(max(Engine.get_frames_per_second(), starting_physics_ticks))
@@ -94,8 +94,6 @@ func _process(delta: float) -> void:
 	if velocity.x == 0 and velocity.z == 0:
 		sprinting = false
 	
-	update_voxel_position_under_player()
-	
 	if not sneaking or falling and sneaking_prevents_falling:
 		if invisible_wall:
 			invisible_wall.queue_free()
@@ -108,19 +106,25 @@ func _process(delta: float) -> void:
 		var neighbors: Array[int] = []
 		var wall_distance = 1.75
 		var shape_size = Vector3(1, 2, 1)
+		var invisible_wall_collider_base: CollisionShape3D = CollisionShape3D.new()
+		var voxels_under_player: Array[Vector3i] = get_voxel_positions_under_player()
+		var highest_voxel_position_under_player: Vector3i = Vector3i.ZERO
+		if voxels_under_player.size() > 0:
+			highest_voxel_position_under_player = voxels_under_player[0]
+		invisible_wall_collider_base.shape = BoxShape3D.new()
+		invisible_wall_collider_base.shape.size = shape_size
 		# TODO: get other highest voxel positions, and check if on top of any of those
 		for i in range(9):
 			var neighbor_transform: Vector3i = Vector3i.ZERO
 			var neighbor_value: int = 0
 			neighbor_transform.x += (i % 3) - 1
+			@warning_ignore("integer_division")
 			neighbor_transform.z += (i / 3) - 1
 			neighbor_value = Game.voxel_tool.get_voxel(highest_voxel_position_under_player + neighbor_transform)
 			neighbors.append(neighbor_value)
 			if neighbor_value or not i % 2:
 				continue
-			var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-			invisible_wall_collider.shape = BoxShape3D.new()
-			invisible_wall_collider.shape.size = shape_size
+			var invisible_wall_collider: CollisionShape3D = invisible_wall_collider_base.duplicate()
 			invisible_wall_collider.position = neighbor_transform * wall_distance
 			invisible_wall.add_child(invisible_wall_collider)
 		# TODO: optimize
@@ -132,54 +136,38 @@ func _process(delta: float) -> void:
 			match i:
 				0:
 					if not neighbors[1]:
-						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-						invisible_wall_collider.shape = BoxShape3D.new()
-						invisible_wall_collider.shape.size = shape_size
+						var invisible_wall_collider: CollisionShape3D = invisible_wall_collider_base.duplicate()
 						invisible_wall_collider.position = Vector3.FORWARD * wall_distance + Vector3.LEFT
 						invisible_wall.add_child(invisible_wall_collider)
 					if not neighbors[3]:
-						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-						invisible_wall_collider.shape = BoxShape3D.new()
-						invisible_wall_collider.shape.size = shape_size
+						var invisible_wall_collider: CollisionShape3D = invisible_wall_collider_base.duplicate()
 						invisible_wall_collider.position = Vector3.LEFT * wall_distance + Vector3.FORWARD
 						invisible_wall.add_child(invisible_wall_collider)
 				2:
 					if not neighbors[1]:
-						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-						invisible_wall_collider.shape = BoxShape3D.new()
-						invisible_wall_collider.shape.size = shape_size
+						var invisible_wall_collider: CollisionShape3D = invisible_wall_collider_base.duplicate()
 						invisible_wall_collider.position = Vector3.FORWARD * wall_distance + Vector3.RIGHT
 						invisible_wall.add_child(invisible_wall_collider)
 					if not neighbors[5]:
-						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-						invisible_wall_collider.shape = BoxShape3D.new()
-						invisible_wall_collider.shape.size = shape_size
+						var invisible_wall_collider: CollisionShape3D = invisible_wall_collider_base.duplicate()
 						invisible_wall_collider.position = Vector3.RIGHT * wall_distance + Vector3.FORWARD
 						invisible_wall.add_child(invisible_wall_collider)
 				6:
 					if not neighbors[3]:
-						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-						invisible_wall_collider.shape = BoxShape3D.new()
-						invisible_wall_collider.shape.size = shape_size
+						var invisible_wall_collider: CollisionShape3D = invisible_wall_collider_base.duplicate()
 						invisible_wall_collider.position = Vector3.LEFT * wall_distance + Vector3.BACK
 						invisible_wall.add_child(invisible_wall_collider)
 					if not neighbors[7]:
-						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-						invisible_wall_collider.shape = BoxShape3D.new()
-						invisible_wall_collider.shape.size = shape_size
+						var invisible_wall_collider: CollisionShape3D = invisible_wall_collider_base.duplicate()
 						invisible_wall_collider.position = Vector3.BACK * wall_distance + Vector3.LEFT
 						invisible_wall.add_child(invisible_wall_collider)
 				8:
 					if not neighbors[7]:
-						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-						invisible_wall_collider.shape = BoxShape3D.new()
-						invisible_wall_collider.shape.size = shape_size
+						var invisible_wall_collider: CollisionShape3D = invisible_wall_collider_base.duplicate()
 						invisible_wall_collider.position = Vector3.BACK * wall_distance + Vector3.RIGHT
 						invisible_wall.add_child(invisible_wall_collider)
 					if not neighbors[5]:
-						var invisible_wall_collider: CollisionShape3D = CollisionShape3D.new()
-						invisible_wall_collider.shape = BoxShape3D.new()
-						invisible_wall_collider.shape.size = shape_size
+						var invisible_wall_collider: CollisionShape3D = invisible_wall_collider_base.duplicate()
 						invisible_wall_collider.position = Vector3.RIGHT * wall_distance + Vector3.BACK
 						invisible_wall.add_child(invisible_wall_collider)
 		invisible_wall.position = Vector3(highest_voxel_position_under_player) + Vector3.ONE * 0.5
@@ -274,7 +262,6 @@ func remove_voxel_at(voxel_position: Vector3i) -> void:
 
 func add_voxel_at(voxel_position: Vector3i) -> void:
 	var voxel_area: AABB = AABB(voxel_position, Vector3.ONE)
-	print(voxel_position)
 	if voxel_area.intersects(player_area):
 		print("Placing overlaps player!")
 		return
@@ -290,19 +277,20 @@ func get_terrain_origin_y() -> int:
 	return int(terrain_bounds.position.y + terrain_bounds.size.y)
 
 
-func update_voxel_position_under_player() -> void:
-	# TODO: update to use weights, and/or update with array of highest voxels. potentially split functions
-	var raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(global_position, Vector3.DOWN)
+func get_voxel_positions_under_player() -> Array[Vector3i]:
+	var voxel_positions: Array[Vector3i] = []
+	var raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(global_position, Vector3.DOWN, 1.25)
 	if raycast_result:
-		highest_voxel_position_under_player = raycast_result.position
-	var count: int = 16
-	for i in range(count):
+		voxel_positions.append(raycast_result.position)
+	var steps: int = 16
+	for i in range(steps):
 		var raycast_origin: Vector3 = global_position
-		var angle: float = 2 * i * PI / count
+		var angle: float = 2 * i * PI / steps
 		raycast_origin.x += cos(angle) * 0.44
 		raycast_origin.z += sin(angle) * 0.44
-		raycast_result = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN)
+		raycast_result = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN, 1.25)
 		if not raycast_result:
 			continue
-		if raycast_result.position.y > highest_voxel_position_under_player.y:
-			highest_voxel_position_under_player = raycast_result.position
+		if not raycast_result.position in voxel_positions:
+			voxel_positions.append(raycast_result.position)
+	return voxel_positions

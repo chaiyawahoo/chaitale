@@ -6,6 +6,7 @@ signal meshed
 var loaded: bool = false
 var requested: bool = false
 
+
 func _ready() -> void:
 	if not Game.terrain:
 		Game.terrain = self

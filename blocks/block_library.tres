@@ -1,8 +1,0 @@
-[gd_resource type="VoxelBlockyLibrary" load_steps=4 format=3 uid="uid://dxeianmodrghp"]
-
-[ext_resource type="VoxelBlockyModelEmpty" uid="uid://doeiul13n1t5u" path="res://blocks/air_block.tres" id="1_ftb52"]
-[ext_resource type="VoxelBlockyModelCube" uid="uid://unv37gd0hbgw" path="res://blocks/solid_block.tres" id="2_8yjml"]
-[ext_resource type="VoxelBlockyModelCube" uid="uid://qastm3k6rkmc" path="res://blocks/solid_2_block.tres" id="3_hd5xk"]
-
-[resource]
-models = Array[VoxelBlockyModel]([ExtResource("1_ftb52"), ExtResource("2_8yjml"), ExtResource("3_hd5xk")])
