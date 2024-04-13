@@ -7,10 +7,13 @@ var loaded: bool = false
 var requested: bool = false
 
 var save_name: String = "world"
+var directory_access: DirAccess = DirAccess.open("./")
 
 
 func _ready() -> void:
 	stream = VoxelStreamSQLite.new()
+	if not directory_access.dir_exists("saves/"):
+		directory_access.make_dir("saves/")
 	if FileAccess.file_exists("saves/%s.sql" % save_name):
 		print("loading %s" % save_name)
 	stream.database_path = "saves/%s.sql" % save_name
