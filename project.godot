@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Chaitale"
-run/main_scene="res://world/game/game.tscn"
+run/main_scene="res://game/game.tscn"
 config/features=PackedStringArray("4.1", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+TickEngine="*res://game/tick_engine.gd"
 
 [dotnet]
 

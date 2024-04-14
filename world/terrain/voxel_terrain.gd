@@ -2,13 +2,14 @@ extends VoxelTerrain
 
 
 signal meshed
+signal save_success
 
 var loaded: bool = false
 var requested: bool = false
 
 var save_name: String = "world"
 var directory_access: DirAccess = DirAccess.open("./")
-
+var save_completion_tracker: VoxelSaveCompletionTracker
 
 func _ready() -> void:
 	stream = VoxelStreamSQLite.new()
@@ -24,6 +25,12 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if save_completion_tracker:
+		if save_completion_tracker.is_complete():
+			print("Terrain saved.")
+			save_success.emit()
+			save_completion_tracker = null
+	
 	if loaded:
 		return
 	# SLOW
@@ -37,5 +44,5 @@ func _process(_delta: float) -> void:
 		requested = true
 
 
-func _exit_tree() -> void:
-	save_modified_blocks()
+func save() -> void:
+	save_completion_tracker = save_modified_blocks()

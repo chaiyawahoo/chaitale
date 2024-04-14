@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cxytg2y538dbb"]
+[gd_scene load_steps=5 format=3 uid="uid://cxytg2y538dbb"]
 
 [ext_resource type="Script" path="res://client/player/player.gd" id="1_l0v5k"]
 [ext_resource type="PackedScene" uid="uid://b0g1cfhmot3q" path="res://client/hover_cube/hover_cube.tscn" id="2_fnpb4"]
@@ -6,8 +6,6 @@
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_eruq2"]
 radius = 0.45
 height = 1.9
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_b4e6h"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a5v0v"]
 size = Vector3(0.9, 1.9, 0.9)
@@ -28,20 +26,10 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.9
 spring_length = 0.0
 
 [node name="Camera3D" type="Camera3D" parent="Body/SpringArm3D"]
-fov = 80.0
 
 [node name="VoxelViewer" type="VoxelViewer" parent="Body/SpringArm3D/Camera3D"]
 transform = Transform3D(1, -4.17444e-14, -2.13163e-14, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.1, 0)
 view_distance = 256
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
-visible = false
-collision_layer = 2
-collision_mask = 0
-
-[node name="MeshCollider" type="CollisionShape3D" parent="Body/StaticBody3D"]
-shape = SubResource("SphereShape3D_b4e6h")
 
 [node name="HoverCube" parent="." instance=ExtResource("2_fnpb4")]
 

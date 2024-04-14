@@ -1,0 +1,37 @@
+[gd_scene load_steps=9 format=3 uid="uid://djynyygwvjdsr"]
+
+[ext_resource type="Script" path="res://game/game.gd" id="1_y5rwf"]
+[ext_resource type="PackedScene" uid="uid://csjhovnrq48t7" path="res://world/terrain/voxel_terrain.tscn" id="2_2yhdt"]
+[ext_resource type="VoxelBlockyLibrary" uid="uid://dxeianmodrghp" path="res://world/voxel_types/voxel_library.tres" id="3_01jwp"]
+[ext_resource type="PackedScene" uid="uid://cxytg2y538dbb" path="res://client/player/player.tscn" id="3_qibtv"]
+[ext_resource type="Environment" uid="uid://c7x65b0gqx275" path="res://world/environment/environment.tres" id="4_n0xbo"]
+[ext_resource type="PackedScene" uid="uid://blled2qkl0icw" path="res://ui/hud.tscn" id="5_rgk72"]
+[ext_resource type="PackedScene" uid="uid://m85gfn7t4bfq" path="res://ui/pause_menu.tscn" id="6_hqf37"]
+
+[sub_resource type="VoxelMesherBlocky" id="VoxelMesherBlocky_28a14"]
+library = ExtResource("3_01jwp")
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_y5rwf")
+
+[node name="VoxelTerrain" parent="." instance=ExtResource("2_2yhdt")]
+mesher = SubResource("VoxelMesherBlocky_28a14")
+gi_mode = 2
+bounds = AABB(-5.36871e+08, -256, -5.36871e+08, 1.07374e+09, 512, 1.07374e+09)
+
+[node name="Player" parent="." instance=ExtResource("3_qibtv")]
+
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.984808, -0.122788, 0.122788, 0, 0.707107, 0.707107, -0.173648, -0.696364, 0.696364, 0, 0, 0)
+light_color = Color(1, 0.980392, 0.839216, 1)
+light_energy = 0.5
+light_volumetric_fog_energy = 5.0
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("4_n0xbo")
+
+[node name="HUD" parent="." instance=ExtResource("5_rgk72")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("6_hqf37")]
+visible = false
