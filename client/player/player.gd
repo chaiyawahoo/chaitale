@@ -12,7 +12,7 @@ extends CharacterBody3D
 @export var sprint_fov_modifier: float = 0.2
 @export var sneak_height_decrement: float = 0.2
 @export var reach: float = 6.0
-@export var sneaking_prevents_falling: bool = false
+@export var sneaking_prevents_falling: bool = true
 @export var maximize_fps: bool = true
 @export var place_voxel_delay: float = 0.2
 @export var break_voxel_delay: float = 0.2
@@ -44,15 +44,18 @@ var can_break_voxel: bool = true
 var place_voxel_timer: SceneTreeTimer
 var break_voxel_timer: SceneTreeTimer
 
-@onready var spring_arm: SpringArm3D = $SpringArm3D
-@onready var camera: Camera3D = $SpringArm3D/Camera3D
-@onready var collider: CollisionShape3D = $Body
+@onready var spring_arm: SpringArm3D = $Body/SpringArm3D
+@onready var body_node: Node3D = $Body
+@onready var camera: Camera3D = $Body/SpringArm3D/Camera3D
+@onready var collider: CollisionShape3D = $BodyCollider
+@onready var hover_cube: MeshInstance3D = $HoverCube
 @onready var default_fov: float = camera.fov
-@onready var default_camera_height: float = camera.position.y
+@onready var default_camera_height: float = spring_arm.position.y
 @onready var player_area: AABB = collider.shape.get_debug_mesh().get_aabb()
 
 
 func _ready() -> void:
+	hover_cube.top_level = true
 	if maximize_fps:
 		Engine.set_physics_ticks_per_second(max(DisplayServer.screen_get_refresh_rate(), starting_physics_ticks))
 	Game.player = self
@@ -67,14 +70,15 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	var fov_tween = create_tween()
+	do_tween(camera, "fov", default_fov, fov_change_time, fov_tween)
+	spring_arm.position.y = default_camera_height
+	
 	if Game.menu_opened:
 		speed = 0
+		sprinting = false
+		sneaking = false
 		return
-	
-	var fov_tween = create_tween()
-	
-	do_tween(camera, "fov", default_fov, fov_change_time, fov_tween)
-	camera.position.y = default_camera_height
 	
 	player_area.position = position - player_area.size / 2
 	
@@ -82,22 +86,17 @@ func _process(_delta: float) -> void:
 	
 	_handle_process_input()
 	
+	draw_hover_cube()
+	
 	if sprinting:
 		speed = walk_speed * sprint_speed_modifier
 		do_tween(camera, "fov", default_fov * (1 + sprint_fov_modifier), fov_change_time, fov_tween)
 	elif sneaking:
 		speed = walk_speed * sneak_speed_modifier
-		camera.position.y = default_camera_height - sneak_height_decrement
+		spring_arm.position.y = default_camera_height - sneak_height_decrement
 	else:
 		walking = true
 		speed = walk_speed
-		camera.position.y = default_camera_height
-	
-	if placing:
-		place_voxel()
-	
-	if breaking:
-		break_voxel()
 	
 	if velocity == Vector3.ZERO:
 		walking = false
@@ -112,12 +111,14 @@ func _process(_delta: float) -> void:
 			invisible_wall.queue_free()
 		invisible_wall = null
 	
+	
+	# Occasional slip when colliding with 3/inside corner
 	if sneaking and not falling and Engine.get_process_frames() % 2 and sneaking_prevents_falling:
 		if invisible_wall:
 			invisible_wall.queue_free()
 		invisible_wall = StaticBody3D.new()
 		var neighbors: Array[int] = []
-		var wall_distance = 1.75
+		var wall_distance = 1.85
 		var shape_size = Vector3(1, 2, 1)
 		var invisible_wall_collider_base: CollisionShape3D = CollisionShape3D.new()
 		var voxels_under_player: Array[Vector3i] = get_voxel_positions_under_player()
@@ -216,7 +217,7 @@ func _input(event) -> void:
 			return
 		var angle_change: Vector2 = -event.relative * mouse_sensitivity
 		horizontal_look += angle_change.x
-		rotation.y += deg_to_rad(angle_change.x)
+		body_node.rotation.y += deg_to_rad(angle_change.x)
 		if abs(angle_change.y + vertical_look) < 89:
 			vertical_look += angle_change.y
 			spring_arm.global_rotation.x += deg_to_rad(angle_change.y)
@@ -237,10 +238,18 @@ func _handle_process_input() -> void:
 			sprinting = true
 			sneaking = false
 			walking = false
-	if Input.is_action_pressed("left_click"):
+	if Input.is_action_just_pressed("left_click"):
 		breaking = true
-	if Input.is_action_pressed("right_click"):
+		break_voxel(true)
+	elif Input.is_action_pressed("left_click"):
+		breaking = true
+		break_voxel()
+	if Input.is_action_just_pressed("right_click"):
 		placing = true
+		place_voxel(true)
+	elif Input.is_action_pressed("right_click"):
+		placing = true
+		place_voxel()
 	if Input.is_action_just_pressed("select_1"):
 		selected_voxel_type = 1
 	if Input.is_action_just_pressed("select_2"):
@@ -274,9 +283,9 @@ func add_voxel_at(voxel_position: Vector3i) -> void:
 	Game.voxel_tool.set_voxel(voxel_position, selected_voxel_type)
 
 
-func break_voxel() -> void:
+func break_voxel(forced: bool = false) -> void:
 	breaking = false
-	if break_voxel_timer:
+	if break_voxel_timer and not forced:
 		if break_voxel_timer.time_left > 0:
 			return
 	var result: VoxelRaycastResult = get_looking_raycast_result()
@@ -286,9 +295,9 @@ func break_voxel() -> void:
 	break_voxel_timer = get_tree().create_timer(break_voxel_delay)
 
 
-func place_voxel() -> void:
+func place_voxel(forced: bool = false) -> void:
 	placing = false
-	if place_voxel_timer:
+	if place_voxel_timer and not forced:
 		if place_voxel_timer.time_left > 0:
 			return
 	var result: VoxelRaycastResult = get_looking_raycast_result()
@@ -309,18 +318,28 @@ func get_terrain_origin_y() -> int:
 
 func get_voxel_positions_under_player() -> Array[Vector3i]:
 	var voxel_positions: Array[Vector3i] = []
-	var raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(global_position, Vector3.DOWN, 1.25)
+	var raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(global_position + Vector3.DOWN * (player_area.size.y / 2), Vector3.DOWN, 1)
 	if raycast_result:
 		voxel_positions.append(raycast_result.position)
-	var steps: int = 16
-	for i in range(steps):
-		var raycast_origin: Vector3 = global_position
-		var angle: float = 2 * i * PI / steps
-		raycast_origin.x += cos(angle) * 0.44
-		raycast_origin.z += sin(angle) * 0.44
-		raycast_result = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN, 1.25)
+	var corners: Array[Vector3] = [
+		Vector3(-1, -1, -1), 
+		Vector3(1, -1, -1), 
+		Vector3(1, -1, 1), 
+		Vector3(-1, -1, 1)]
+	for i in range(4):
+		var raycast_origin: Vector3 = global_position + corners[i] * (player_area.size / 2)
+		raycast_result = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN, 1)
 		if not raycast_result:
 			continue
 		if not raycast_result.position in voxel_positions:
 			voxel_positions.append(raycast_result.position)
 	return voxel_positions
+
+
+func draw_hover_cube() -> void:
+	var result: VoxelRaycastResult = get_looking_raycast_result()
+	if not result:
+		hover_cube.visible = false
+		return
+	hover_cube.position = Vector3(result.position) + Game.terrain.global_position - Vector3.ONE * 0.0005
+	hover_cube.visible = true

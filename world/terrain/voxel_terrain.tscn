@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://csjhovnrq48t7"]
 
-[ext_resource type="VoxelBlockyLibrary" uid="uid://dxeianmodrghp" path="res://voxel_types/voxel_library.tres" id="1_aq8dp"]
-[ext_resource type="Script" path="res://terrain/voxel_terrain.gd" id="2_764gb"]
+[ext_resource type="VoxelBlockyLibrary" uid="uid://dxeianmodrghp" path="res://world/voxel_types/voxel_library.tres" id="1_aq8dp"]
+[ext_resource type="Script" path="res://world/terrain/voxel_terrain.gd" id="2_764gb"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h5ush"]
 seed = 1004

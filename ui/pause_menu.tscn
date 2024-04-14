@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://m85gfn7t4bfq"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="ResumeButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Resume"
+
+[node name="SaveButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Save
+"
+
+[node name="SaveQuitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Save & Quit
+"
+
+[node name="QuitNoSaveButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Quit without Saving"

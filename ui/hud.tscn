@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://blled2qkl0icw"]
 
-[ext_resource type="Script" path="res://hud/HUD.gd" id="1_idbpy"]
-[ext_resource type="Texture2D" uid="uid://bmofk27bci7k5" path="res://hud/pointer.png" id="2_kyhhx"]
+[ext_resource type="Script" path="res://ui/HUD.gd" id="1_ylnuo"]
+[ext_resource type="Texture2D" uid="uid://bmofk27bci7k5" path="res://ui/pointer.png" id="2_vntbw"]
 
 [node name="HUD" type="CanvasLayer"]
-script = ExtResource("1_idbpy")
+script = ExtResource("1_ylnuo")
 
 [node name="Pointer" type="TextureRect" parent="."]
 unique_name_in_owner = true
@@ -19,10 +19,11 @@ offset_right = 16.0
 offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_kyhhx")
+texture = ExtResource("2_vntbw")
 stretch_mode = 2
 
 [node name="Debug" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
