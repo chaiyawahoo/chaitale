@@ -22,7 +22,7 @@ var gravity_axis: Vector3 = ProjectSettings.get_setting("physics/3d/default_grav
 var starting_physics_ticks: float = ProjectSettings.get_setting("physics/common/physics_ticks_per_second")
 
 var invisible_wall: StaticBody3D = null
-var invisible_wall_distance: float = 1.89
+var invisible_wall_distance: float = 1.49
 
 var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
@@ -158,8 +158,10 @@ func _input(event) -> void:
 	if event.is_action_pressed("camera_mode"):
 		if spring_arm.spring_length == 0:
 			spring_arm.spring_length = third_person_camera_distance
+			camera.cull_mask += 2
 		else:
 			spring_arm.spring_length = 0
+			camera.cull_mask -= 2
 	if event.is_action("left_click"):
 		if not event.is_pressed():
 			breaking = false
