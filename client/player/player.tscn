@@ -16,6 +16,7 @@ script = ExtResource("1_l0v5k")
 [node name="SteveFile" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(-2.40413e-09, -0.055, -2.40413e-09, 0, -2.40413e-09, 0.055, -0.055, 2.40413e-09, 1.05088e-16, 0, -0.22, 0)
 layers = 2
+gi_mode = 2
 mesh = ExtResource("3_q4mbj")
 skeleton = NodePath("../..")
 

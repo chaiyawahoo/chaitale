@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dh35wfq84fxkp"]
+
+[ext_resource type="Script" path="res://ui/world_selector/world_selection.gd" id="1_dwtjg"]
+
+[node name="WorldSelection" type="MarginContainer"]
+script = ExtResource("1_dwtjg")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+toggle_mode = true
+text = "world"

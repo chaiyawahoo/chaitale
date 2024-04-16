@@ -1,13 +1,19 @@
 extends CanvasLayer
 
 
+var main_menu_scene: PackedScene = preload("res://ui/main_menu.tscn")
+
+
+func _enter_tree() -> void:
+	Game.pause_menu = self
+
+
 func _ready() -> void:
-	if not Game.pause_menu:
-		Game.pause_menu = self
 	%ResumeButton.pressed.connect(_on_button_resume)
 	%SaveButton.pressed.connect(_on_button_save)
 	%SaveQuitButton.pressed.connect(_on_button_save_and_quit)
 	%QuitNoSaveButton.pressed.connect(_on_button_quit_no_save)
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("menu"):
@@ -40,7 +46,8 @@ func save() -> void:
 
 
 func quit() -> void:
-	get_tree().quit()
+	get_tree().change_scene_to_packed(main_menu_scene)
+#	get_tree().quit()
 
 
 func toggle_menu() -> void:

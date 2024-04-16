@@ -52,10 +52,11 @@ var break_voxel_timer: SceneTreeTimer
 @onready var hover_cube: MeshInstance3D = $HoverCube
 @onready var default_fov: float = camera.fov
 @onready var default_camera_height: float = spring_arm.position.y
-@onready var player_area: AABB = collider.shape.get_debug_mesh().get_aabb()
+@onready var player_area: AABB = AABB(Vector3.ZERO, collider.shape.size)
 
 
 func _ready() -> void:
+	position.y = Game.terrain.bounds.position.y + Game.terrain.bounds.size.y
 	hover_cube.top_level = true
 	if maximize_fps:
 		Engine.set_physics_ticks_per_second(max(DisplayServer.screen_get_refresh_rate(), starting_physics_ticks))
@@ -65,7 +66,7 @@ func _ready() -> void:
 	await Game.terrain.meshed
 	set_physics_process(true)
 	set_process(true)
-	position.y = get_terrain_origin_y() + 5
+	position.y = Game.terrain.highest_voxel_position.y + 5
 	position.x = 0.5
 	position.z = 0.5
 
@@ -320,15 +321,6 @@ func place_voxel(forced: bool = false) -> void:
 		return
 	add_voxel_at(result.previous_position)
 	place_voxel_timer = get_tree().create_timer(place_voxel_delay)
-
-
-func get_terrain_origin_y() -> int:
-	var terrain_bounds: AABB = Game.terrain.bounds
-	for i in range(terrain_bounds.position.y + terrain_bounds.size.y, terrain_bounds.position.y, -1):
-		var voxel: int = Game.voxel_tool.get_voxel(Vector3i(0, i, 0))
-		if voxel:
-			return i
-	return int(terrain_bounds.position.y + terrain_bounds.size.y)
 
 
 func get_voxel_positions_under_player() -> Array[Vector3i]:
