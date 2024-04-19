@@ -7,6 +7,7 @@ extends CharacterBody3D
 @export var sprint_speed_modifier: float = 1.3
 @export var jump_speed: float = 9.0
 @export var sprint_stop_threshold: float = 3.0
+@export var jitter_interpolation: float = 40.0
 
 var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
@@ -22,6 +23,7 @@ var standing: bool = false
 @onready var body_node: Node3D = $Body
 @onready var camera: Camera3D = $Body/SpringArm3D/Camera3D
 @onready var collider: CollisionShape3D = $BodyCollider
+@onready var sneaking_collider_generator: Node3D = $SneakingColliderGenerator
 @onready var player_area: AABB = AABB(Vector3.ZERO, collider.shape.size)
 
 
@@ -38,8 +40,11 @@ func _ready() -> void:
 	position.z = 0.5
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	smooth_player_movement(delta)
+
 	if Game.pause_menu.visible:
+		# TODO: keep velocity with drag
 		speed = 0
 		sprinting = false
 		sneaking = false
@@ -74,6 +79,7 @@ func _process(_delta: float) -> void:
 	if forward_velocity <= sprint_stop_threshold:
 		sprinting = false
 
+	sneaking_collider_generator.generate_sneaking_collision()
 
 func _physics_process(delta: float) -> void:
 	var input_vector: Vector3 = input_direction * speed
@@ -105,3 +111,16 @@ func _input(event) -> void:
 		sprinting = true
 		sneaking = false
 		walking = false
+
+
+# source: Garbaj: "Fixing Jittery Movement In Godot" (https://www.youtube.com/watch?v=pqrD3B75yKo)
+func smooth_player_movement(delta: float) -> void:
+	var fps: float = Engine.get_frames_per_second()
+	if fps > Settings.physics_ticks_per_second:	
+		var lerp_interval: Vector3 = input_direction / fps
+		var lerp_position: Vector3 = global_position + lerp_interval
+		body_node.top_level = true
+		body_node.global_position = body_node.position.lerp(lerp_position, jitter_interpolation * delta)
+	elif body_node.top_level:
+		body_node.global_position = global_position
+		body_node.top_level = false

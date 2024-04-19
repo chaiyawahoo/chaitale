@@ -5,16 +5,12 @@ var invisible_wall: StaticBody3D = null
 var invisible_wall_distance: float = 1.49
 
 
-func _process(_delta: float) -> void:
+func generate_sneaking_collision() -> void:
 	if not Game.player.sneaking or Game.player.falling:
 		if invisible_wall:
 			invisible_wall.queue_free()
 		invisible_wall = null
-	
-	generate_sneaking_collision()
 
-
-func generate_sneaking_collision() -> void:
 	if Game.player.sneaking and not Game.player.falling and Engine.get_process_frames() % 2:
 		if invisible_wall:
 			invisible_wall.queue_free()

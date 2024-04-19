@@ -125,6 +125,7 @@ toggle_ui={
 
 [physics]
 
+common/physics_jitter_fix=0.0
 3d/default_gravity=32.0
 
 [rendering]
