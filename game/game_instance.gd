@@ -5,6 +5,10 @@ extends Node3D
 var autosave_tick_interval: int = 1200 # one minute
 
 
+func _enter_tree() -> void:
+	Game.instance = self
+
+
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	TickEngine.ticked.connect(_on_tick)

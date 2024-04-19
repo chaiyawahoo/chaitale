@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cxytg2y538dbb"]
+[gd_scene load_steps=7 format=3 uid="uid://cxytg2y538dbb"]
 
 [ext_resource type="Script" path="res://client/player/player.gd" id="1_l0v5k"]
 [ext_resource type="Script" path="res://client/player/voxel_editor.gd" id="3_3wnia"]
 [ext_resource type="ArrayMesh" uid="uid://b5jt5tt1hn23s" path="res://assets/minecraft_steve/steve_file.tres" id="3_q4mbj"]
 [ext_resource type="Script" path="res://client/player/player_camera.gd" id="3_xevlm"]
+[ext_resource type="Script" path="res://client/player/sneak_collider_generator.gd" id="5_4yn0e"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a5v0v"]
 size = Vector3(0.5, 1.75, 0.5)
@@ -44,3 +45,6 @@ script = ExtResource("3_3wnia")
 
 [node name="BodyCollider" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_a5v0v")
+
+[node name="SneakingColliderGenerator" type="Node3D" parent="."]
+script = ExtResource("5_4yn0e")
