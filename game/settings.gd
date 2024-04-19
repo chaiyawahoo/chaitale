@@ -7,10 +7,8 @@ var physics_ticks_per_second: float = ProjectSettings.get_setting("physics/commo
 
 var window_mode: Window.Mode = Window.MODE_WINDOWED
 
-var coarse_mouse_sensitivity: float = 0.5
-var fine_mouse_sensitivity: float = 0.1
-var mouse_sensitivity: float:
-	get: return coarse_mouse_sensitivity * fine_mouse_sensitivity
+var mouse_sensitivity_coefficient: float = 0.5
+var mouse_sensitivity: float = 0.1
 
 var place_voxel_hold_delay: float = 0.2
 var break_voxel_hold_delay: float = 0.2
@@ -33,7 +31,7 @@ func load_settings() -> void:
 		return
 	
 	window_mode = config.get_value("graphics", "window_mode")
-	fine_mouse_sensitivity = config.get_value("controls", "mouse_sensitivity")
+	mouse_sensitivity = config.get_value("controls", "mouse_sensitivity")
 
 	update_settings()
 
@@ -44,6 +42,6 @@ func update_settings() -> void:
 	get_viewport().get_window().mode = window_mode
 
 	config.set_value("graphics", "window_mode", window_mode)
-	config.set_value("controls", "mouse_sensitivity", fine_mouse_sensitivity)
+	config.set_value("controls", "mouse_sensitivity", mouse_sensitivity)
 
 	config.save("user://settings.cfg")

@@ -39,7 +39,7 @@ func _input(event: InputEvent) -> void:
 
 
 func look_around(relative_motion: Vector2):
-	var angle_change: Vector2 = -relative_motion * Settings.mouse_sensitivity
+	var angle_change: Vector2 = -relative_motion * Settings.mouse_sensitivity * Settings.mouse_sensitivity_coefficient
 	horizontal_look += angle_change.x
 	if abs(angle_change.y + vertical_look) > 89:
 		return

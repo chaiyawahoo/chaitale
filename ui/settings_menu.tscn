@@ -65,14 +65,17 @@ layout_mode = 2
 
 [node name="FullscreenMode" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/VBoxContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/VBoxContainer/FullscreenMode"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Window Mode"
 
 [node name="WindowMode" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/VBoxContainer/FullscreenMode"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 item_count = 3
 selected = 0
 popup/item_0/text = "Windowed"
@@ -82,11 +85,53 @@ popup/item_1/id = 3
 popup/item_2/text = "Fullscreen"
 popup/item_2/id = 4
 
+[node name="Controls" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls"]
+layout_mode = 2
+
+[node name="Sensitivity" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer/Sensitivity"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mouse Sensitivity"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer/Sensitivity"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SensitivityInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer/Sensitivity/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="SensitivitySlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer/Sensitivity/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10.0
+step = 0.001
+
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 12
 alignment = 1
 
 [node name="ApplyButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "Apply"
+
+[node name="ApplyCloseButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Apply & Close"
