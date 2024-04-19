@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://djynyygwvjdsr"]
+[gd_scene load_steps=10 format=3 uid="uid://djynyygwvjdsr"]
 
 [ext_resource type="Script" path="res://game/game_instance.gd" id="1_6aid6"]
 [ext_resource type="PackedScene" uid="uid://csjhovnrq48t7" path="res://world/terrain/voxel_terrain.tscn" id="2_2yhdt"]
 [ext_resource type="VoxelBlockyLibrary" uid="uid://dxeianmodrghp" path="res://world/voxel_types/voxel_library.tres" id="3_01jwp"]
 [ext_resource type="PackedScene" uid="uid://cxytg2y538dbb" path="res://client/player/player.tscn" id="3_qibtv"]
 [ext_resource type="Environment" uid="uid://c7x65b0gqx275" path="res://world/environment/environment.tres" id="4_n0xbo"]
+[ext_resource type="PackedScene" uid="uid://b0g1cfhmot3q" path="res://client/hover_cube/hover_cube.tscn" id="5_1ksic"]
 [ext_resource type="PackedScene" uid="uid://blled2qkl0icw" path="res://ui/hud.tscn" id="5_rgk72"]
 [ext_resource type="PackedScene" uid="uid://m85gfn7t4bfq" path="res://ui/pause_menu.tscn" id="6_hqf37"]
 
@@ -19,6 +20,8 @@ mesher = SubResource("VoxelMesherBlocky_28a14")
 gi_mode = 2
 
 [node name="Player" parent="." instance=ExtResource("3_qibtv")]
+
+[node name="HoverCube" parent="." instance=ExtResource("5_1ksic")]
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.984808, -0.122788, 0.122788, 0, 0.707107, 0.707107, -0.173648, -0.696364, 0.696364, 0, 0, 0)

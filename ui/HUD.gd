@@ -16,5 +16,7 @@ func _process(_delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("debug"):
+	if event.is_action_pressed("toggle_debug"):
 		$Debug.visible = not $Debug.visible
+	if event.is_action_pressed("toggle_ui"):
+		visible = not visible

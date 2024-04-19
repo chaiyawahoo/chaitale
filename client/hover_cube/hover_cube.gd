@@ -4,10 +4,24 @@ extends MeshInstance3D
 var material: StandardMaterial3D = preload("res://client/hover_cube/hover_cube_material.tres")
 
 
+func _enter_tree() -> void:
+	Game.hover_cube = self
+
+
 func _ready() -> void:
 	create_mesh()
 	mesh.surface_set_material(0, material)
 	visible = false
+	top_level = true
+
+
+func _process(_delta: float) -> void:
+	var result: VoxelRaycastResult = Game.camera_raycast_result
+	if not result:
+		visible = false
+		return
+	position = Vector3(result.position) + Game.terrain.global_position - Vector3.ONE * 0.0005
+	visible = true
 
 
 # from https://github.com/Zylann/godot_debug_draw/blob/master/addons/zylann.debug_draw/debug_draw.gd

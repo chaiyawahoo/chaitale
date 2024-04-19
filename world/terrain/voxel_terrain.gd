@@ -17,6 +17,7 @@ var save_completion_tracker: VoxelSaveCompletionTracker
 func _enter_tree() -> void:
 	Game.terrain = self
 	Game.voxel_tool = get_voxel_tool()
+	Game.voxel_types = mesher.library.models.size() - 1
 	if Game.world_seed:
 		world_seed = Game.world_seed
 	if Game.save_name:
@@ -49,6 +50,7 @@ func _process(_delta: float) -> void:
 #	if is_area_meshed(AABB(Vector3.ZERO, Vector3.ONE)):
 #		loaded = true
 #		meshed.emit()
+
 	# TODO: this is fast, but not reliable. maybe find a way to keep it fast?
 #	if requested:
 #		if get_statistics().time_request_blocks_to_load == 0:

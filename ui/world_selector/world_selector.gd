@@ -23,6 +23,10 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	%CreateButton.pressed.connect(_on_button_create)
 	%LoadButton.pressed.connect(_on_button_load)
+	for world in %WorldsContainer.get_children():
+		if not world is WorldSelection:
+			continue
+		world.double_clicked.connect(load_specific_world)
 
 
 func _on_button_create() -> void:
@@ -34,7 +38,6 @@ func _on_button_load() -> void:
 
 
 func instanitate_world_in_list(directory_name: String) -> void:
-	var directory_access: DirAccess = DirAccess.open("./saves/%s" % directory_name)
 	var world_selection: WorldSelection = world_selection_scene.instantiate()
 	world_selection.name = directory_name
 	world_selection.save_name = directory_name
@@ -65,7 +68,10 @@ func create_world() -> void:
 
 
 func load_world() -> void:
-	var world_selection: WorldSelection = world_button_group.get_pressed_button().get_parent()
+	load_specific_world(world_button_group.get_pressed_button().get_parent())
+
+
+func load_specific_world(world_selection: WorldSelection) -> void:
 	Game.save_name = world_selection.save_name
 	Game.world_seed = world_selection.world_seed
 	get_tree().change_scene_to_packed(game_scene)

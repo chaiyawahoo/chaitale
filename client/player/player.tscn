@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cxytg2y538dbb"]
+[gd_scene load_steps=6 format=3 uid="uid://cxytg2y538dbb"]
 
 [ext_resource type="Script" path="res://client/player/player.gd" id="1_l0v5k"]
-[ext_resource type="PackedScene" uid="uid://b0g1cfhmot3q" path="res://client/hover_cube/hover_cube.tscn" id="2_fnpb4"]
+[ext_resource type="Script" path="res://client/player/voxel_editor.gd" id="3_3wnia"]
 [ext_resource type="ArrayMesh" uid="uid://b5jt5tt1hn23s" path="res://assets/minecraft_steve/steve_file.tres" id="3_q4mbj"]
+[ext_resource type="Script" path="res://client/player/player_camera.gd" id="3_xevlm"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a5v0v"]
 size = Vector3(0.5, 1.75, 0.5)
@@ -31,12 +32,15 @@ spring_length = 0.0
 
 [node name="Camera3D" type="Camera3D" parent="Body/SpringArm3D"]
 cull_mask = 1048573
+script = ExtResource("3_xevlm")
 
 [node name="VoxelViewer" type="VoxelViewer" parent="Body/SpringArm3D/Camera3D"]
 transform = Transform3D(1, -4.17444e-14, -2.13163e-14, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.1, 0)
 view_distance = 256
 
-[node name="HoverCube" parent="." instance=ExtResource("2_fnpb4")]
+[node name="VoxelEditor" type="Node3D" parent="Body/SpringArm3D/Camera3D"]
+unique_name_in_owner = true
+script = ExtResource("3_3wnia")
 
 [node name="BodyCollider" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_a5v0v")

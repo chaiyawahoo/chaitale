@@ -1,0 +1,14 @@
+[gd_resource type="VoxelBlockyModelCube" load_steps=2 format=3 uid="uid://bpeu10sijhjxc"]
+
+[ext_resource type="Material" uid="uid://dqg0nluhek7fs" path="res://world/voxel_types/solid_material.tres" id="1_t80iv"]
+
+[resource]
+transparent = true
+transparency_index = 2
+material_override_0 = ExtResource("1_t80iv")
+tile_left = Vector2i(4, 0)
+tile_right = Vector2i(4, 0)
+tile_bottom = Vector2i(4, 0)
+tile_top = Vector2i(4, 0)
+tile_back = Vector2i(4, 0)
+tile_front = Vector2i(4, 0)
