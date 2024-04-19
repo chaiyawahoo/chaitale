@@ -1,9 +1,21 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://ds8fh5bs1ce8i"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://ds8fh5bs1ce8i"]
 
-[ext_resource type="StyleBox" uid="uid://b8vddee48aqq1" path="res://ui/theme/panel_opaque.tres" id="1_up217"]
-[ext_resource type="StyleBox" uid="uid://c416gcnoa8ibt" path="res://ui/theme/panel_transparent.tres" id="2_ljr6q"]
+[ext_resource type="FontFile" uid="uid://bp7by3cs8m03j" path="res://ui/fonts/chaitale.ttf" id="1_l33el"]
 
 [resource]
-Panel/styles/panel = ExtResource("1_up217")
-TransparentPanel/base_type = &"Panel"
-TransparentPanel/styles/panel = ExtResource("2_ljr6q")
+default_font = ExtResource("1_l33el")
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/constants/outline_size = 6
+Button/font_sizes/font_size = 24
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 6
+Label/font_sizes/font_size = 24
+Label/fonts/font = ExtResource("1_l33el")
+MainTitle/base_type = &"Label"
+MainTitle/colors/font_outline_color = Color(0, 0, 0, 1)
+MainTitle/constants/outline_size = 16
+MainTitle/font_sizes/font_size = 64
+Title/base_type = &"Label"
+Title/colors/font_outline_color = Color(0, 0, 0, 1)
+Title/constants/outline_size = 8
+Title/font_sizes/font_size = 32

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsstmt3aaq20g"]
+[gd_scene load_steps=3 format=3 uid="uid://bsstmt3aaq20g"]
 
 [ext_resource type="Script" path="res://ui/world_selector/world_selector.gd" id="1_locwo"]
+[ext_resource type="PackedScene" uid="uid://cqlr2xsuk3g46" path="res://ui/theme/background.tscn" id="2_6qg74"]
 
 [node name="WorldSelector" type="Control"]
 layout_mode = 3
@@ -11,13 +12,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_locwo")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Background" parent="." instance=ExtResource("2_6qg74")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -49,6 +45,7 @@ text = "Back"
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_type_variation = &"Title"
 text = "Select World
 "
 horizontal_alignment = 1

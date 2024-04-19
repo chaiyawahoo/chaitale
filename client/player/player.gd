@@ -6,6 +6,7 @@ extends CharacterBody3D
 @export var sneak_speed_modifier: float = 0.5
 @export var sprint_speed_modifier: float = 1.3
 @export var jump_speed: float = 9.0
+@export var sprint_stop_threshold: float = 3.0
 
 var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
@@ -68,7 +69,9 @@ func _process(_delta: float) -> void:
 		standing = true
 		sprinting = false
 	
-	if velocity.x == 0 and velocity.z == 0:
+	var forward_velocity: float = velocity.rotated(Vector3.UP, deg_to_rad(-camera.horizontal_look)).x
+
+	if forward_velocity <= sprint_stop_threshold:
 		sprinting = false
 
 
