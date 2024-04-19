@@ -1,8 +1,8 @@
 extends Camera3D
 
 
-var default_fov: float = 75
-var sprint_fov: float = default_fov * 1.2
+var sprint_fov: float:
+	get: return Settings.fov + 20
 var third_person_camera_distance: float = 3.0
 var fov_change_time: float = 0.1
 var default_eye_level: float = 0.5
@@ -15,10 +15,11 @@ var horizontal_look: float = 0
 
 
 func _enter_tree() -> void:
-	fov = default_fov
+	fov = Settings.fov
 
 
 func _process(_delta: float) -> void:
+	fov = Settings.fov
 	_update_sprint_fov()
 	_update_sneak_eye_level()
 
@@ -55,7 +56,7 @@ func get_looking_raycast_result() -> VoxelRaycastResult:
 
 func _update_sprint_fov() -> void:
 	var fov_tween: Tween = create_tween()
-	var new_fov: float = sprint_fov if Game.player.sprinting else default_fov
+	var new_fov: float = sprint_fov if Game.player.sprinting else Settings.fov
 	Game.do_tween(self, "fov", new_fov, fov_change_time, fov_tween)
 
 
