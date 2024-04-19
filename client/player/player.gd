@@ -6,11 +6,6 @@ extends CharacterBody3D
 @export var sneak_speed_modifier: float = 0.5
 @export var sprint_speed_modifier: float = 1.3
 @export var jump_speed: float = 9.0
-@export var sneaking_prevents_falling: bool = true
-@export var maximize_fps: bool = true
-
-var invisible_wall: StaticBody3D = null
-var invisible_wall_distance: float = 1.49
 
 var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
@@ -31,8 +26,6 @@ var standing: bool = false
 
 func _ready() -> void:
 	position.y = Game.terrain.bounds.position.y + Game.terrain.bounds.size.y
-	if maximize_fps:
-		Engine.set_physics_ticks_per_second(max(DisplayServer.screen_get_refresh_rate(), Settings.starting_physics_ticks))
 	Game.player = self
 	set_physics_process(false)
 	set_process(false)
