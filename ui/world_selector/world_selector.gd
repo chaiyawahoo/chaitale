@@ -23,10 +23,21 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	%CreateButton.pressed.connect(_on_button_create)
 	%LoadButton.pressed.connect(_on_button_load)
+	%BackButton.pressed.connect(_on_button_back)
 	for world in %WorldsContainer.get_children():
 		if not world is WorldSelection:
 			continue
 		world.double_clicked.connect(load_specific_world)
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		back()
+		get_viewport().set_input_as_handled()
+
+
+func _on_button_back() -> void:
+	back()
 
 
 func _on_button_create() -> void:
@@ -75,3 +86,7 @@ func load_specific_world(world_selection: WorldSelection) -> void:
 	Game.save_name = world_selection.save_name
 	Game.world_seed = world_selection.world_seed
 	get_tree().change_scene_to_packed(game_scene)
+
+
+func back() -> void:
+	queue_free()

@@ -1,0 +1,9 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://ds8fh5bs1ce8i"]
+
+[ext_resource type="StyleBox" uid="uid://b8vddee48aqq1" path="res://ui/theme/panel_opaque.tres" id="1_up217"]
+[ext_resource type="StyleBox" uid="uid://c416gcnoa8ibt" path="res://ui/theme/panel_transparent.tres" id="2_ljr6q"]
+
+[resource]
+Panel/styles/panel = ExtResource("1_up217")
+TransparentPanel/base_type = &"Panel"
+TransparentPanel/styles/panel = ExtResource("2_ljr6q")

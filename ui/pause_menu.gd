@@ -10,9 +10,11 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	%ResumeButton.pressed.connect(_on_button_resume)
+	%SettingsButton.pressed.connect(_on_button_settings)
 	%SaveButton.pressed.connect(_on_button_save)
 	%SaveQuitButton.pressed.connect(_on_button_save_and_quit)
 	%QuitNoSaveButton.pressed.connect(_on_button_quit_no_save)
+	
 
 
 func _input(event: InputEvent) -> void:
@@ -22,6 +24,10 @@ func _input(event: InputEvent) -> void:
 
 func _on_button_resume() -> void:
 	toggle_menu()
+
+
+func _on_button_settings() -> void:
+	open_settings()
 
 
 func _on_button_save() -> void:
@@ -37,6 +43,10 @@ func _on_button_save_and_quit() -> void:
 
 func _on_button_quit_no_save() -> void:
 	quit()
+
+
+func open_settings() -> void:
+	add_child(UI.settings_scene.instantiate())
 
 
 func save() -> void:

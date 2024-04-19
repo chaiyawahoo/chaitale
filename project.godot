@@ -26,6 +26,10 @@ Settings="*res://game/settings.gd"
 
 project/assembly_name="Chaitale"
 
+[gui]
+
+theme/custom="res://ui/theme/main_theme.tres"
+
 [input]
 
 move_left={
