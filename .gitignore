@@ -6,3 +6,9 @@ saves/
 
 # Builds
 builds/
+
+# Codealike
+codealike.json
+
+# VSCode
+.vscode
