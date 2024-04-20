@@ -34,7 +34,7 @@ func _input(event: InputEvent) -> void:
 			cull_mask -= 2
 	
 	if event is InputEventMouseMotion:
-		if Game.pause_menu.visible:
+		if Game.is_paused:
 			return
 		look_around(event.relative)
 

@@ -11,7 +11,7 @@ var place_voxel_timer: SceneTreeTimer
 
 
 func _process(_delta: float) -> void:
-	if Game.pause_menu.visible:
+	if Game.is_paused:
 		return
 	
 	if breaking:
@@ -22,7 +22,7 @@ func _process(_delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if Game.pause_menu.visible:
+	if Game.is_paused:
 		return
 
 	if event.is_action_pressed("select_1") or event.is_action_pressed("select_2") or event.is_action_pressed("select_3") or event.is_action_pressed("select_4"):

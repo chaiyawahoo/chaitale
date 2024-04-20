@@ -22,10 +22,6 @@ Game="*res://game/game_autoload.gd"
 UI="*res://ui/ui.gd"
 Settings="*res://game/settings.gd"
 
-[display]
-
-window/vsync/vsync_mode=0
-
 [dotnet]
 
 project/assembly_name="Chaitale"

@@ -13,6 +13,9 @@ var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
 var speed: float = 0
 
+var external_velocity: Vector3 = Vector3.ZERO
+var input_velocity: Vector3 = Vector3.ZERO
+
 var jumping: bool = false
 var falling: bool = false
 var sneaking: bool = false
@@ -43,16 +46,17 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	smooth_player_movement(delta)
 
-	if Game.pause_menu.visible:
-		# TODO: keep velocity with drag
+	falling = not is_on_floor()
+
+	if Game.is_paused:
 		speed = 0
 		sprinting = false
 		sneaking = false
+		jumping = false
 		return
 	
 	player_area.position = position - player_area.size / 2
 	
-	falling = not is_on_floor()
 	
 	body_node.rotation.y = deg_to_rad(camera.horizontal_look)
 	
@@ -82,21 +86,27 @@ func _process(delta: float) -> void:
 	sneaking_collider_generator.generate_sneaking_collision()
 
 func _physics_process(delta: float) -> void:
-	var input_vector: Vector3 = input_direction * speed
-	velocity.x = input_vector.x
-	velocity.z = input_vector.z
+	if not (Game.is_paused and falling): # removed "and falling" once block drag is properly implmeneted
+		var input_vector: Vector3 = input_direction * speed
+		input_velocity.x = input_vector.x
+		input_velocity.z = input_vector.z
 	if falling:
-		velocity += Settings.gravity_axis * Settings.gravity_constant * delta
+		external_velocity += Settings.gravity_axis * Settings.gravity_constant * delta
 	elif jumping:
-		velocity.y = jump_speed
+		external_velocity.y = 0
+		input_velocity.y = jump_speed
 	else:
-		velocity.y = 0
+		external_velocity.y = 0
+		input_velocity.y = 0
+	
+	
+	velocity = external_velocity + input_velocity
 	
 	move_and_slide()
 
 
 func _input(event) -> void:
-	if Game.pause_menu.visible:
+	if Game.is_paused:
 		return
 	
 	if event.is_action("jump"):

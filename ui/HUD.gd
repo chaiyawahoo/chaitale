@@ -8,7 +8,7 @@ extends CanvasLayer
 
 func _process(_delta: float) -> void:
 	fps_label.text = str(Engine.get_frames_per_second())
-	pointer.visible = not Game.pause_menu.visible
+	pointer.visible = not Game.is_paused
 	if not Game.player:
 		return
 	var position_string_format: String = "x: %.3f y: %.3f z: %.3f"
