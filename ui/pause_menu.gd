@@ -1,9 +1,6 @@
 extends CanvasLayer
 
 
-@export var main_menu_scene: PackedScene = preload("res://ui/main_menu.tscn")
-
-
 func _enter_tree() -> void:
 	Game.pause_menu = self
 
@@ -53,7 +50,9 @@ func save() -> void:
 
 
 func quit() -> void:
-	get_tree().change_scene_to_packed(main_menu_scene)
+	get_tree().change_scene_to_packed(UI.main_menu_scene)
+	# i do not like this but it seems to not crash
+	# get_tree().change_scene_to_file("res://ui/main_menu.tscn")
 	# get_tree().quit()
 
 

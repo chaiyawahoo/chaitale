@@ -28,4 +28,5 @@ func open_settings() -> void:
 
 
 func quit() -> void:
+	print("Quitting.")
 	get_tree().quit()

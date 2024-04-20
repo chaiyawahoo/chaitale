@@ -94,4 +94,3 @@ func update_after_load() -> void:
 	Game.player.camera.horizontal_look = float(save_data.player.horizontal_look)
 	Game.player.camera.vertical_look = float(save_data.player.vertical_look)
 	Game.player.external_velocity = str_to_var("Vector3%s" % save_data.player.external_velocity)
-	print("Game loaded")
