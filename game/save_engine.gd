@@ -45,8 +45,7 @@ func save_game() -> void:
 	update_before_save()
 
 	var save_file: FileAccess = FileAccess.open(save_format % Game.save_name, FileAccess.WRITE)
-	var save_string: String = JSON.stringify(save_data)
-	save_file.store_string(save_string)
+	save_file.store_var(save_data, true)
 
 
 func load_game() -> void:
@@ -55,11 +54,7 @@ func load_game() -> void:
 		return
 	
 	var save_file: FileAccess = FileAccess.open(save_format % Game.save_name, FileAccess.READ)
-	var save_json: JSON = JSON.new()
-	var parse_error: Error = save_json.parse(save_file.get_as_text())
-	if parse_error != OK:
-		return
-	save_data = save_json.get_data()
+	save_data = save_file.get_var(true)
 
 	update_after_load()
 
@@ -90,7 +85,7 @@ func update_before_save() -> void:
 
 
 func update_after_load() -> void:
-	Game.player.global_position = str_to_var("Vector3%s" % save_data.player.position)
-	Game.player.camera.horizontal_look = float(save_data.player.horizontal_look)
-	Game.player.camera.vertical_look = float(save_data.player.vertical_look)
-	Game.player.external_velocity = str_to_var("Vector3%s" % save_data.player.external_velocity)
+	Game.player.global_position = save_data.player.position
+	Game.player.camera.horizontal_look = save_data.player.horizontal_look
+	Game.player.camera.vertical_look = save_data.player.vertical_look
+	Game.player.external_velocity = save_data.player.external_velocity
