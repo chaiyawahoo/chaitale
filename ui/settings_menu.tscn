@@ -85,6 +85,75 @@ popup/item_1/id = 3
 popup/item_2/text = "Fullscreen"
 popup/item_2/id = 4
 
+[node name="FramerateCap" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CapFramerate" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/CapFramerate"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cap Framerate"
+
+[node name="CapFpsCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/CapFramerate"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = " "
+
+[node name="MaximumFramerate" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer"]
+layout_mode = 2
+
+[node name="FramerateLabel" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DisabledLabel"
+text = "Maximum Framerate"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FpsInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "60"
+editable = false
+
+[node name="FpsSlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 30.0
+max_value = 500.0
+value = 60.0
+exp_edit = true
+rounded = true
+editable = false
+
+[node name="Vsync" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/Vsync"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vsync"
+
+[node name="VsyncCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/Vsync"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = " "
+
 [node name="FOV" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer"]
 layout_mode = 2
 
@@ -106,9 +175,11 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 1
 min_value = 30.0
 max_value = 110.0
 value = 30.0
+rounded = true
 
 [node name="Controls" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 visible = false
@@ -142,6 +213,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 1
 max_value = 10.0
 step = 0.001
 
