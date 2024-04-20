@@ -1,12 +1,12 @@
 [gd_resource type="VoxelBlockyModelCube" load_steps=2 format=3 uid="uid://db2b2hc458ksk"]
 
-[ext_resource type="Material" uid="uid://dqg0nluhek7fs" path="res://world/voxel_types/voxel_material.tres" id="1_32jj7"]
+[ext_resource type="Material" uid="uid://dqg0nluhek7fs" path="res://world/voxel_types/transparent_material.tres" id="1_32pdw"]
 
 [resource]
 transparent = true
 transparency_index = 1
 culls_neighbors = false
-material_override_0 = ExtResource("1_32jj7")
+material_override_0 = ExtResource("1_32pdw")
 tile_left = Vector2i(3, 0)
 tile_right = Vector2i(3, 0)
 tile_bottom = Vector2i(3, 0)

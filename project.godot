@@ -17,9 +17,10 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-TickEngine="*res://game/tick_engine.gd"
 Game="*res://game/game_autoload.gd"
+TickEngine="*res://game/tick_engine.gd"
 UI="*res://ui/ui.gd"
+SaveEngine="*res://game/save_engine.gd"
 Settings="*res://game/settings.gd"
 
 [dotnet]

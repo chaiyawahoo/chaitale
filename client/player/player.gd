@@ -17,11 +17,11 @@ var external_velocity: Vector3 = Vector3.ZERO
 var input_velocity: Vector3 = Vector3.ZERO
 
 var jumping: bool = false
-var falling: bool = false
+var falling: bool = true
 var sneaking: bool = false
 var sprinting: bool = false
-var walking: bool = false
-var standing: bool = false
+var walking: bool = true
+var standing: bool = true
 
 @onready var body_node: Node3D = $Body
 @onready var camera: Camera3D = $Body/SpringArm3D/Camera3D
@@ -31,16 +31,16 @@ var standing: bool = false
 
 
 func _ready() -> void:
-	position.y = Game.terrain.bounds.position.y + Game.terrain.bounds.size.y
 	Game.player = self
 	set_physics_process(false)
 	set_process(false)
 	await Game.terrain.meshed
 	set_physics_process(true)
 	set_process(true)
-	position.y = Game.terrain.highest_voxel_position.y + 5
-	position.x = 0.5
-	position.z = 0.5
+	if position == Vector3.ZERO:
+		position.y = Game.terrain.highest_voxel_position.y + 2
+		position.x = 0.5
+		position.z = 0.5
 
 
 func _process(delta: float) -> void:
@@ -85,6 +85,7 @@ func _process(delta: float) -> void:
 
 	sneaking_collider_generator.generate_sneaking_collision()
 
+
 func _physics_process(delta: float) -> void:
 	if not (Game.is_paused and falling): # removed "and falling" once block drag is properly implmeneted
 		var input_vector: Vector3 = input_direction * speed
@@ -98,7 +99,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		external_velocity.y = 0
 		input_velocity.y = 0
-	
 	
 	velocity = external_velocity + input_velocity
 	

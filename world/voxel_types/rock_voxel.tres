@@ -1,6 +1,6 @@
 [gd_resource type="VoxelBlockyModelCube" load_steps=2 format=3 uid="uid://unv37gd0hbgw"]
 
-[ext_resource type="Material" uid="uid://dqg0nluhek7fs" path="res://world/voxel_types/voxel_material.tres" id="1_vj77j"]
+[ext_resource type="Material" uid="uid://buxeucso0b2xp" path="res://world/voxel_types/solid_material.tres" id="1_b0nlu"]
 
 [resource]
-material_override_0 = ExtResource("1_vj77j")
+material_override_0 = ExtResource("1_b0nlu")

@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://ycrowe58chfj"]
+
+[ext_resource type="PackedScene" uid="uid://cqlr2xsuk3g46" path="res://ui/theme/background.tscn" id="1_by8k3"]
+[ext_resource type="Script" path="res://ui/loading_screen.gd" id="1_iut3d"]
+
+[node name="LoadingScreen" type="CanvasLayer"]
+script = ExtResource("1_iut3d")
+
+[node name="Background" parent="." instance=ExtResource("1_by8k3")]
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -12.5
+offset_right = 20.0
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Loading Terrain..."

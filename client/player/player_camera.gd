@@ -8,7 +8,10 @@ var fov_change_time: float = 0.1
 var default_eye_level: float = 0.5
 var sneaking_eye_level: float = 0.3
 
-var vertical_look: float = 0
+var vertical_look: float = 0:
+	set(value):
+		vertical_look = value
+		spring_arm.global_rotation.x = deg_to_rad(value)
 var horizontal_look: float = 0
 
 @onready var spring_arm: SpringArm3D = get_parent()
@@ -19,7 +22,6 @@ func _enter_tree() -> void:
 
 
 func _process(_delta: float) -> void:
-	fov = Settings.fov
 	_update_sprint_fov()
 	_update_sneak_eye_level()
 
@@ -40,12 +42,12 @@ func _input(event: InputEvent) -> void:
 
 
 func look_around(relative_motion: Vector2):
+	vertical_look = rad_to_deg(spring_arm.global_rotation.x)
 	var angle_change: Vector2 = -relative_motion * Settings.mouse_sensitivity * Settings.mouse_sensitivity_coefficient
 	horizontal_look += angle_change.x
 	if abs(angle_change.y + vertical_look) > 89:
 		return
 	vertical_look += angle_change.y
-	spring_arm.global_rotation.x += deg_to_rad(angle_change.y)
 
 
 func get_looking_raycast_result() -> VoxelRaycastResult:

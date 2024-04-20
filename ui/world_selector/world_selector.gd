@@ -75,6 +75,7 @@ func create_world() -> void:
 	seed_file.store_string("%d" % random_seed)
 	Game.save_name = "%d" % random_seed
 	Game.world_seed = random_seed
+	SaveEngine.is_new_save = true
 	get_tree().change_scene_to_packed(game_scene)
 
 

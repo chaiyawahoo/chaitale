@@ -12,6 +12,7 @@ var hover_cube: MeshInstance3D
 var pause_menu: CanvasLayer
 var camera_raycast_result: VoxelRaycastResult
 
+
 var is_paused: bool:
 	get:
 		if pause_menu:

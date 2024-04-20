@@ -14,7 +14,6 @@ func _ready() -> void:
 	%SaveButton.pressed.connect(_on_button_save)
 	%SaveQuitButton.pressed.connect(_on_button_save_and_quit)
 	%QuitNoSaveButton.pressed.connect(_on_button_quit_no_save)
-	
 
 
 func _input(event: InputEvent) -> void:
@@ -37,7 +36,7 @@ func _on_button_save() -> void:
 func _on_button_save_and_quit() -> void:
 	save()
 	if Game.terrain:
-		await Game.terrain.save_success
+		await SaveEngine.save_success
 	quit()
 
 
@@ -50,9 +49,7 @@ func open_settings() -> void:
 
 
 func save() -> void:
-	if not Game.terrain:
-		return
-	Game.terrain.save()
+	SaveEngine.save_game()
 
 
 func quit() -> void:
