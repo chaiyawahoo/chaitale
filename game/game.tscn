@@ -9,10 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://m85gfn7t4bfq" path="res://ui/pause_menu.tscn" id="6_hqf37"]
 [ext_resource type="PackedScene" uid="uid://ycrowe58chfj" path="res://ui/loading_screen.tscn" id="6_on5p2"]
 
-[node name="Game" type="Node3D"]
+[node name="GameInstance" type="Node3D"]
 script = ExtResource("1_6aid6")
 
 [node name="VoxelTerrain" parent="." instance=ExtResource("2_2yhdt")]
+bounds = AABB(-5.36871e+08, -256, -5.36871e+08, 1.07374e+09, 512, 1.07374e+09)
 
 [node name="Player" parent="." instance=ExtResource("3_qibtv")]
 

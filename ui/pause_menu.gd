@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 
-var main_menu_scene: PackedScene = preload("res://ui/main_menu.tscn")
+@export var main_menu_scene: PackedScene = preload("res://ui/main_menu.tscn")
 
 
 func _enter_tree() -> void:
@@ -54,7 +54,7 @@ func save() -> void:
 
 func quit() -> void:
 	get_tree().change_scene_to_packed(main_menu_scene)
-#	get_tree().quit()
+	# get_tree().quit()
 
 
 func toggle_menu() -> void:
