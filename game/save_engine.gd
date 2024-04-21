@@ -12,14 +12,7 @@ var terrain_save_format: String = "./saves/%s/terrain.sql"
 
 var save_format: String = "./saves/%s/save.dat"
 var is_new_save: bool = false
-var save_data: Dictionary = {
-	player = {
-		position = Vector3.ZERO,
-		horizontal_look = 0.0,
-		vertical_look = 0.0,
-		external_velocity = Vector3.ZERO
-	}
-}
+var save_data: Dictionary = {}
 
 
 func _enter_tree() -> void:
@@ -50,7 +43,7 @@ func save_game() -> void:
 	save_file.store_var(save_data, true)
 
 
-func load_game() -> void:
+func load_game(silent: bool = false) -> void:
 	is_new_save = false
 	if not FileAccess.file_exists(save_format % Game.save_name):
 		return
@@ -58,6 +51,8 @@ func load_game() -> void:
 	var save_file: FileAccess = FileAccess.open(save_format % Game.save_name, FileAccess.READ)
 	save_data = save_file.get_var(true)
 
+	if silent:
+		return
 	loaded.emit()
 
 
@@ -79,8 +74,6 @@ func track_terrain_save() -> void:
 
 
 func update_before_save() -> void:
-	save_data.player.position = Game.player.position
-	save_data.player.horizontal_look = Game.player.camera.horizontal_look
-	save_data.player.vertical_look = Game.player.camera.vertical_look
-	save_data.player.external_velocity = Game.player.external_velocity
+	get_tree().call_group("players", "send_save_data")
+	Game.instance.hud.send_save_data()
 	terrain_save_completion_tracker = Game.terrain.save_modified_blocks()

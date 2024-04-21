@@ -1,7 +1,7 @@
 extends Node3D
 
 
-var selected_voxel_type: int = 1
+var selected_type: int = 1
 
 var breaking: bool = false
 var placing: bool = false
@@ -10,10 +10,7 @@ var break_voxel_timer: SceneTreeTimer
 var place_voxel_timer: SceneTreeTimer
 
 
-func _process(_delta: float) -> void:
-	if Game.is_paused:
-		return
-	
+func handle_process() -> void:
 	if breaking:
 		break_voxel()
 	
@@ -21,13 +18,7 @@ func _process(_delta: float) -> void:
 		place_voxel()
 
 
-func _input(event: InputEvent) -> void:
-	if Game.is_paused:
-		return
-
-	if event.is_action_pressed("select_1") or event.is_action_pressed("select_2") or event.is_action_pressed("select_3") or event.is_action_pressed("select_4"):
-		selected_voxel_type = int(event.as_text())
-	
+func handle_input(event: InputEvent):
 	if event.is_action("left_click"):
 		if not event.is_pressed():
 			breaking = false
@@ -61,7 +52,7 @@ func add_voxel_at(voxel_position: Vector3i) -> void:
 	if voxel_area.intersects(Game.player.player_area):
 		print("Placing overlaps player!")
 		return
-	Game.voxel_tool.set_voxel(voxel_position, selected_voxel_type)
+	Game.voxel_tool.set_voxel(voxel_position, selected_type)
 
 
 func break_voxel(forced: bool = false) -> void:
@@ -76,7 +67,7 @@ func break_voxel(forced: bool = false) -> void:
 
 
 func place_voxel(forced: bool = false) -> void:
-	if selected_voxel_type > Game.voxel_types or selected_voxel_type <= 0:
+	if selected_type > Game.voxel_types or selected_type <= 0:
 		return
 	if place_voxel_timer and not forced:
 		if place_voxel_timer.time_left > 0:

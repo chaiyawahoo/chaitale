@@ -2,12 +2,17 @@ class_name Player
 extends CharacterBody3D
 
 
-@export var walk_speed: float = 4.5
+@export var walk_speed: float = 4.0
 @export var sneak_speed_modifier: float = 0.5
 @export var sprint_speed_modifier: float = 1.3
+@export var fly_speed_modifier: float = 2.0
 @export var jump_speed: float = 9.0
 @export var sprint_stop_threshold: float = 3.0
 @export var jitter_interpolation: float = 40.0
+
+var double_tap_speed: float = 0.25 # seconds before double tap resets
+var jump_double_tap_timer: float = 0
+var tapped_jump: bool = false
 
 var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
@@ -22,9 +27,13 @@ var sneaking: bool = false
 var sprinting: bool = false
 var walking: bool = true
 var standing: bool = true
+var flying: bool = false
+
+var player_name: String = "monky"
 
 @onready var body_node: Node3D = $Body
 @onready var camera: Camera3D = $Body/SpringArm3D/Camera3D
+@onready var voxel_editor: Node3D = $VoxelEditor
 @onready var collider: CollisionShape3D = $BodyCollider
 @onready var sneaking_collider_generator: Node3D = $SneakingColliderGenerator
 @onready var player_area: AABB = AABB(Vector3.ZERO, collider.shape.size)
@@ -46,9 +55,13 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	smooth_player_movement(delta)
+	if tapped_jump:
+		jump_double_tap_timer += delta
+		if jump_double_tap_timer >= double_tap_speed:
+			jump_double_tap_timer = 0
+			tapped_jump = false
 
-	falling = not is_on_floor()
+	smooth_player_movement(delta)
 
 	if Game.is_paused:
 		speed = 0
@@ -56,6 +69,21 @@ func _process(delta: float) -> void:
 		sneaking = false
 		jumping = false
 		return
+	
+	if Input.is_action_just_pressed("jump"):
+		if tapped_jump:
+			flying = not flying
+			tapped_jump = false
+			jump_double_tap_timer = 0
+		else:
+			tapped_jump = true
+
+	falling = not is_on_floor() and not flying
+
+	if flying and is_on_floor():
+		flying = false
+	
+	voxel_editor.handle_process()
 	
 	player_area.position = position - player_area.size / 2
 	
@@ -66,13 +94,16 @@ func _process(delta: float) -> void:
 	input_direction.z = raw_input_vector.y
 	input_direction = input_direction.rotated(Vector3.UP, deg_to_rad(camera.horizontal_look))
 	
+	var speed_modifier: float = 1.0
+	if flying:
+		speed_modifier *= fly_speed_modifier
 	if sprinting:
-		speed = walk_speed * sprint_speed_modifier
+		speed_modifier *= sprint_speed_modifier
 	elif sneaking:
-		speed = walk_speed * sneak_speed_modifier
+		speed_modifier *= sneak_speed_modifier
 	else:
 		walking = true
-		speed = walk_speed
+	speed = walk_speed * speed_modifier
 	
 	if velocity == Vector3.ZERO:
 		walking = false
@@ -89,14 +120,19 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if not (Game.is_paused and falling): # removed "and falling" once block drag is properly implmeneted
-		var input_vector: Vector3 = input_direction * speed
-		input_velocity.x = input_vector.x
-		input_velocity.z = input_vector.z
+		input_velocity.x = input_direction.x * speed
+		input_velocity.z = input_direction.z * speed
 	if falling:
 		external_velocity += Settings.gravity_axis * Settings.gravity_constant * delta
-	elif jumping:
-		external_velocity.y = 0
-		input_velocity.y = jump_speed
+	elif jumping: # (and not falling)
+		if not flying:
+			external_velocity.y = 0
+			input_velocity.y = jump_speed
+		else:
+			external_velocity.y = 0
+			input_velocity.y = speed
+	elif flying and sneaking:
+		input_velocity.y = -speed * 2
 	else:
 		external_velocity.y = 0
 		input_velocity.y = 0
@@ -122,6 +158,8 @@ func _input(event) -> void:
 		sprinting = true
 		sneaking = false
 		walking = false
+	
+	voxel_editor.handle_input(event)
 
 
 func _on_save_loaded():
@@ -142,10 +180,23 @@ func smooth_player_movement(delta: float) -> void:
 
 
 func load_save() -> void:
-	var save_data: Dictionary = SaveEngine.save_data
-	position = save_data.player.position
-	camera.horizontal_look = save_data.player.horizontal_look
+	if not player_name in SaveEngine.save_data:
+		return
+	var save_data: Dictionary = SaveEngine.save_data[player_name]
+	position = save_data.position
+	camera.horizontal_look = save_data.horizontal_look
 	body_node.rotation.y = deg_to_rad(camera.horizontal_look)
-	camera.vertical_look = save_data.player.vertical_look
-	external_velocity = save_data.player.external_velocity
-	
+	camera.vertical_look = save_data.vertical_look
+	external_velocity = save_data.external_velocity
+	flying = save_data.flying
+
+
+func send_save_data() -> void:
+	var save_data: Dictionary = {
+		position = position,
+		horizontal_look = camera.horizontal_look,
+		vertical_look = camera.vertical_look,
+		external_velocity = external_velocity,
+		flying = flying
+	}
+	SaveEngine.save_data[player_name] = save_data

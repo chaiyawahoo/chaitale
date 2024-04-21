@@ -22,8 +22,8 @@ func _ready() -> void:
 	remove_child(spawn_viewer)
 	Game.player = player_scene.instantiate()
 	add_child(Game.player)
-	if SaveEngine.is_new_save:
-		# multiplayer: check if player name exists in save
+	SaveEngine.load_game(true)
+	if SaveEngine.is_new_save or not Game.player.player_name in SaveEngine.save_data:
 		Game.player.position.y = Game.terrain.highest_voxel_position.y + 2
 		Game.player.position.x = 0.5
 		Game.player.position.z = 0.5

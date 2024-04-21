@@ -57,9 +57,10 @@ func get_looking_raycast_result() -> VoxelRaycastResult:
 
 
 func _update_sprint_fov() -> void:
-	var fov_tween: Tween = create_tween()
 	var new_fov: float = sprint_fov if Game.player.sprinting else Settings.fov
-	Game.do_tween(self, "fov", new_fov, fov_change_time, fov_tween)
+	if new_fov == fov:
+		return
+	Game.do_tween(self, "fov", new_fov, fov_change_time, create_tween())
 
 
 func _update_sneak_eye_level() -> void:

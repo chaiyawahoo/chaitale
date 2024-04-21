@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://blled2qkl0icw"]
+[gd_scene load_steps=4 format=3 uid="uid://blled2qkl0icw"]
 
 [ext_resource type="Script" path="res://ui/HUD.gd" id="1_ylnuo"]
 [ext_resource type="Texture2D" uid="uid://bmofk27bci7k5" path="res://ui/pointer.png" id="2_vntbw"]
+[ext_resource type="PackedScene" uid="uid://63ww2o8hy0ee" path="res://HotbarSlot.tscn" id="3_titdh"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_ylnuo")
@@ -52,3 +53,47 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Hotbar" type="HBoxContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+alignment = 1
+
+[node name="HotbarSlot1" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+layout_mode = 2
+
+[node name="HotbarSlot2" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+layout_mode = 2
+
+[node name="HotbarSlot3" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+layout_mode = 2
+
+[node name="HotbarSlot4" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+layout_mode = 2
+
+[node name="HotbarSlot5" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+layout_mode = 2
+
+[node name="HotbarSlot6" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+layout_mode = 2
+
+[node name="HotbarSlot7" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+layout_mode = 2
+
+[node name="HotbarSlot8" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+layout_mode = 2
+
+[node name="HotbarSlot9" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+layout_mode = 2
