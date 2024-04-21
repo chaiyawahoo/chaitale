@@ -1,10 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://ycrowe58chfj"]
+[gd_scene load_steps=2 format=3 uid="uid://ycrowe58chfj"]
 
 [ext_resource type="PackedScene" uid="uid://cqlr2xsuk3g46" path="res://ui/theme/background.tscn" id="1_by8k3"]
-[ext_resource type="Script" path="res://ui/loading_screen.gd" id="1_iut3d"]
 
 [node name="LoadingScreen" type="CanvasLayer"]
-script = ExtResource("1_iut3d")
 
 [node name="Background" parent="." instance=ExtResource("1_by8k3")]
 

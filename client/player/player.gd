@@ -30,17 +30,19 @@ var standing: bool = true
 @onready var player_area: AABB = AABB(Vector3.ZERO, collider.shape.size)
 
 
-func _ready() -> void:
+func _enter_tree() -> void:
 	Game.player = self
-	set_physics_process(false)
+	SaveEngine.loaded.connect(_on_save_loaded)
+
+
+func _ready() -> void:
 	set_process(false)
-	await Game.terrain.meshed
-	set_physics_process(true)
+	set_physics_process(false)
+	await get_tree().create_timer(1.0).timeout
 	set_process(true)
-	if position == Vector3.ZERO:
-		position.y = Game.terrain.highest_voxel_position.y + 2
-		position.x = 0.5
-		position.z = 0.5
+	set_physics_process(true)
+	Game.instance.hide_loading_screen()
+	Game.instance.show_hud()
 
 
 func _process(delta: float) -> void:
@@ -56,7 +58,6 @@ func _process(delta: float) -> void:
 		return
 	
 	player_area.position = position - player_area.size / 2
-	
 	
 	body_node.rotation.y = deg_to_rad(camera.horizontal_look)
 	
@@ -123,6 +124,10 @@ func _input(event) -> void:
 		walking = false
 
 
+func _on_save_loaded():
+	load_save()
+
+
 # source: Garbaj: "Fixing Jittery Movement In Godot" (https://www.youtube.com/watch?v=pqrD3B75yKo)
 func smooth_player_movement(delta: float) -> void:
 	var fps: float = Engine.get_frames_per_second()
@@ -134,3 +139,13 @@ func smooth_player_movement(delta: float) -> void:
 	elif body_node.top_level:
 		body_node.global_position = global_position
 		body_node.top_level = false
+
+
+func load_save() -> void:
+	var save_data: Dictionary = SaveEngine.save_data
+	position = save_data.player.position
+	camera.horizontal_look = save_data.player.horizontal_look
+	body_node.rotation.y = deg_to_rad(camera.horizontal_look)
+	camera.vertical_look = save_data.player.vertical_look
+	external_velocity = save_data.player.external_velocity
+	

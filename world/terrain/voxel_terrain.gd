@@ -26,16 +26,15 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	wait_for_collision_loaded()
+	wait_for_mesh()
 
 
-# find a better way to wait for load
-func wait_for_collision_loaded() -> void:
-	await get_tree().create_timer(1).timeout
+func wait_for_mesh() -> void:
 	var voxel_raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(bounds.size * Vector3.UP, Vector3.DOWN, bounds.size.y)
 	if voxel_raycast_result:
 		loaded = true
 		highest_voxel_position = voxel_raycast_result.position
 		meshed.emit()
 		return
-	wait_for_collision_loaded()
+	await TickEngine.ticked
+	wait_for_mesh()

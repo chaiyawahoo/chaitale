@@ -6,13 +6,6 @@ extends CanvasLayer
 @onready var position_label: Label = %PositionLabel
 
 
-
-func _ready() -> void:
-	visible = false
-	await Game.terrain.meshed
-	visible = true
-
-
 func _process(_delta: float) -> void:
 	if not $Debug.visible:
 		return

@@ -12,12 +12,12 @@ var hover_cube: MeshInstance3D
 var pause_menu: CanvasLayer
 var camera_raycast_result: VoxelRaycastResult
 
-
-var is_paused: bool:
+var is_paused: bool = false:
 	get:
 		if pause_menu:
 			return pause_menu.visible
 		return false
+var is_server: bool = false
 
 
 func _process(_delta: float) -> void:
@@ -28,6 +28,7 @@ func _update_camera_raycast_result() -> void:
 	if not player:
 		return
 	camera_raycast_result = player.camera.get_looking_raycast_result()
+
 
 func do_tween(object: Object, property: String, new_value: Variant, duration: float, tween: Tween) -> void:
 	if tween:

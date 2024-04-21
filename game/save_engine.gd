@@ -2,6 +2,8 @@ extends Node
 
 
 signal save_success
+signal loaded
+
 
 var autosave_tick_interval: int = 1200 # one minute
 
@@ -56,7 +58,7 @@ func load_game() -> void:
 	var save_file: FileAccess = FileAccess.open(save_format % Game.save_name, FileAccess.READ)
 	save_data = save_file.get_var(true)
 
-	update_after_load()
+	loaded.emit()
 
 
 func load_terrain_stream() -> void:
@@ -77,15 +79,8 @@ func track_terrain_save() -> void:
 
 
 func update_before_save() -> void:
-	save_data.player.position = Game.player.global_position
+	save_data.player.position = Game.player.position
 	save_data.player.horizontal_look = Game.player.camera.horizontal_look
 	save_data.player.vertical_look = Game.player.camera.vertical_look
 	save_data.player.external_velocity = Game.player.external_velocity
 	terrain_save_completion_tracker = Game.terrain.save_modified_blocks()
-
-
-func update_after_load() -> void:
-	Game.player.global_position = save_data.player.position
-	Game.player.camera.horizontal_look = save_data.player.horizontal_look
-	Game.player.camera.vertical_look = save_data.player.vertical_look
-	Game.player.external_velocity = save_data.player.external_velocity

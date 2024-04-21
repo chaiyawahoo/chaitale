@@ -38,6 +38,7 @@ script = ExtResource("3_xevlm")
 [node name="VoxelViewer" type="VoxelViewer" parent="Body/SpringArm3D/Camera3D"]
 transform = Transform3D(1, -4.17444e-14, -2.13163e-14, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.1, 0)
 view_distance = 256
+requires_data_block_notifications = true
 
 [node name="VoxelEditor" type="Node3D" parent="Body/SpringArm3D/Camera3D"]
 unique_name_in_owner = true
