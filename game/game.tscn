@@ -32,3 +32,9 @@ visible = false
 
 [node name="PauseMenu" parent="." instance=ExtResource("6_hqf37")]
 visible = false
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://client/player/player.tscn")
+spawn_path = NodePath("..")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]

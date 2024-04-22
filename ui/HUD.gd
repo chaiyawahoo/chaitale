@@ -1,7 +1,6 @@
 extends CanvasLayer
 
 
-
 var current_hotbar_index: int = 0
 
 @onready var pointer: TextureRect = %Pointer

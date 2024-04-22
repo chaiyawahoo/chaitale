@@ -32,8 +32,9 @@ var flying: bool = false
 var player_name: String = "monky"
 
 @onready var body_node: Node3D = $Body
-@onready var camera: Camera3D = $Body/SpringArm3D/Camera3D
+@onready var camera: Camera3D = %Camera3D
 @onready var voxel_editor: Node3D = $VoxelEditor
+@onready var voxel_viewer: VoxelViewer = %VoxelViewer
 @onready var collider: CollisionShape3D = $BodyCollider
 @onready var sneaking_collider_generator: Node3D = $SneakingColliderGenerator
 @onready var player_area: AABB = AABB(Vector3.ZERO, collider.shape.size)
@@ -45,6 +46,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	voxel_viewer.set_network_peer_id(multiplayer.get_unique_id())
 	set_process(false)
 	set_physics_process(false)
 	await get_tree().create_timer(1.0).timeout

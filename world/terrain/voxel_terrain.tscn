@@ -20,4 +20,8 @@ generator = SubResource("VoxelGeneratorNoise_cu8aa")
 mesher = SubResource("VoxelMesherBlocky_8cho8")
 bounds = AABB(-5.36871e+08, -256, -5.36871e+08, 1.07374e+09, 512, 1.07374e+09)
 max_view_distance = 256
+block_enter_notification_enabled = true
+area_edit_notification_enabled = true
 script = ExtResource("2_764gb")
+
+[node name="VoxelTerrainMultiplayerSynchronizer" type="VoxelTerrainMultiplayerSynchronizer" parent="."]

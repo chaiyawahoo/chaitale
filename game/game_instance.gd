@@ -11,17 +11,24 @@ var player_scene: PackedScene = preload("res://client/player/player.tscn")
 func _enter_tree() -> void:
 	Game.instance = self
 	TickEngine.start_ticking()
+	$MultiplayerSpawner.spawn_function = player_spawn_function
+	set_multiplayer_authority(multiplayer.get_unique_id())
 
 
 func _ready() -> void:
 	print("Game ready.")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	var spawn_viewer = VoxelViewer.new()
+	spawn_viewer.set_network_peer_id(multiplayer.get_unique_id())
+	spawn_viewer.requires_data_block_notifications = true
+	spawn_viewer.view_distance = 512
+	spawn_viewer.requires_collisions = true
+	spawn_viewer.requires_visuals = true
 	add_child(spawn_viewer)
 	await Game.terrain.meshed
 	remove_child(spawn_viewer)
 	Game.player = player_scene.instantiate()
-	add_child(Game.player)
+	$MultiplayerSpawner.spawn(Game.player)
 	SaveEngine.load_game(true)
 	if SaveEngine.is_new_save or not Game.player.player_name in SaveEngine.save_data:
 		Game.player.position.y = Game.terrain.highest_voxel_position.y + 2
@@ -41,3 +48,8 @@ func hide_loading_screen() -> void:
 
 func show_hud() -> void:
 	hud.visible = true
+
+
+func player_spawn_function(data: Player) -> Node:
+	data.set_multiplayer_authority(multiplayer.get_unique_id())
+	return data

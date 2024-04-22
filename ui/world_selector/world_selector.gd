@@ -76,6 +76,7 @@ func create_world() -> void:
 	Game.save_name = "%d" % random_seed
 	Game.world_seed = random_seed
 	SaveEngine.is_new_save = true
+	Multiplayer.create_game()
 	get_tree().change_scene_to_packed(game_scene)
 
 
@@ -86,7 +87,12 @@ func load_world() -> void:
 func load_specific_world(world_selection: WorldSelection) -> void:
 	Game.save_name = world_selection.save_name
 	Game.world_seed = world_selection.world_seed
+	Multiplayer.create_game()
 	get_tree().change_scene_to_packed(game_scene)
+
+
+func join_world() -> void:
+	pass
 
 
 func back() -> void:
