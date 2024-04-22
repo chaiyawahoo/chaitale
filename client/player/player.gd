@@ -29,7 +29,7 @@ var walking: bool = true
 var standing: bool = true
 var flying: bool = false
 
-var player_name: String = "monky"
+var player_name: String = ""
 
 @onready var body_node: Node3D = $Body
 @onready var camera: Camera3D = %Camera3D
@@ -41,17 +41,14 @@ var player_name: String = "monky"
 
 
 func _enter_tree() -> void:
+	player_name = Multiplayer.player_info.name
 	Game.player = self
 	SaveEngine.loaded.connect(_on_save_loaded)
 
 
 func _ready() -> void:
 	voxel_viewer.set_network_peer_id(multiplayer.get_unique_id())
-	set_process(false)
-	set_physics_process(false)
-	await get_tree().create_timer(1.0).timeout
-	set_process(true)
-	set_physics_process(true)
+	await Game.terrain.wait_for_mesh_under_player(self)
 	Game.instance.hide_loading_screen()
 	Game.instance.show_hud()
 
@@ -75,6 +72,8 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"):
 		if tapped_jump:
 			flying = not flying
+			if not flying:
+				input_velocity.y = 0
 			tapped_jump = false
 			jump_double_tap_timer = 0
 		else:

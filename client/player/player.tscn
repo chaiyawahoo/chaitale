@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxytg2y538dbb"]
+[gd_scene load_steps=8 format=3 uid="uid://cxytg2y538dbb"]
 
 [ext_resource type="Script" path="res://client/player/player.gd" id="1_l0v5k"]
 [ext_resource type="Script" path="res://client/player/voxel_editor.gd" id="3_3wnia"]
 [ext_resource type="ArrayMesh" uid="uid://b5jt5tt1hn23s" path="res://assets/minecraft_steve/steve_file.tres" id="3_q4mbj"]
 [ext_resource type="Script" path="res://client/player/player_camera.gd" id="3_xevlm"]
 [ext_resource type="Script" path="res://client/player/sneak_collider_generator.gd" id="5_4yn0e"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_h15v2"]
+size = Vector3(0.75, 1.75, 0.75)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a5v0v"]
 size = Vector3(0.5, 1.75, 0.5)
@@ -17,14 +20,15 @@ script = ExtResource("1_l0v5k")
 
 [node name="SteveFile" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(-2.40413e-09, -0.055, -2.40413e-09, 0, -2.40413e-09, 0.055, -0.055, 2.40413e-09, 1.05088e-16, 0, -0.22, 0)
+visible = false
 layers = 2
 gi_mode = 2
 mesh = ExtResource("3_q4mbj")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
-visible = false
 cast_shadow = 0
+mesh = SubResource("BoxMesh_h15v2")
 skeleton = NodePath("../..")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="Body"]

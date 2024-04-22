@@ -1,8 +1,6 @@
 extends VoxelTerrain
 
 
-signal meshed
-
 var loaded: bool = false
 var highest_voxel_position: Vector3i = Vector3i.ZERO
 
@@ -11,7 +9,6 @@ var world_seed: int = 1004
 
 
 func _enter_tree() -> void:
-	set_multiplayer_authority(multiplayer.get_unique_id(), true)
 	Game.terrain = self
 	Game.voxel_tool = get_voxel_tool()
 	Game.voxel_types = mesher.library.models.size() - 1
@@ -23,8 +20,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	wait_for_mesh()
-
+	pass
 
 # func _on_data_block_entered(info: VoxelDataBlockEnterInfo) -> void:
 # 	if not info.are_voxels_edited():
@@ -41,15 +37,17 @@ func _ready() -> void:
 # 	print(peer_ids)
 
 
-func wait_for_mesh() -> void:
-	var voxel_raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(bounds.size * Vector3.UP, Vector3.DOWN, bounds.size.y)
+func wait_for_mesh_under_player(player: Player) -> void:
+	var player_aabb_position: Vector3 = Vector3(floor(player.position.x - 1), bounds.position.y, floor(player.position.z - 1))
+	var player_aabb_size: Vector3 = Vector3(ceil(player.position.x + 1), bounds.position.y + bounds.size.y, ceil(player.position.z + 1))
+	while not is_area_meshed(AABB(player_aabb_position, player_aabb_size)):
+		await TickEngine.ticked
+		continue
+	var voxel_raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(Vector3(player.position.x, bounds.position.y + bounds.size.y, player.position.z), Vector3.DOWN, bounds.size.y)
 	if voxel_raycast_result:
-		loaded = true
-		highest_voxel_position = voxel_raycast_result.position
-		meshed.emit()
+		if player.position.y - voxel_raycast_result.position.y < 3:
+			player.position.y = voxel_raycast_result.position.y + 2.25
 		return
-	await TickEngine.ticked
-	wait_for_mesh()
 
 
 # func receive_data_block(info: VoxelDataBlockEnterInfo) -> void:

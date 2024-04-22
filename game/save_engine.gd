@@ -20,14 +20,21 @@ func _enter_tree() -> void:
 
 
 func _process(_delta):
+	if not Multiplayer.is_server and TickEngine.ticked.is_connected(_on_tick):
+		TickEngine.ticked.disconnect(_on_tick)
+		return
 	track_terrain_save()
 
 
 func _on_tick() -> void:
+	if not Multiplayer.is_server:
+		return
 	autosave()
 
 
 func autosave() -> void:
+	if not Multiplayer.is_server:
+		return
 	if TickEngine.ticks_elapsed % autosave_tick_interval:
 		return
 	if not Game.terrain:
@@ -37,6 +44,9 @@ func autosave() -> void:
 
 
 func save_game() -> void:
+	if not Multiplayer.is_server:
+		return
+
 	update_before_save()
 
 	var save_file: FileAccess = FileAccess.open(save_format % Game.save_name, FileAccess.WRITE)
@@ -44,6 +54,9 @@ func save_game() -> void:
 
 
 func load_game(silent: bool = false) -> void:
+	if not Multiplayer.is_server:
+		return
+
 	is_new_save = false
 	if not FileAccess.file_exists(save_format % Game.save_name):
 		return
@@ -57,6 +70,8 @@ func load_game(silent: bool = false) -> void:
 
 
 func load_terrain_stream() -> void:
+	if not Multiplayer.is_server:
+		return
 	if not Game.terrain:
 		return
 	Game.terrain.stream = VoxelStreamSQLite.new()
@@ -65,6 +80,8 @@ func load_terrain_stream() -> void:
 
 
 func track_terrain_save() -> void:
+	if not Multiplayer.is_server:
+		return
 	if not terrain_save_completion_tracker:
 		return
 	if terrain_save_completion_tracker.is_complete():
@@ -74,6 +91,8 @@ func track_terrain_save() -> void:
 
 
 func update_before_save() -> void:
+	if not Multiplayer.is_server:
+		return
 	get_tree().call_group("players", "send_save_data")
 	Game.instance.hud.send_save_data()
 	terrain_save_completion_tracker = Game.terrain.save_modified_blocks()

@@ -15,7 +15,23 @@ script = ExtResource("1_7ienl")
 [node name="Background" parent="." instance=ExtResource("2_qsmej")]
 layout_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="LoggedInAs" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="LoggedInAs"]
+layout_mode = 2
+text = "Logged in as:"
+
+[node name="UsernameLabel" type="Label" parent="LoggedInAs"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Username"
+
+[node name="MenuSelect" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +40,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="MenuSelect"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_type_variation = &"MainTitle"
@@ -32,22 +48,42 @@ text = "Chaitale"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuSelect"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="SelectWorldButton" type="Button" parent="VBoxContainer/VBoxContainer"]
+[node name="UsernameInput" type="LineEdit" parent="MenuSelect/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+placeholder_text = "Username"
+alignment = 1
+
+[node name="LoginButton" type="Button" parent="MenuSelect/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Login"
+
+[node name="SelectWorldButton" type="Button" parent="MenuSelect/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "Select World"
 
-[node name="SettingsButton" type="Button" parent="VBoxContainer/VBoxContainer"]
+[node name="JoinWorldButton" type="Button" parent="MenuSelect/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Join World"
+
+[node name="SettingsButton" type="Button" parent="MenuSelect/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "Settings"
 
-[node name="QuitButton" type="Button" parent="VBoxContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="MenuSelect/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Quit"
