@@ -11,18 +11,18 @@ config_version=5
 [application]
 
 config/name="Chaitale"
-run/main_scene="res://ui/main_menu.tscn"
+run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.1", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-Game="*res://game/game_autoload.gd"
+Game="*res://game/game.gd"
 TickEngine="*res://game/tick_engine.gd"
-UI="*res://ui/ui.gd"
 SaveEngine="*res://game/save_engine.gd"
 Settings="*res://game/settings.gd"
 Multiplayer="*res://game/multiplayer.gd"
+UI="*res://ui/ui.tscn"
 
 [dotnet]
 

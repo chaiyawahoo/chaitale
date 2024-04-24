@@ -1,4 +1,4 @@
-extends Control
+extends CanvasLayer
 
 
 func _ready() -> void:
@@ -7,6 +7,7 @@ func _ready() -> void:
 	%SettingsButton.pressed.connect(_on_button_settings)
 	%LoginButton.pressed.connect(_on_button_login)
 	%JoinWorldButton.pressed.connect(_on_button_join_world)
+	%LogoutButton.pressed.connect(_on_button_logout)
 
 
 func _on_button_select_world() -> void:
@@ -22,12 +23,15 @@ func _on_button_quit() -> void:
 
 
 func _on_button_login() -> void:
-	set_username(%UsernameInput.text)
-	show_post_login()
+	login()
 
 
 func _on_button_join_world() -> void:
 	Multiplayer.join_server()
+
+
+func _on_button_logout() -> void:
+	logout()
 
 
 func set_username(username: String) -> void:
@@ -47,11 +51,26 @@ func quit() -> void:
 	get_tree().quit()
 
 
-func show_post_login() -> void:
+func login() -> void:
+	set_username(%UsernameInput.text)
 	%LoggedInAs.visible = true
 	%UsernameLabel.text = Multiplayer.player_info.name
 	%UsernameInput.visible = false
 	%LoginButton.visible = false
+	%LogoutButton.visible = true
 	%SelectWorldButton.visible = true
 	%JoinWorldButton.visible = true
 	%SettingsButton.visible = true
+
+
+func logout() -> void:
+	set_username("")
+	%LoggedInAs.visible = false
+	%UsernameLabel.text = ""
+	%UsernameInput.visible = true
+	%UsernameInput.text = ""
+	%LoginButton.visible = true
+	%LogoutButton.visible = false
+	%SelectWorldButton.visible = false
+	%JoinWorldButton.visible = false
+	%SettingsButton.visible = false

@@ -1,7 +1,6 @@
 extends Control
 
 
-var game_scene: PackedScene = preload("res://game/game.tscn")
 var world_selection_scene: PackedScene = preload("res://ui/world_selector/world_selection.tscn")
 var world_button_group: ButtonGroup = ButtonGroup.new()
 
@@ -77,7 +76,7 @@ func create_world() -> void:
 	Game.world_seed = random_seed
 	SaveEngine.is_new_save = true
 	Multiplayer.create_server()
-	get_tree().change_scene_to_packed(game_scene)
+	Main.change_level()
 
 
 func load_world() -> void:
@@ -88,8 +87,7 @@ func load_specific_world(world_selection: WorldSelection) -> void:
 	Game.save_name = world_selection.save_name
 	Game.world_seed = world_selection.world_seed
 	Multiplayer.create_server()
-	get_tree().change_scene_to_packed(game_scene)
-
+	Main.change_level()
 
 func back() -> void:
 	queue_free()

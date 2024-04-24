@@ -3,9 +3,11 @@ extends Node
 
 signal save_success
 signal loaded
+signal server_data_received
 
 
 var autosave_tick_interval: int = 1200 # one minute
+var autosave_tick_counter: int = 0
 
 var terrain_save_completion_tracker: VoxelSaveCompletionTracker
 var terrain_save_format: String = "./saves/%s/terrain.sql"
@@ -20,32 +22,31 @@ func _enter_tree() -> void:
 
 
 func _process(_delta):
-	if not Multiplayer.is_server and TickEngine.ticked.is_connected(_on_tick):
-		TickEngine.ticked.disconnect(_on_tick)
-		return
 	track_terrain_save()
 
 
 func _on_tick() -> void:
-	if not Multiplayer.is_server:
-		return
-	autosave()
+	autosave_tick()
 
 
-func autosave() -> void:
-	if not Multiplayer.is_server:
-		return
-	if TickEngine.ticks_elapsed % autosave_tick_interval:
-		return
+func autosave_tick() -> void:
+	if multiplayer.multiplayer_peer:
+		if not multiplayer.is_server():
+			return
 	if not Game.terrain:
 		return
+	if autosave_tick_counter < autosave_tick_interval:
+		autosave_tick_counter += 1
+		return
+	autosave_tick_counter = 0
 	print("Autosaving...")
 	save_game()
 
 
 func save_game() -> void:
-	if not Multiplayer.is_server:
-		return
+	if multiplayer.multiplayer_peer:
+		if not multiplayer.is_server():
+			return
 
 	update_before_save()
 
@@ -54,8 +55,9 @@ func save_game() -> void:
 
 
 func load_game(silent: bool = false) -> void:
-	if not Multiplayer.is_server:
-		return
+	if multiplayer.multiplayer_peer:
+		if not multiplayer.is_server():
+			return
 
 	is_new_save = false
 	if not FileAccess.file_exists(save_format % Game.save_name):
@@ -70,8 +72,9 @@ func load_game(silent: bool = false) -> void:
 
 
 func load_terrain_stream() -> void:
-	if not Multiplayer.is_server:
-		return
+	if multiplayer.multiplayer_peer:
+		if not multiplayer.is_server():
+			return
 	if not Game.terrain:
 		return
 	Game.terrain.stream = VoxelStreamSQLite.new()
@@ -79,9 +82,23 @@ func load_terrain_stream() -> void:
 	Game.terrain.generator.noise.seed = Game.world_seed
 
 
-func track_terrain_save() -> void:
-	if not Multiplayer.is_server:
+@rpc("any_peer", "reliable")
+func request_server_save_data() -> void:
+	if not multiplayer.is_server():
 		return
+	send_server_save_data.rpc_id(multiplayer.get_remote_sender_id(), save_data)
+
+
+@rpc("authority", "call_local", "reliable")
+func send_server_save_data(data: Dictionary) -> void:
+	save_data = data
+	server_data_received.emit()
+
+
+func track_terrain_save() -> void:
+	if multiplayer.multiplayer_peer:
+		if not multiplayer.is_server():
+			return
 	if not terrain_save_completion_tracker:
 		return
 	if terrain_save_completion_tracker.is_complete():
@@ -91,8 +108,9 @@ func track_terrain_save() -> void:
 
 
 func update_before_save() -> void:
-	if not Multiplayer.is_server:
-		return
+	if multiplayer.multiplayer_peer:
+		if not multiplayer.is_server():
+			return
 	get_tree().call_group("players", "send_save_data")
-	Game.instance.hud.send_save_data()
+	UI.hud.send_save_data()
 	terrain_save_completion_tracker = Game.terrain.save_modified_blocks()

@@ -13,11 +13,13 @@ const DEFAULT_SERVER_ADDRESS: String = "127.0.0.1"
 var player_info: Dictionary = {name = ""}
 var players: Dictionary = {} # id: player_info
 
-var is_server: bool = false
-
 
 func _ready() -> void:
-	pass
+	multiplayer.peer_connected.connect(_on_player_connected)
+	multiplayer.peer_disconnected.connect(_on_player_disconnected)
+	multiplayer.connected_to_server.connect(_on_connected_ok)
+	multiplayer.connection_failed.connect(_on_connected_fail)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
 func create_server() -> Error:
@@ -26,7 +28,7 @@ func create_server() -> Error:
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer
-	is_server = true
+	register_player(1, player_info)
 	return OK
 
 
@@ -44,15 +46,14 @@ func end_multiplayer_session() -> void:
 
 
 @rpc("any_peer", "reliable")
-func register_player(peer_id: int, info: Dictionary):
+func register_player(peer_id: int, info: Dictionary) -> void: 
 	players[peer_id] = info
 	player_connected.emit(peer_id, info)
 
 
-
 func _on_player_connected(peer_id: int) -> void:
-	if multiplayer.is_server():
-		return
+	# if multiplayer.is_server():
+	# 	return
 	register_player.rpc_id(peer_id, multiplayer.get_unique_id(), player_info)
 
 
@@ -66,9 +67,9 @@ func _on_connected_ok() -> void:
 
 
 func _on_connected_fail() -> void:
-	end_multiplayer_session()
+	Main.close_level()
 
 
 func _on_server_disconnected() -> void:
-	end_multiplayer_session()
+	Main.close_level()
 	server_disconnected.emit()

@@ -3,15 +3,16 @@ extends Node3D
 
 var invisible_wall: StaticBody3D = null
 var invisible_wall_distance: float = 1.49
+@onready var player: Player = get_parent()
 
 
 func generate_sneaking_collision() -> void:
-	if not Game.player.sneaking or Game.player.falling:
+	if not player.sneaking or player.falling:
 		if invisible_wall:
 			invisible_wall.queue_free()
 		invisible_wall = null
 
-	if Game.player.sneaking and not Game.player.falling and Engine.get_process_frames() % 2:
+	if player.sneaking and not player.falling and Engine.get_process_frames() % 2:
 		if invisible_wall:
 			invisible_wall.queue_free()
 		invisible_wall = StaticBody3D.new()
@@ -69,7 +70,7 @@ func generate_sneaking_collision() -> void:
 		for wall_collider in invisible_wall_colliders:
 			invisible_wall.add_child(wall_collider)
 		invisible_wall.position = Vector3(highest_voxel_position_under_player) + Vector3.ONE * 0.5
-		Game.instance.add_child(invisible_wall)
+		get_parent().add_child(invisible_wall)
 	
 
 func generate_corner_shape_from_base(base_shape: CollisionShape3D, corner_vector: Vector3, distance: float, neighbor_x: bool, neighbor_z: bool) -> Array[CollisionShape3D]:
@@ -94,7 +95,7 @@ func generate_shape_from_base(base_shape: CollisionShape3D, shape_position: Vect
 
 func get_voxel_positions_under_player() -> Array[Vector3i]:
 	var voxel_positions: Array[Vector3i] = []
-	var raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(global_position + Vector3.DOWN * (Game.player.player_area.size.y / 2), Vector3.DOWN, 1)
+	var raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(global_position + Vector3.DOWN * (player.player_area.size.y / 2), Vector3.DOWN, 1)
 	if raycast_result:
 		voxel_positions.append(raycast_result.position)
 	var corners: Array[Vector3] = [
@@ -103,7 +104,7 @@ func get_voxel_positions_under_player() -> Array[Vector3i]:
 		Vector3(1, -1, 1), 
 		Vector3(-1, -1, 1)]
 	for i in range(4):
-		var raycast_origin: Vector3 = global_position + corners[i] * (Game.player.player_area.size / 2)
+		var raycast_origin: Vector3 = global_position + corners[i] * (player.player_area.size / 2)
 		raycast_result = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN, 1)
 		if not raycast_result:
 			continue
@@ -121,9 +122,9 @@ func get_voxel_position_standing_on_most() -> Vector3i:
 	var voxel_areas: Array[AABB] = []
 	var area_intersection_volumes: Array[float] = []
 	var largest_volume: float = 0
-	var feet_position: Vector3 = global_position - Game.player.player_area.size / 2
+	var feet_position: Vector3 = global_position - player.player_area.size / 2
 	feet_position -= Vector3.UP * 0.5
-	var feet_area: AABB = AABB(feet_position, Game.player.player_area.size)
+	var feet_area: AABB = AABB(feet_position, player.player_area.size)
 	var index_of_greatest_intersection: int = 0
 	for voxel_position in voxel_positions:
 		voxel_areas.append(AABB(Vector3(voxel_position) + Game.terrain.global_position, Vector3.ONE))

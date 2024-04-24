@@ -18,18 +18,21 @@ var raw_input_vector: Vector2 = Vector2.ZERO
 var input_direction: Vector3 = Vector3.ZERO
 var speed: float = 0
 
-var external_velocity: Vector3 = Vector3.ZERO
-var input_velocity: Vector3 = Vector3.ZERO
+@export var external_velocity: Vector3 = Vector3.ZERO
+@export var input_velocity: Vector3 = Vector3.ZERO
 
-var jumping: bool = false
-var falling: bool = true
-var sneaking: bool = false
-var sprinting: bool = false
-var walking: bool = true
-var standing: bool = true
-var flying: bool = false
+@export var jumping: bool = false
+@export var falling: bool = false
+@export var sneaking: bool = false
+@export var sprinting: bool = false
+@export var walking: bool = true
+@export var standing: bool = true
+@export var flying: bool = false
 
-var player_name: String = ""
+var loaded = false
+var is_new_to_save = false
+
+@export var player_name: String = ""
 
 @onready var body_node: Node3D = $Body
 @onready var camera: Camera3D = %Camera3D
@@ -41,16 +44,37 @@ var player_name: String = ""
 
 
 func _enter_tree() -> void:
-	player_name = Multiplayer.player_info.name
-	Game.player = self
-	SaveEngine.loaded.connect(_on_save_loaded)
+	if multiplayer.is_server():
+		player_name = Multiplayer.players[get_multiplayer_authority()].name	
+		SaveEngine.loaded.connect(_on_save_loaded)
+	elif is_multiplayer_authority():
+		player_name = Multiplayer.player_info.name
+		load_save()
 
 
 func _ready() -> void:
-	voxel_viewer.set_network_peer_id(multiplayer.get_unique_id())
-	await Game.terrain.wait_for_mesh_under_player(self)
-	Game.instance.hide_loading_screen()
-	Game.instance.show_hud()
+	if is_multiplayer_authority():
+		camera.make_current()
+		Game.player = self
+	if not multiplayer.is_server() and not is_multiplayer_authority():
+		voxel_viewer.queue_free()
+	else:
+		voxel_viewer.set_network_peer_id(get_multiplayer_authority())
+	set_process(false)
+	set_physics_process(false)
+	if not Game.terrain.loaded:
+		Game.terrain.wait_for_mesh_under_player(self, get_multiplayer_authority())
+	await Game.terrain.meshed
+	set_process(is_multiplayer_authority())
+	set_physics_process(is_multiplayer_authority())
+	if is_multiplayer_authority():
+		%NameLabel.text = player_name
+		while is_new_to_save and not is_on_floor():
+			await TickEngine.ticked
+		UI.loading_screen.visible = false
+		UI.hud.visible = true
+	if multiplayer.is_server():
+		SaveEngine.save_game()
 
 
 func _process(delta: float) -> void:
@@ -181,7 +205,14 @@ func smooth_player_movement(delta: float) -> void:
 
 
 func load_save() -> void:
+	if not multiplayer.is_server():
+		SaveEngine.request_server_save_data.rpc_id(1)
+		await SaveEngine.server_data_received
+		if not is_multiplayer_authority():
+			return
 	if not player_name in SaveEngine.save_data:
+		print("%s not found in save" % player_name)
+		is_new_to_save = true
 		return
 	var save_data: Dictionary = SaveEngine.save_data[player_name]
 	position = save_data.position
@@ -190,14 +221,19 @@ func load_save() -> void:
 	camera.vertical_look = save_data.vertical_look
 	external_velocity = save_data.external_velocity
 	flying = save_data.flying
+	falling = save_data.falling
+	loaded = true
 
 
 func send_save_data() -> void:
+	if not loaded:
+		load_save()
 	var save_data: Dictionary = {
 		position = position,
 		horizontal_look = camera.horizontal_look,
 		vertical_look = camera.vertical_look,
 		external_velocity = external_velocity,
+		falling = falling,
 		flying = flying
 	}
 	SaveEngine.save_data[player_name] = save_data

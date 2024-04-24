@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cxytg2y538dbb"]
+[gd_scene load_steps=9 format=3 uid="uid://cxytg2y538dbb"]
 
 [ext_resource type="Script" path="res://client/player/player.gd" id="1_l0v5k"]
 [ext_resource type="Script" path="res://client/player/voxel_editor.gd" id="3_3wnia"]
@@ -11,6 +11,36 @@ size = Vector3(0.75, 1.75, 0.75)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a5v0v"]
 size = Vector3(0.5, 1.75, 0.5)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oqejt"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath("Body:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
+properties/2/path = NodePath("Body/SpringArm3D/Camera3D:vertical_look")
+properties/2/spawn = true
+properties/2/sync = true
+properties/2/watch = false
+properties/3/path = NodePath("Body/SpringArm3D/Camera3D:horizontal_look")
+properties/3/spawn = true
+properties/3/sync = true
+properties/3/watch = false
+properties/4/path = NodePath(".:flying")
+properties/4/spawn = true
+properties/4/sync = true
+properties/4/watch = false
+properties/5/path = NodePath(".:falling")
+properties/5/spawn = true
+properties/5/sync = true
+properties/5/watch = false
+properties/6/path = NodePath("Body/NameLabel:text")
+properties/6/spawn = true
+properties/6/sync = true
+properties/6/watch = false
 
 [node name="Player" type="CharacterBody3D" groups=["players"]]
 collision_layer = 2
@@ -30,6 +60,12 @@ skeleton = NodePath("../..")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_h15v2")
 skeleton = NodePath("../..")
+
+[node name="NameLabel" type="Label3D" parent="Body"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01629, 0)
+billboard = 2
+text = "name"
 
 [node name="SpringArm3D" type="SpringArm3D" parent="Body"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, 0)
@@ -55,3 +91,6 @@ script = ExtResource("5_4yn0e")
 [node name="VoxelEditor" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, 0)
 script = ExtResource("3_3wnia")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_oqejt")

@@ -7,15 +7,15 @@ var terrain: VoxelTerrain
 var voxel_tool: VoxelTool
 var voxel_types: int
 var player: Player
-var instance: GameInstance
+var main: Main
 var hover_cube: MeshInstance3D
 var pause_menu: CanvasLayer
 var camera_raycast_result: VoxelRaycastResult
 
 var is_paused: bool = false:
 	get:
-		if pause_menu:
-			return pause_menu.visible
+		if UI.pause_menu:
+			return UI.pause_menu.visible
 		return false
 var is_server: bool = false
 
