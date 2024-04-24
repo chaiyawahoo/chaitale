@@ -70,7 +70,7 @@ func generate_sneaking_collision() -> void:
 		for wall_collider in invisible_wall_colliders:
 			invisible_wall.add_child(wall_collider)
 		invisible_wall.position = Vector3(highest_voxel_position_under_player) + Vector3.ONE * 0.5
-		get_parent().add_child(invisible_wall)
+		get_parent().get_parent().add_child(invisible_wall)
 	
 
 func generate_corner_shape_from_base(base_shape: CollisionShape3D, corner_vector: Vector3, distance: float, neighbor_x: bool, neighbor_z: bool) -> Array[CollisionShape3D]:
