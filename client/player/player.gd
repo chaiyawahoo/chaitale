@@ -56,9 +56,12 @@ func _ready() -> void:
 	if is_multiplayer_authority():
 		camera.make_current()
 		Game.player = self
-	if not multiplayer.is_server() and not is_multiplayer_authority():
+		voxel_viewer.set_network_peer_id(get_multiplayer_authority())
+	elif not multiplayer.is_server():
 		voxel_viewer.queue_free()
 	else:
+		voxel_viewer.requires_visuals = false
+		voxel_viewer.requires_collisions = false
 		voxel_viewer.set_network_peer_id(get_multiplayer_authority())
 	set_process(false)
 	set_physics_process(false)

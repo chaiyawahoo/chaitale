@@ -15,21 +15,9 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	$PlayerSpawner.spawn_function = _spawn
 	print("Game ready.")
-	# if multiplayer.is_server():
-	# 	add_child.call_deferred(terrain_scene.instantiate())
-	# while not Game.terrain:
-	# 	await TickEngine.ticked
 	UI.loading_screen.visible = true
 	UI.main_menu.visible = false
-	var spawn_viewer = VoxelViewer.new()
-	spawn_viewer.set_network_peer_id(multiplayer.get_unique_id())
-	spawn_viewer.requires_data_block_notifications = true
-	spawn_viewer.view_distance = 256
-	spawn_viewer.requires_collisions = true
-	spawn_viewer.requires_visuals = true
-	add_child(spawn_viewer)
 	spawn_on_server.rpc()
-	# add_child.call_deferred(new_player)
 	while not Game.player:
 		await TickEngine.ticked
 	if multiplayer.is_server():
