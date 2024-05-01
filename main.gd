@@ -45,3 +45,4 @@ func _remove_level() -> void:
 	for node in level_parent.get_children():
 		level_parent.remove_child(node)
 		node.queue_free()
+	SaveEngine.purge_save_data()

@@ -76,3 +76,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Load World"
+
+[node name="HostButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Host World"

@@ -10,6 +10,13 @@ extends CharacterBody3D
 @export var sprint_stop_threshold: float = 3.0
 @export var jitter_interpolation: float = 40.0
 
+var third_person_camera_distance: float = 3.0
+var sprint_fov: float:
+	get: return Settings.fov + 20
+var fov_change_time: float = 0.1
+var default_eye_level: float = 0.5
+var sneaking_eye_level: float = 0.3
+
 var double_tap_speed: float = 0.25 # seconds before double tap resets
 var jump_double_tap_timer: float = 0
 var tapped_jump: bool = false
@@ -32,11 +39,18 @@ var speed: float = 0
 var loaded = false
 var is_new_to_save = false
 
+@export var vertical_look: float = 0:
+	set(value):
+		vertical_look = value
+		if spring_arm:
+			spring_arm.global_rotation.x = deg_to_rad(value)
+@export var horizontal_look: float = 0
+
 @export var player_name: String = ""
 
 @onready var body_node: Node3D = $Body
 @onready var camera: Camera3D = %Camera3D
-@onready var voxel_editor: Node3D = $VoxelEditor
+@onready var spring_arm: SpringArm3D = %SpringArm3D
 @onready var voxel_viewer: VoxelViewer = %VoxelViewer
 @onready var collider: CollisionShape3D = $BodyCollider
 @onready var sneaking_collider_generator: Node3D = $SneakingColliderGenerator
@@ -48,6 +62,7 @@ func _enter_tree() -> void:
 		player_name = Multiplayer.players[get_multiplayer_authority()].name	
 		SaveEngine.loaded.connect(_on_save_loaded)
 	elif is_multiplayer_authority():
+		is_new_to_save = true
 		player_name = Multiplayer.player_info.name
 		load_save()
 
@@ -71,9 +86,11 @@ func _ready() -> void:
 	set_process(is_multiplayer_authority())
 	set_physics_process(is_multiplayer_authority())
 	if is_multiplayer_authority():
+		camera.fov = Settings.fov
 		%NameLabel.text = player_name
 		while is_new_to_save and not is_on_floor():
 			await TickEngine.ticked
+		is_new_to_save = false
 		UI.loading_screen.visible = false
 		UI.hud.visible = true
 	if multiplayer.is_server():
@@ -111,16 +128,16 @@ func _process(delta: float) -> void:
 	if flying and is_on_floor():
 		flying = false
 	
-	voxel_editor.handle_process()
+	VoxelEditor.handle_process()
 	
 	player_area.position = position - player_area.size / 2
 	
-	body_node.rotation.y = deg_to_rad(camera.horizontal_look)
+	body_node.rotation.y = deg_to_rad(horizontal_look)
 	
 	raw_input_vector = Input.get_vector("move_backward", "move_forward", "move_left", "move_right")
 	input_direction.x = raw_input_vector.x
 	input_direction.z = raw_input_vector.y
-	input_direction = input_direction.rotated(Vector3.UP, deg_to_rad(camera.horizontal_look))
+	input_direction = input_direction.rotated(Vector3.UP, deg_to_rad(horizontal_look))
 	
 	var speed_modifier: float = 1.0
 	if flying:
@@ -138,10 +155,13 @@ func _process(delta: float) -> void:
 		standing = true
 		sprinting = false
 	
-	var forward_velocity: float = velocity.rotated(Vector3.UP, deg_to_rad(-camera.horizontal_look)).x
+	var forward_velocity: float = velocity.rotated(Vector3.UP, deg_to_rad(-horizontal_look)).x
 
 	if forward_velocity <= sprint_stop_threshold:
 		sprinting = false
+	
+	update_sprint_fov()
+	update_sneak_eye_level()
 
 	sneaking_collider_generator.generate_sneaking_collision()
 
@@ -176,22 +196,58 @@ func _input(event) -> void:
 	
 	if event.is_action("jump"):
 		jumping = event.is_pressed()
+		return
 		
 	if event.is_action("sneak"):
 		sneaking = event.is_pressed()
 		sprinting = false if sneaking else sprinting
 		walking = false if sneaking else walking
+		return
 	
 	if event.is_action_pressed("sprint"):
 		sprinting = true
 		sneaking = false
 		walking = false
+		return
 	
-	voxel_editor.handle_input(event)
+	if event.is_action_pressed("camera_mode"):
+		if spring_arm.spring_length == 0:
+			spring_arm.spring_length = third_person_camera_distance
+			camera.cull_mask += 2
+		else:
+			spring_arm.spring_length = 0
+			camera.cull_mask -= 2
+
+	if event is InputEventMouseMotion:
+		look_around(event.relative)
+	
+	VoxelEditor.handle_input(event)
 
 
-func _on_save_loaded():
-	load_save()
+func look_around(relative_motion: Vector2):
+	vertical_look = rad_to_deg(spring_arm.global_rotation.x)
+	var angle_change: Vector2 = -relative_motion * Settings.mouse_sensitivity * Settings.mouse_sensitivity_coefficient
+	horizontal_look += angle_change.x
+	if abs(angle_change.y + vertical_look) > 89:
+		return
+	vertical_look += angle_change.y
+
+
+func get_looking_raycast_result() -> VoxelRaycastResult:
+	var reach: float = Settings.voxel_interaction_reach + spring_arm.spring_length
+	var result: VoxelRaycastResult = Game.voxel_tool.raycast(camera.global_position, -camera.global_transform.basis.z, reach)
+	return result
+
+
+func update_sprint_fov() -> void:
+	var new_fov: float = sprint_fov if sprinting else Settings.fov
+	if new_fov == camera.fov:
+		return
+	Game.do_tween(camera, "fov", new_fov, fov_change_time, create_tween())
+
+
+func update_sneak_eye_level() -> void:
+	spring_arm.position.y = sneaking_eye_level if sneaking else default_eye_level
 
 
 # source: Garbaj: "Fixing Jittery Movement In Godot" (https://www.youtube.com/watch?v=pqrD3B75yKo)
@@ -219,9 +275,9 @@ func load_save() -> void:
 		return
 	var save_data: Dictionary = SaveEngine.save_data[player_name]
 	position = save_data.position
-	camera.horizontal_look = save_data.horizontal_look
-	body_node.rotation.y = deg_to_rad(camera.horizontal_look)
-	camera.vertical_look = save_data.vertical_look
+	horizontal_look = save_data.horizontal_look
+	body_node.rotation.y = deg_to_rad(horizontal_look)
+	vertical_look = save_data.vertical_look
 	external_velocity = save_data.external_velocity
 	flying = save_data.flying
 	falling = save_data.falling
@@ -233,10 +289,14 @@ func send_save_data() -> void:
 		load_save()
 	var save_data: Dictionary = {
 		position = position,
-		horizontal_look = camera.horizontal_look,
-		vertical_look = camera.vertical_look,
+		horizontal_look = horizontal_look,
+		vertical_look = vertical_look,
 		external_velocity = external_velocity,
 		falling = falling,
 		flying = flying
 	}
 	SaveEngine.save_data[player_name] = save_data
+
+
+func _on_save_loaded():
+	load_save()

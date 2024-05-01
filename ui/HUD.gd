@@ -66,7 +66,7 @@ func select_item(index: int) -> void:
 		hotbar_slots[i].theme_type_variation = "HotbarSlot"
 	if not Game.player:
 		return
-	Game.player.voxel_editor.selected_type = current_hotbar_index + 1
+	VoxelEditor.current_voxel_id = current_hotbar_index + 1
 
 
 func select_previous() -> void:

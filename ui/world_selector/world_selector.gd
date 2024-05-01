@@ -21,6 +21,7 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	%CreateButton.pressed.connect(_on_button_create)
+	%HostButton.pressed.connect(_on_button_host)
 	%LoadButton.pressed.connect(_on_button_load)
 	%BackButton.pressed.connect(_on_button_back)
 	for world in %WorldsContainer.get_children():
@@ -45,6 +46,10 @@ func _on_button_create() -> void:
 
 func _on_button_load() -> void:
 	load_world()
+
+
+func _on_button_host() -> void:
+	load_world(false)
 
 
 func instanitate_world_in_list(directory_name: String) -> void:
@@ -79,14 +84,14 @@ func create_world() -> void:
 	Main.change_level()
 
 
-func load_world() -> void:
-	load_specific_world(world_button_group.get_pressed_button().get_parent())
+func load_world(is_offline: bool = true) -> void:
+	load_specific_world(world_button_group.get_pressed_button().get_parent(), is_offline)
 
 
-func load_specific_world(world_selection: WorldSelection) -> void:
+func load_specific_world(world_selection: WorldSelection, is_offline: bool = true) -> void:
 	Game.save_name = world_selection.save_name
 	Game.world_seed = world_selection.world_seed
-	Multiplayer.create_server()
+	Multiplayer.create_server(is_offline)
 	Main.change_level()
 
 func back() -> void:

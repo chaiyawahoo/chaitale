@@ -50,6 +50,8 @@ func save_game() -> void:
 
 	update_before_save()
 
+	terrain_save_completion_tracker = Game.terrain.save_modified_blocks()
+	
 	var save_file: FileAccess = FileAccess.open(save_format % Game.save_name, FileAccess.WRITE)
 	save_file.store_var(save_data, true)
 
@@ -69,6 +71,10 @@ func load_game(silent: bool = false) -> void:
 	if silent:
 		return
 	loaded.emit()
+
+
+func purge_save_data() -> void:
+	save_data = {}
 
 
 func load_terrain_stream() -> void:
@@ -113,4 +119,3 @@ func update_before_save() -> void:
 			return
 	get_tree().call_group("players", "send_save_data")
 	UI.hud.send_save_data()
-	terrain_save_completion_tracker = Game.terrain.save_modified_blocks()

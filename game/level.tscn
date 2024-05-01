@@ -9,7 +9,6 @@
 script = ExtResource("1_jcbme")
 
 [node name="VoxelTerrain" parent="." instance=ExtResource("2_lq421")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="HoverCube" parent="." instance=ExtResource("3_pk8n6")]
 

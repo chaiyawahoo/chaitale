@@ -10,12 +10,12 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("menu") and Game.terrain:
-		toggle_menu()
+	if event.is_action_pressed("pause") and Game.terrain:
+		toggle_pause()
 
 
 func _on_button_resume() -> void:
-	toggle_menu()
+	toggle_pause()
 
 
 func _on_button_settings() -> void:
@@ -49,6 +49,6 @@ func quit() -> void:
 	Main.close_level()
 
 
-func toggle_menu() -> void:
+func toggle_pause() -> void:
 	visible = not visible
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if visible else Input.MOUSE_MODE_CAPTURED

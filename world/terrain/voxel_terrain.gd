@@ -28,7 +28,7 @@ func wait_for_mesh_under_player(player: Player, peer_id: int = 1) -> void:
 	while result.size() == 0:
 		await TickEngine.ticked
 		var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-		var relative_ground_distance = 2
+		var relative_ground_distance: float = 2
 		if player.falling or player.flying or player.is_new_to_save:
 			relative_ground_distance = player.position.y
 		var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(Vector3(player.position), Vector3(player.position.x, player.position.y - relative_ground_distance, player.position.z), 1)
