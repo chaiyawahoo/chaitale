@@ -33,9 +33,11 @@ func create_server(is_offline: bool = true) -> Error:
 	return OK
 
 
-func join_server() -> Error:
+func join_server(ip: String = "") -> Error:
+	ip = DEFAULT_SERVER_ADDRESS if ip == "" else ip
+	print(ip)
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
-	var error: Error = peer.create_client(DEFAULT_SERVER_ADDRESS, PORT)
+	var error: Error = peer.create_client(ip, PORT)
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer

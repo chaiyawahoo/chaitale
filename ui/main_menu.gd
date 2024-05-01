@@ -7,6 +7,8 @@ func _ready() -> void:
 	%SettingsButton.pressed.connect(_on_button_settings)
 	%LoginButton.pressed.connect(_on_button_login)
 	%JoinWorldButton.pressed.connect(_on_button_join_world)
+	%ConnectButton.pressed.connect(_on_button_connect)
+	%BackButton.pressed.connect(_on_button_back)
 	%LogoutButton.pressed.connect(_on_button_logout)
 
 
@@ -27,7 +29,15 @@ func _on_button_login() -> void:
 
 
 func _on_button_join_world() -> void:
-	Multiplayer.join_server()
+	toggle_join_container()
+
+
+func _on_button_back() -> void:
+	toggle_join_container()
+
+
+func _on_button_connect() -> void:
+	Multiplayer.join_server(%IPInput.text)
 
 
 func _on_button_logout() -> void:
@@ -74,3 +84,8 @@ func logout() -> void:
 	%SelectWorldButton.visible = false
 	%JoinWorldButton.visible = false
 	%SettingsButton.visible = false
+
+
+func toggle_join_container() -> void:
+	%JoinContainer.visible = not %JoinContainer.visible
+	%MainContainer.visible = not %MainContainer.visible
