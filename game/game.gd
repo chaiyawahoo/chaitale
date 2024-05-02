@@ -7,17 +7,17 @@ var terrain: VoxelTerrain
 var voxel_tool: VoxelTool
 var voxel_types: int
 var player: Player
-var instance: GameInstance
+var main: Main
 var hover_cube: MeshInstance3D
 var pause_menu: CanvasLayer
 var camera_raycast_result: VoxelRaycastResult
 
-
-var is_paused: bool:
+var is_paused: bool = false:
 	get:
-		if pause_menu:
-			return pause_menu.visible
+		if UI.pause_menu:
+			return UI.pause_menu.visible
 		return false
+var is_server: bool = false
 
 
 func _process(_delta: float) -> void:
@@ -25,9 +25,10 @@ func _process(_delta: float) -> void:
 
 
 func _update_camera_raycast_result() -> void:
-	if not player:
+	if not player or not player.is_inside_tree():
 		return
-	camera_raycast_result = player.camera.get_looking_raycast_result()
+	camera_raycast_result = player.get_looking_raycast_result()
+
 
 func do_tween(object: Object, property: String, new_value: Variant, duration: float, tween: Tween) -> void:
 	if tween:

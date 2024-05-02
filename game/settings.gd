@@ -24,6 +24,8 @@ var fov_maximum: float = 110
 var mouse_sensitivity_coefficient: float = 0.5
 var mouse_sensitivity: float = 0.1
 
+var invert_scroll: bool = false
+
 
 func _enter_tree() -> void:
 	load_settings()
@@ -46,6 +48,7 @@ func load_settings() -> void:
 	max_fps = config.get_value("video", "max_fps", max_fps)
 	vsync_mode = config.get_value("video", "vsync_mode", vsync_mode)
 	mouse_sensitivity = config.get_value("controls", "mouse_sensitivity", mouse_sensitivity)
+	invert_scroll = config.get_value("controls", "invert_scroll", invert_scroll)
 
 	update_settings()
 
@@ -66,5 +69,6 @@ func update_settings() -> void:
 	config.set_value("video", "max_fps", max_fps)
 	config.set_value("video", "vsync_mode", vsync_mode)
 	config.set_value("controls", "mouse_sensitivity", mouse_sensitivity)
+	config.set_value("controls", "invert_scroll", invert_scroll)
 
 	config.save("user://settings.cfg")

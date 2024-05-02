@@ -1,10 +1,6 @@
 extends CanvasLayer
 
 
-func _enter_tree() -> void:
-	Game.pause_menu = self
-
-
 func _ready() -> void:
 	%ResumeButton.pressed.connect(_on_button_resume)
 	%SettingsButton.pressed.connect(_on_button_settings)
@@ -14,12 +10,12 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("menu"):
-		toggle_menu()
+	if event.is_action_pressed("pause") and Game.terrain:
+		toggle_pause()
 
 
 func _on_button_resume() -> void:
-	toggle_menu()
+	toggle_pause()
 
 
 func _on_button_settings() -> void:
@@ -50,12 +46,9 @@ func save() -> void:
 
 
 func quit() -> void:
-	get_tree().change_scene_to_packed(UI.main_menu_scene)
-	# i do not like this but it seems to not crash
-	# get_tree().change_scene_to_file("res://ui/main_menu.tscn")
-	# get_tree().quit()
+	Main.close_level()
 
 
-func toggle_menu() -> void:
+func toggle_pause() -> void:
 	visible = not visible
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if visible else Input.MOUSE_MODE_CAPTURED

@@ -1,50 +1,81 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxytg2y538dbb"]
+[gd_scene load_steps=6 format=3 uid="uid://cxytg2y538dbb"]
 
 [ext_resource type="Script" path="res://client/player/player.gd" id="1_l0v5k"]
-[ext_resource type="Script" path="res://client/player/voxel_editor.gd" id="3_3wnia"]
-[ext_resource type="ArrayMesh" uid="uid://b5jt5tt1hn23s" path="res://assets/minecraft_steve/steve_file.tres" id="3_q4mbj"]
-[ext_resource type="Script" path="res://client/player/player_camera.gd" id="3_xevlm"]
 [ext_resource type="Script" path="res://client/player/sneak_collider_generator.gd" id="5_4yn0e"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_h15v2"]
+size = Vector3(0.75, 1.75, 0.75)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a5v0v"]
 size = Vector3(0.5, 1.75, 0.5)
 
-[node name="Player" type="CharacterBody3D"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oqejt"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath("Body:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
+properties/2/path = NodePath(".:flying")
+properties/2/spawn = true
+properties/2/sync = true
+properties/2/watch = false
+properties/3/path = NodePath(".:falling")
+properties/3/spawn = true
+properties/3/sync = true
+properties/3/watch = false
+properties/4/path = NodePath("Body/NameLabel:text")
+properties/4/spawn = true
+properties/4/sync = true
+properties/4/watch = false
+properties/5/path = NodePath(".:vertical_look")
+properties/5/spawn = true
+properties/5/sync = true
+properties/5/watch = false
+properties/6/path = NodePath(".:horizontal_look")
+properties/6/spawn = true
+properties/6/sync = true
+properties/6/watch = false
+
+[node name="Player" type="CharacterBody3D" groups=["players"]]
 collision_layer = 2
 script = ExtResource("1_l0v5k")
 
 [node name="Body" type="Node3D" parent="."]
 
-[node name="SteveFile" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(-2.40413e-09, -0.055, -2.40413e-09, 0, -2.40413e-09, 0.055, -0.055, 2.40413e-09, 1.05088e-16, 0, -0.22, 0)
-layers = 2
-gi_mode = 2
-mesh = ExtResource("3_q4mbj")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
+cast_shadow = 0
+mesh = SubResource("BoxMesh_h15v2")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
-visible = false
-cast_shadow = 0
-skeleton = NodePath("../..")
+[node name="NameLabel" type="Label3D" parent="Body"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01629, 0)
+billboard = 2
+text = "name"
 
 [node name="SpringArm3D" type="SpringArm3D" parent="Body"]
+unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, 0)
 spring_length = 0.0
 
 [node name="Camera3D" type="Camera3D" parent="Body/SpringArm3D"]
+unique_name_in_owner = true
 cull_mask = 1048573
-script = ExtResource("3_xevlm")
 
 [node name="VoxelViewer" type="VoxelViewer" parent="Body/SpringArm3D/Camera3D"]
+unique_name_in_owner = true
 transform = Transform3D(1, -4.17444e-14, -2.13163e-14, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.1, 0)
 view_distance = 256
-
-[node name="VoxelEditor" type="Node3D" parent="Body/SpringArm3D/Camera3D"]
-unique_name_in_owner = true
-script = ExtResource("3_3wnia")
+requires_data_block_notifications = true
 
 [node name="BodyCollider" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_a5v0v")
 
 [node name="SneakingColliderGenerator" type="Node3D" parent="."]
 script = ExtResource("5_4yn0e")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_oqejt")

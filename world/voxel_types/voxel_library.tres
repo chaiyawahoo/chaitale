@@ -1,10 +1,11 @@
-[gd_resource type="VoxelBlockyLibrary" load_steps=6 format=3 uid="uid://dxeianmodrghp"]
+[gd_resource type="VoxelBlockyLibrary" load_steps=7 format=3 uid="uid://dxeianmodrghp"]
 
 [ext_resource type="VoxelBlockyModelEmpty" uid="uid://doeiul13n1t5u" path="res://world/voxel_types/air_voxel.tres" id="1_ftb52"]
 [ext_resource type="VoxelBlockyModelCube" uid="uid://unv37gd0hbgw" path="res://world/voxel_types/rock_voxel.tres" id="2_3angj"]
 [ext_resource type="VoxelBlockyModelCube" uid="uid://qastm3k6rkmc" path="res://world/voxel_types/log_voxel.tres" id="3_oqsse"]
 [ext_resource type="VoxelBlockyModelCube" uid="uid://db2b2hc458ksk" path="res://world/voxel_types/leaf_voxel.tres" id="4_vof7n"]
+[ext_resource type="VoxelBlockyModelCube" uid="uid://c8b67wmlhsyff" path="res://world/voxel_types/plank_voxel.tres" id="5_6c1k8"]
 [ext_resource type="VoxelBlockyModelCube" uid="uid://bpeu10sijhjxc" path="res://world/voxel_types/glass_voxel.tres" id="5_v1arq"]
 
 [resource]
-models = Array[VoxelBlockyModel]([ExtResource("1_ftb52"), ExtResource("2_3angj"), ExtResource("3_oqsse"), ExtResource("4_vof7n"), ExtResource("5_v1arq")])
+models = Array[VoxelBlockyModel]([ExtResource("1_ftb52"), ExtResource("2_3angj"), ExtResource("3_oqsse"), ExtResource("4_vof7n"), ExtResource("5_6c1k8"), ExtResource("5_v1arq")])
