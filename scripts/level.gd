@@ -48,4 +48,6 @@ func _spawn(peer_id: int) -> Player:
 
 
 func despawn(peer_id: int) -> void:
-	get_node(str(peer_id)).queue_free()
+	var player_to_despawn: Player = get_node(str(peer_id))
+	SaveEngine.save_data[player_to_despawn.player_name] = player_to_despawn.get_save_data()
+	player_to_despawn.queue_free()

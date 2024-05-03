@@ -30,9 +30,8 @@ func _on_tick() -> void:
 
 
 func autosave_tick() -> void:
-	if multiplayer.multiplayer_peer:
-		if not multiplayer.is_server():
-			return
+	if not multiplayer.is_server():
+		return
 	if not Game.terrain:
 		return
 	if autosave_tick_counter < autosave_tick_interval:
@@ -57,9 +56,8 @@ func save_game() -> void:
 
 
 func load_game(silent: bool = false) -> void:
-	if multiplayer.multiplayer_peer:
-		if not multiplayer.is_server():
-			return
+	if not multiplayer.is_server():
+		return
 
 	is_new_save = false
 	if not FileAccess.file_exists(save_format % Game.save_name):

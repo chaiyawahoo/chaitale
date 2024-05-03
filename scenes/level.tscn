@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/level.gd" id="1_f3cq4"]
 [ext_resource type="PackedScene" uid="uid://csjhovnrq48t7" path="res://scenes/voxel_terrain.tscn" id="2_lq421"]
 [ext_resource type="PackedScene" uid="uid://b0g1cfhmot3q" path="res://scenes/hover_cube.tscn" id="3_pk8n6"]
-[ext_resource type="Environment" uid="uid://c7x65b0gqx275" path="res://environment.tres" id="4_e4exn"]
+[ext_resource type="Environment" uid="uid://c7x65b0gqx275" path="res://art/environment/environment.tres" id="4_e4exn"]
 
 [node name="Level" type="Node3D"]
 script = ExtResource("1_f3cq4")
@@ -24,4 +24,5 @@ shadow_enabled = true
 environment = ExtResource("4_e4exn")
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://scenes/player.tscn")
 spawn_path = NodePath("..")

@@ -62,7 +62,6 @@ func _enter_tree() -> void:
 		player_name = Multiplayer.players[get_multiplayer_authority()].name	
 		SaveEngine.loaded.connect(_on_save_loaded)
 	elif is_multiplayer_authority():
-		is_new_to_save = true
 		player_name = Multiplayer.player_info.name
 		load_save()
 
@@ -284,10 +283,8 @@ func load_save() -> void:
 	loaded = true
 
 
-func send_save_data() -> void:
-	if not loaded:
-		load_save()
-	var save_data: Dictionary = {
+func get_save_data() -> Dictionary:
+	return {
 		position = position,
 		horizontal_look = horizontal_look,
 		vertical_look = vertical_look,
@@ -295,8 +292,13 @@ func send_save_data() -> void:
 		falling = falling,
 		flying = flying
 	}
-	SaveEngine.save_data[player_name] = save_data
 
+
+func send_save_data() -> void:
+	if not loaded:
+		load_save()
+	SaveEngine.save_data[player_name] = get_save_data()
+ 
 
 func _on_save_loaded():
 	load_save()

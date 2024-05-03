@@ -140,7 +140,7 @@ func update_vsync(button_pressed: bool) -> void:
 
 func back() -> void:
 	if unapplied_settings.size() > 0:
-		print("unapplied changes")
+		print("Unapplied changes")
 	unapplied_settings.clear()
 	queue_free()
 

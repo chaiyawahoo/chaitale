@@ -4,9 +4,7 @@ extends CanvasLayer
 func _ready() -> void:
 	%ResumeButton.pressed.connect(_on_button_resume)
 	%SettingsButton.pressed.connect(_on_button_settings)
-	%SaveButton.pressed.connect(_on_button_save)
-	%SaveQuitButton.pressed.connect(_on_button_save_and_quit)
-	%QuitNoSaveButton.pressed.connect(_on_button_quit_no_save)
+	%QuitButton.pressed.connect(_on_button_quit)
 
 
 func _input(event: InputEvent) -> void:
@@ -22,18 +20,11 @@ func _on_button_settings() -> void:
 	open_settings()
 
 
-func _on_button_save() -> void:
-	save()
-
-
-func _on_button_save_and_quit() -> void:
-	save()
-	if Game.terrain:
-		await SaveEngine.save_success
-	quit()
-
-
-func _on_button_quit_no_save() -> void:
+func _on_button_quit() -> void:
+	if multiplayer.is_server():
+		save()
+		if Game.terrain:
+			await SaveEngine.save_success
 	quit()
 
 

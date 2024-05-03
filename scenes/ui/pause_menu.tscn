@@ -33,19 +33,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Settings"
 
-[node name="SaveButton" type="Button" parent="VBoxContainer"]
+[node name="QuitButton" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Save
-"
-
-[node name="SaveQuitButton" type="Button" parent="VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Save & Quit
-"
-
-[node name="QuitNoSaveButton" type="Button" parent="VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Quit without Saving"
+text = "Quit"

@@ -35,7 +35,6 @@ func create_server(is_offline: bool = true) -> Error:
 
 func join_server(ip: String = "") -> Error:
 	ip = DEFAULT_SERVER_ADDRESS if ip == "" else ip
-	print(ip)
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var error: Error = peer.create_client(ip, PORT)
 	if error:
@@ -61,8 +60,9 @@ func _on_player_connected(peer_id: int) -> void:
 
 
 func _on_player_disconnected(peer_id: int) -> void:
-	players.erase(peer_id)
 	player_disconnected.emit(peer_id)
+	SaveEngine.save_game()
+	players.erase(peer_id)
 
 
 func _on_connected_ok() -> void:
