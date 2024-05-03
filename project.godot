@@ -11,19 +11,19 @@ config_version=5
 [application]
 
 config/name="Chaitale"
-run/main_scene="res://main.tscn"
+run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.1", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://art/textures/icon.svg"
 
 [autoload]
 
-Game="*res://game/game.gd"
-TickEngine="*res://game/tick_engine.gd"
-SaveEngine="*res://game/save_engine.gd"
-Settings="*res://game/settings.gd"
-Multiplayer="*res://game/multiplayer.gd"
-UI="*res://ui/ui.tscn"
-VoxelEditor="*res://game/voxel_editor.gd"
+Game="*res://scripts/autoload/game.gd"
+TickEngine="*res://scripts/autoload/tick_engine.gd"
+SaveEngine="*res://scripts/autoload/save_engine.gd"
+Settings="*res://scripts/autoload/settings.gd"
+Multiplayer="*res://scripts/autoload/multiplayer.gd"
+UI="*res://scenes/ui/ui.tscn"
+VoxelEditor="*res://scripts/autoload/voxel_editor.gd"
 
 [dotnet]
 
@@ -31,7 +31,7 @@ project/assembly_name="Chaitale"
 
 [gui]
 
-theme/custom="res://ui/theme/main_theme.tres"
+theme/custom="res://art/themes/main_theme.tres"
 
 [input]
 

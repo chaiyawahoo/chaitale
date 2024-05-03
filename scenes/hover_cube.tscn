@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0g1cfhmot3q"]
+
+[ext_resource type="Script" path="res://scripts/hover_cube.gd" id="1_2kq8i"]
+
+[node name="HoverCube" type="MeshInstance3D"]
+transform = Transform3D(1.001, 0, 0, 0, 1.001, 0, 0, 0, 1.001, 0, 0, 0)
+top_level = true
+script = ExtResource("1_2kq8i")

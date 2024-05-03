@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://prpk6gvuba8h"]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_f3cq4"]
+[ext_resource type="PackedScene" uid="uid://csjhovnrq48t7" path="res://scenes/voxel_terrain.tscn" id="2_lq421"]
+[ext_resource type="PackedScene" uid="uid://b0g1cfhmot3q" path="res://scenes/hover_cube.tscn" id="3_pk8n6"]
+[ext_resource type="Environment" uid="uid://c7x65b0gqx275" path="res://environment.tres" id="4_e4exn"]
+
+[node name="Level" type="Node3D"]
+script = ExtResource("1_f3cq4")
+
+[node name="VoxelTerrain" parent="." instance=ExtResource("2_lq421")]
+bounds = AABB(-5.36871e+08, -256, -5.36871e+08, 1.07374e+09, 512, 1.07374e+09)
+
+[node name="HoverCube" parent="." instance=ExtResource("3_pk8n6")]
+
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.984808, -0.122788, 0.122788, 0, 0.707107, 0.707107, -0.173648, -0.696364, 0.696364, 0, 0, 0)
+light_color = Color(1, 0.980392, 0.839216, 1)
+light_energy = 0.5
+light_volumetric_fog_energy = 5.0
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("4_e4exn")
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("..")
