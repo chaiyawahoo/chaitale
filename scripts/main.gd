@@ -12,7 +12,6 @@ static var _instance: Main
 
 func _enter_tree() -> void:
 	_instance = self
-	Game.main = self
 
 
 static func change_level() -> void:

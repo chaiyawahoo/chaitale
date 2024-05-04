@@ -44,7 +44,11 @@ var is_new_to_save = false
 		vertical_look = value
 		if spring_arm:
 			spring_arm.global_rotation.x = deg_to_rad(value)
-@export var horizontal_look: float = 0
+@export var horizontal_look: float = 0:
+	set(value):
+		horizontal_look = value
+		if body_node:
+			body_node.rotation.y = deg_to_rad(value)
 
 @export var player_name: String = ""
 
@@ -79,11 +83,13 @@ func _ready() -> void:
 		voxel_viewer.set_network_peer_id(get_multiplayer_authority())
 	set_process(false)
 	set_physics_process(false)
+	set_process_input(false)
 	if not Game.terrain.loaded:
 		Game.terrain.wait_for_mesh_under_player(self, get_multiplayer_authority())
 	await Game.terrain.meshed
 	set_process(is_multiplayer_authority())
 	set_physics_process(is_multiplayer_authority())
+	set_process_input(is_multiplayer_authority())
 	if is_multiplayer_authority():
 		camera.fov = Settings.fov
 		%NameLabel.text = player_name
@@ -273,25 +279,16 @@ func load_save() -> void:
 		is_new_to_save = true
 		return
 	var save_data: Dictionary = SaveEngine.save_data[player_name]
-	position = save_data.position
-	horizontal_look = save_data.horizontal_look
-	body_node.rotation.y = deg_to_rad(horizontal_look)
-	vertical_look = save_data.vertical_look
-	external_velocity = save_data.external_velocity
-	flying = save_data.flying
-	falling = save_data.falling
+	for key in save_data:
+		set(key, save_data[key])
 	loaded = true
 
 
 func get_save_data() -> Dictionary:
-	return {
-		position = position,
-		horizontal_look = horizontal_look,
-		vertical_look = vertical_look,
-		external_velocity = external_velocity,
-		falling = falling,
-		flying = flying
-	}
+	var save_data: Dictionary = {}
+	for key in SaveEngine.PLAYER_SAVE_KEYS:
+		save_data[key] = get(key)
+	return save_data
 
 
 func send_save_data() -> void:

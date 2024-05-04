@@ -7,7 +7,6 @@ var terrain: VoxelTerrain
 var voxel_tool: VoxelTool
 var voxel_types: int
 var player: Player
-var main: Main
 var hover_cube: MeshInstance3D
 var pause_menu: CanvasLayer
 var camera_raycast_result: VoxelRaycastResult

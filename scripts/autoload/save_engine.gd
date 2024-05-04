@@ -6,6 +6,9 @@ signal loaded
 signal server_data_received
 
 
+const PLAYER_SAVE_KEYS: Array[String] = ["position", "horizontal_look", "vertical_look", "external_velocity", "falling", "flying"]
+
+
 var autosave_tick_interval: int = 1200 # one minute
 var autosave_tick_counter: int = 0
 
