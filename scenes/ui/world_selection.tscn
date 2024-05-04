@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dh35wfq84fxkp"]
+
+[ext_resource type="Script" path="res://scripts/ui/world_selection.gd" id="1_up4cu"]
+[ext_resource type="Script" path="res://scripts/ui/world_selection_button.gd" id="2_t16wp"]
+
+[node name="WorldSelection" type="MarginContainer"]
+script = ExtResource("1_up4cu")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+mouse_filter = 1
+toggle_mode = true
+text = "world"
+script = ExtResource("2_t16wp")

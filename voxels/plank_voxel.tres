@@ -1,0 +1,12 @@
+[gd_resource type="VoxelBlockyModelCube" load_steps=2 format=3 uid="uid://c8b67wmlhsyff"]
+
+[ext_resource type="Material" uid="uid://buxeucso0b2xp" path="res://art/materials/solid_material.tres" id="1_bsa0j"]
+
+[resource]
+material_override_0 = ExtResource("1_bsa0j")
+tile_left = Vector2i(1, 1)
+tile_right = Vector2i(1, 1)
+tile_bottom = Vector2i(1, 1)
+tile_top = Vector2i(1, 1)
+tile_back = Vector2i(1, 1)
+tile_front = Vector2i(1, 1)

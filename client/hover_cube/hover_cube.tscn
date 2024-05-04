@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0g1cfhmot3q"]
-
-[ext_resource type="Script" path="res://client/hover_cube/hover_cube.gd" id="1_2kq8i"]
-
-[node name="HoverCube" type="MeshInstance3D"]
-top_level = true
-sorting_offset = 1.0
-script = ExtResource("1_2kq8i")

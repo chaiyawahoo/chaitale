@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://csjhovnrq48t7"]
+
+[ext_resource type="VoxelBlockyLibrary" uid="uid://dxeianmodrghp" path="res://voxels/voxel_library.tres" id="1_l6rcw"]
+[ext_resource type="Script" path="res://scripts/voxel_terrain.gd" id="2_xmc32"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h5ush"]
+seed = 1004
+metadata/_preview_in_3d_space_ = true
+
+[sub_resource type="VoxelGeneratorNoise" id="VoxelGeneratorNoise_cu8aa"]
+channel = 0
+noise = SubResource("FastNoiseLite_h5ush")
+height_range = 128.0
+
+[sub_resource type="VoxelMesherBlocky" id="VoxelMesherBlocky_8cho8"]
+library = ExtResource("1_l6rcw")
+
+[node name="VoxelTerrain" type="VoxelTerrain"]
+generator = SubResource("VoxelGeneratorNoise_cu8aa")
+mesher = SubResource("VoxelMesherBlocky_8cho8")
+bounds = AABB(-5.36871e+08, -256, -5.36871e+08, 1.07374e+09, 512, 1.07374e+09)
+max_view_distance = 256
+block_enter_notification_enabled = true
+area_edit_notification_enabled = true
+script = ExtResource("2_xmc32")
+
+[node name="VoxelTerrainMultiplayerSynchronizer" type="VoxelTerrainMultiplayerSynchronizer" parent="."]
