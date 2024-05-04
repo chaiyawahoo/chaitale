@@ -1,14 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://blled2qkl0icw"]
+[gd_scene load_steps=6 format=3 uid="uid://blled2qkl0icw"]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_ylnuo"]
+[ext_resource type="Shader" path="res://art/shaders/invert_canvas_shader.gdshader" id="2_kywoh"]
 [ext_resource type="Texture2D" uid="uid://bmofk27bci7k5" path="res://art/textures/pointer.png" id="2_vntbw"]
-[ext_resource type="PackedScene" uid="uid://63ww2o8hy0ee" path="res://scenes/ui/HotbarSlot.tscn" id="3_titdh"]
+[ext_resource type="PackedScene" uid="uid://63ww2o8hy0ee" path="res://scenes/ui/hotbar_slot.tscn" id="3_titdh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rfdsy"]
+shader = ExtResource("2_kywoh")
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_ylnuo")
 
 [node name="Pointer" type="TextureRect" parent="."]
 unique_name_in_owner = true
+modulate = Color(0, 0, 0, 1)
+material = SubResource("ShaderMaterial_rfdsy")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

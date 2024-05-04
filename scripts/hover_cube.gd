@@ -1,7 +1,7 @@
 extends MeshInstance3D
 
 
-var material: StandardMaterial3D = preload("res://art/materials/hover_cube_material.tres")
+var material: ShaderMaterial = preload("res://art/materials/hover_cube_material.tres")
 
 
 func _enter_tree() -> void:
@@ -20,7 +20,7 @@ func _process(_delta: float) -> void:
 	if not result:
 		visible = false
 		return
-	position = Vector3(result.position) + Game.terrain.global_position - Vector3.ONE * 0.0005
+	position = Vector3(result.position) + Game.terrain.global_position
 	visible = true
 
 
