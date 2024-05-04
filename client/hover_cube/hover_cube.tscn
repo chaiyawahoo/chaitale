@@ -3,6 +3,6 @@
 [ext_resource type="Script" path="res://client/hover_cube/hover_cube.gd" id="1_2kq8i"]
 
 [node name="HoverCube" type="MeshInstance3D"]
-transform = Transform3D(1.001, 0, 0, 0, 1.001, 0, 0, 0, 1.001, 0, 0, 0)
 top_level = true
+sorting_offset = 1.0
 script = ExtResource("1_2kq8i")
