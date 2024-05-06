@@ -38,8 +38,8 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton:
 		if event.is_pressed():
-			var up_function: Callable = select_previous if not Settings.invert_scroll else select_next
-			var down_function: Callable = select_next if not Settings.invert_scroll else select_previous
+			var up_function: Callable = select_previous if not Settings.settings.controls.invert_scroll else select_next
+			var down_function: Callable = select_next if not Settings.settings.controls.invert_scroll else select_previous
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 				up_function.call()
 				return

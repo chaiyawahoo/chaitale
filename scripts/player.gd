@@ -12,7 +12,7 @@ extends CharacterBody3D
 
 var third_person_camera_distance: float = 3.0
 var sprint_fov: float:
-	get: return Settings.fov + 20
+	get: return Settings.settings.video.fov + 20
 var fov_change_time: float = 0.1
 var default_eye_level: float = 0.5
 var sneaking_eye_level: float = 0.3
@@ -54,6 +54,7 @@ var is_new_to_save = false
 
 @onready var body_node: Node3D = $Body
 @onready var camera: Camera3D = %Camera3D
+@onready var camera_attributes: CameraAttributesPractical = camera.attributes
 @onready var spring_arm: SpringArm3D = %SpringArm3D
 @onready var voxel_viewer: VoxelViewer = %VoxelViewer
 @onready var collider: CollisionShape3D = $BodyCollider
@@ -91,7 +92,7 @@ func _ready() -> void:
 	set_physics_process(is_multiplayer_authority())
 	set_process_input(is_multiplayer_authority())
 	if is_multiplayer_authority():
-		camera.fov = Settings.fov
+		camera.fov = Settings.settings.video.fov
 		%NameLabel.text = player_name
 		while is_new_to_save and not is_on_floor():
 			await TickEngine.ticked
@@ -231,7 +232,7 @@ func _input(event) -> void:
 
 func look_around(relative_motion: Vector2):
 	vertical_look = rad_to_deg(spring_arm.global_rotation.x)
-	var angle_change: Vector2 = -relative_motion * Settings.mouse_sensitivity * Settings.mouse_sensitivity_coefficient
+	var angle_change: Vector2 = -relative_motion * Settings.settings.controls.mouse_sensitivity * Settings.settings.controls.mouse_sensitivity_coefficient
 	horizontal_look += angle_change.x
 	if abs(angle_change.y + vertical_look) > 89:
 		return
@@ -245,7 +246,7 @@ func get_looking_raycast_result() -> VoxelRaycastResult:
 
 
 func update_sprint_fov() -> void:
-	var new_fov: float = sprint_fov if sprinting else Settings.fov
+	var new_fov: float = sprint_fov if sprinting else Settings.settings.video.fov
 	if new_fov == camera.fov:
 		return
 	Game.do_tween(camera, "fov", new_fov, fov_change_time, create_tween())

@@ -53,26 +53,29 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Video" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+[node name="Video" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
+horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video"]
+[node name="Video" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"TabMarginContainer"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video"]
 layout_mode = 2
 
-[node name="FullscreenMode" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer"]
+[node name="FullscreenMode" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FullscreenMode"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FullscreenMode"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Window Mode"
 
-[node name="WindowMode" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FullscreenMode"]
+[node name="WindowMode" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FullscreenMode"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -85,50 +88,50 @@ popup/item_1/id = 3
 popup/item_2/text = "Fullscreen"
 popup/item_2/id = 4
 
-[node name="FramerateCap" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer"]
+[node name="FramerateCap" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FramerateCap"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CapFramerate" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer"]
+[node name="CapFramerate" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FramerateCap/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/CapFramerate"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FramerateCap/VBoxContainer/CapFramerate"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Cap Framerate"
 
-[node name="CapFpsCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/CapFramerate"]
+[node name="CapFpsCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FramerateCap/VBoxContainer/CapFramerate"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = " "
 
-[node name="MaximumFramerate" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer"]
+[node name="MaximumFramerate" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FramerateCap/VBoxContainer"]
 layout_mode = 2
 
-[node name="FramerateLabel" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate"]
+[node name="FramerateLabel" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"DisabledLabel"
 text = "Maximum Framerate"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FpsInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate/HBoxContainer"]
+[node name="FpsInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "60"
 editable = false
 
-[node name="FpsSlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate/HBoxContainer"]
+[node name="FpsSlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FramerateCap/VBoxContainer/MaximumFramerate/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -140,38 +143,38 @@ exp_edit = true
 rounded = true
 editable = false
 
-[node name="Vsync" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer"]
+[node name="Vsync" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/Vsync"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/Vsync"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Vsync"
 
-[node name="VsyncCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/Vsync"]
+[node name="VsyncCheck" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/Vsync"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = " "
 
-[node name="FOV" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer"]
+[node name="FOV" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FOV"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FOV"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Field of View"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FOV"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FOV"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FovInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FOV/HBoxContainer"]
+[node name="FovInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FOV/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 
-[node name="FovSlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Video/VBoxContainer/FOV/HBoxContainer"]
+[node name="FovSlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Video/Video/VBoxContainer/FOV/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -181,41 +184,380 @@ max_value = 110.0
 value = 30.0
 rounded = true
 
-[node name="Controls" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+[node name="Graphics" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
+horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls"]
-layout_mode = 2
-
-[node name="Sensitivity" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer/Sensitivity"]
+[node name="Graphics" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Mouse Sensitivity"
+size_flags_vertical = 3
+theme_type_variation = &"TabMarginContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer/Sensitivity"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics"]
+layout_mode = 2
+
+[node name="LightsShadowsDivider" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Lights & Shadows"
+horizontal_alignment = 1
+
+[node name="Shadows" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/Shadows"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SensitivityInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer/Sensitivity/HBoxContainer"]
+[node name="SoftShadowFilterQuality" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/Shadows/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/Shadows/VBoxContainer/SoftShadowFilterQuality"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Soft Shadow Filter Quality"
+
+[node name="ShadowFilterQuality" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/Shadows/VBoxContainer/SoftShadowFilterQuality"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 6
+selected = 2
+popup/item_0/text = "Hard (Disabled)"
+popup/item_0/id = 0
+popup/item_1/text = "Very Low"
+popup/item_1/id = 1
+popup/item_2/text = "Low"
+popup/item_2/id = 2
+popup/item_3/text = "Medium"
+popup/item_3/id = 3
+popup/item_4/text = "High"
+popup/item_4/id = 4
+popup/item_5/text = "Ultra"
+popup/item_5/id = 5
+
+[node name="HalfPrecision" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/Shadows/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/Shadows/VBoxContainer/HalfPrecision"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Half-Precision Shadow Map"
+
+[node name="ShadowHalfPrecision" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/Shadows/VBoxContainer/HalfPrecision"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EnvironmentDivider" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Environment"
+horizontal_alignment = 1
+
+[node name="SSAO" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Quality" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer/Quality"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ambient Occlusion Quality"
+
+[node name="SSAOQuality" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer/Quality"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 5
+selected = 2
+popup/item_0/text = "Very Low"
+popup/item_0/id = 0
+popup/item_1/text = "Low"
+popup/item_1/id = 1
+popup/item_2/text = "Medium"
+popup/item_2/id = 2
+popup/item_3/text = "High"
+popup/item_3/id = 3
+popup/item_4/text = "Ultra"
+popup/item_4/id = 4
+
+[node name="AdaptiveTarget" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer"]
+layout_mode = 2
+
+[node name="AdaptiveAOLabel" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer/AdaptiveTarget"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AO Adaptive Target (Custom Only)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer/AdaptiveTarget"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AdaptiveAOInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer/AdaptiveTarget/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 
-[node name="SensitivitySlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Controls/VBoxContainer/Sensitivity/HBoxContainer"]
+[node name="AdaptiveAOSlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer/AdaptiveTarget/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="HalfSize" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer/HalfSize"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Half-Size AO Rendering"
+
+[node name="AOHalfSize" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer/HalfSize"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SSIL" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Quality" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer/Quality"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Indirect Lighting Quality"
+
+[node name="SSILQuality" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer/Quality"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 5
+selected = 2
+popup/item_0/text = "Very Low"
+popup/item_0/id = 0
+popup/item_1/text = "Low"
+popup/item_1/id = 1
+popup/item_2/text = "Medium"
+popup/item_2/id = 2
+popup/item_3/text = "High"
+popup/item_3/id = 3
+popup/item_4/text = "Ultra"
+popup/item_4/id = 4
+
+[node name="AdaptiveTarget" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer"]
+layout_mode = 2
+
+[node name="AdaptiveILLabel" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer/AdaptiveTarget"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "IL Adaptive Target (Custom Only)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer/AdaptiveTarget"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AdaptiveILInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer/AdaptiveTarget/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="AdaptiveILSlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer/AdaptiveTarget/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="HalfSize" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer/HalfSize"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Half-Size IL Rendering"
+
+[node name="ILHalfSize" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer/HalfSize"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AntiAliasingDivider" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Anti-Aliasing"
+horizontal_alignment = 1
+
+[node name="AntiAliasing" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MSAA" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer/MSAA"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "MSAA Samples"
+
+[node name="MSAASamples" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer/MSAA"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 4
+selected = 0
+popup/item_0/text = "Disabled"
+popup/item_0/id = 0
+popup/item_1/text = "2x"
+popup/item_1/id = 1
+popup/item_2/text = "4x"
+popup/item_2/id = 2
+popup/item_3/text = "8x"
+popup/item_3/id = 3
+
+[node name="SSAA" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer/SSAA"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Screen Space Anti-Aliasing"
+
+[node name="SSAAOption" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer/SSAA"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 2
+selected = 0
+popup/item_0/text = "Disabled"
+popup/item_0/id = 0
+popup/item_1/text = "FXAA"
+popup/item_1/id = 1
+
+[node name="TAA" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer/TAA"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Use TAA"
+
+[node name="UseTAA" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer/TAA"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Debanding" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer/Debanding"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Use Debanding"
+
+[node name="UseDebanding" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/AntiAliasing/VBoxContainer/Debanding"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Controls" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Controls" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"TabMarginContainer"
+theme_override_constants/margin_right = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls/Controls"]
+layout_mode = 2
+
+[node name="Sensitivity" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls/Controls/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Controls/Controls/VBoxContainer/Sensitivity"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mouse Sensitivity"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls/Controls/VBoxContainer/Sensitivity"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SensitivityInput" type="LineEdit" parent="MarginContainer/VBoxContainer/TabContainer/Controls/Controls/VBoxContainer/Sensitivity/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="SensitivitySlider" type="HSlider" parent="MarginContainer/VBoxContainer/TabContainer/Controls/Controls/VBoxContainer/Sensitivity/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 max_value = 10.0
 step = 0.001
+
+[node name="InvertScroll" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Controls/Controls/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Controls/Controls/VBoxContainer/InvertScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Invert Scroll"
+
+[node name="InvertScroll" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Controls/Controls/VBoxContainer/InvertScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Gameplay" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Gameplay" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Gameplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"TabMarginContainer"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
