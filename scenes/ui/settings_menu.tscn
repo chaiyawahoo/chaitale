@@ -290,7 +290,7 @@ popup/item_2/text = "Medium"
 popup/item_2/id = 2
 popup/item_3/text = "High"
 popup/item_3/id = 3
-popup/item_4/text = "Ultra"
+popup/item_4/text = "Ultra/Custom"
 popup/item_4/id = 4
 
 [node name="AdaptiveTarget" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSAO/VBoxContainer"]
@@ -365,7 +365,7 @@ popup/item_2/text = "Medium"
 popup/item_2/id = 2
 popup/item_3/text = "High"
 popup/item_3/id = 3
-popup/item_4/text = "Ultra"
+popup/item_4/text = "Ultra/Custom"
 popup/item_4/id = 4
 
 [node name="AdaptiveTarget" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Graphics/Graphics/VBoxContainer/SSIL/VBoxContainer"]
