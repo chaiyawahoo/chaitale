@@ -1,10 +1,10 @@
+# adapted from source: DashNothing: Easy Input Settings Menu | Let's Godot (https://www.youtube.com/watch?v=ZDPM45cHHlI)
 extends Control
 
 
 signal dirtied
 
 
-var settings_menu: Control
 var is_rebinding := false
 var rebind_action_name := ""
 var action_buttons := {} # { String: Button }
@@ -45,6 +45,8 @@ func _input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventKey or (event is InputEventMouseButton and event.is_pressed()):
+		if event is InputEventMouseButton:
+			event.double_click = false
 		pending_rebinds[rebind_action_name] = event
 		action_buttons[rebind_action_name].text = event.as_text().trim_suffix(" (Physical)").trim_suffix(" - All Devices")
 		revert_buttons[rebind_action_name].disabled = false
