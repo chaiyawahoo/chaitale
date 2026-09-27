@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://dh35wfq84fxkp"]
+[gd_scene format=3 uid="uid://dh35wfq84fxkp"]
 
-[ext_resource type="Script" path="res://scripts/ui/world_selection.gd" id="1_up4cu"]
-[ext_resource type="Script" path="res://scripts/ui/world_selection_button.gd" id="2_t16wp"]
+[ext_resource type="Script" uid="uid://cxp1r2anav7w5" path="res://scripts/ui/world_selection.gd" id="1_up4cu"]
+[ext_resource type="Script" uid="uid://cmovpi5v1wysp" path="res://scripts/ui/world_selection_button.gd" id="2_t16wp"]
 
-[node name="WorldSelection" type="MarginContainer"]
+[node name="WorldSelection" type="MarginContainer" unique_id=2048766231]
 script = ExtResource("1_up4cu")
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="." unique_id=1893785047]
 layout_mode = 2
 mouse_filter = 1
 toggle_mode = true

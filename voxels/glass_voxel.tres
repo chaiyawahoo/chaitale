@@ -1,9 +1,8 @@
-[gd_resource type="VoxelBlockyModelCube" load_steps=2 format=3 uid="uid://bpeu10sijhjxc"]
+[gd_resource type="VoxelBlockyModelCube" format=3 uid="uid://bpeu10sijhjxc"]
 
 [ext_resource type="Material" uid="uid://dqg0nluhek7fs" path="res://art/materials/transparent_material.tres" id="1_8hj8v"]
 
 [resource]
-transparent = true
 transparency_index = 2
 material_override_0 = ExtResource("1_8hj8v")
 tile_left = Vector2i(4, 0)

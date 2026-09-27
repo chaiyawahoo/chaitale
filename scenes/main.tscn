@@ -1,13 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://ci5m134uprck0"]
+[gd_scene format=3 uid="uid://ci5m134uprck0"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_1mr3c"]
+[ext_resource type="Script" uid="uid://cqs6xj0jbndpp" path="res://scripts/main.gd" id="1_1mr3c"]
 
-[node name="Game" type="Node"]
+[node name="Game" type="Node" unique_id=678276462]
 script = ExtResource("1_1mr3c")
 
-[node name="LevelParent" type="Node" parent="."]
+[node name="LevelParent" type="Node" parent="." unique_id=516038528]
 
-[node name="LevelSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://scenes/level.tscn")
+[node name="LevelSpawner" type="MultiplayerSpawner" parent="." unique_id=1170039122]
+_spawnable_scenes = PackedStringArray("uid://prpk6gvuba8h")
 spawn_path = NodePath("../LevelParent")
 spawn_limit = 1

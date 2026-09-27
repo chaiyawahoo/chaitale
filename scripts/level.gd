@@ -49,6 +49,9 @@ func _spawn(peer_id: int) -> Player:
 
 
 func despawn(peer_id: int) -> void:
+	if not has_node(player_node_format % peer_id):
+		# throw error or warning?
+		return
 	var player_to_despawn: Player = get_node(player_node_format % peer_id)
 	if not player_to_despawn:
 		# throw error or warning?

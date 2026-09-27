@@ -3,8 +3,8 @@ extends Node3D
 
 var current_voxel_id: int = 1
 
-var breaking: bool = false
-var placing: bool = false
+var breaking := false
+var placing := false
 
 var break_voxel_timer: SceneTreeTimer
 var place_voxel_timer: SceneTreeTimer
@@ -77,7 +77,7 @@ func place_voxel(voxel_id: int = 1, forced := false) -> void:
 	var result: VoxelRaycastResult = Game.camera_raycast_result
 	if not result:
 		return
-	var voxel_area: AABB = AABB(result.previous_position, Vector3.ONE)
+	var voxel_area := AABB(result.previous_position, Vector3.ONE)
 	if voxel_area.intersects(Game.player.player_area):
 		print("Placing overlaps player!")
 		return

@@ -40,7 +40,7 @@ func _input(event: InputEvent) -> void:
 				down_function.call()
 				return
 	# for loop do last ?
-	for i in range(9):
+	for i: int in range(9):
 		if event.is_action_pressed("select_%s" % (i+1)):
 			select_item(i)
 			return
@@ -63,7 +63,7 @@ func _update_debug() -> void:
 
 func select_item(index: int) -> void:
 	current_hotbar_index = posmod(index, 9)
-	for i in range(9):
+	for i: int in range(9):
 		if i == current_hotbar_index:
 			hotbar_slots[i].theme_type_variation = "HotbarSelected"
 			continue

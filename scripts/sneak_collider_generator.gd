@@ -35,7 +35,7 @@ func generate_sneaking_collision() -> void:
 			return
 		invisible_wall_collider_base.shape = BoxShape3D.new()
 		invisible_wall_collider_base.shape.size = shape_size
-		for i in range(9):
+		for i: int in range(9):
 			var neighbor_transform := Vector3i.ZERO
 			var neighbor_value: int = 0
 			neighbor_transform.x += (i % 3) - 1
@@ -48,7 +48,7 @@ func generate_sneaking_collision() -> void:
 			invisible_wall_collider.position = neighbor_transform * invisible_wall_distance
 			invisible_wall.add_child(invisible_wall_collider)
 		# draw corners...
-		var neighbor_position := {
+		var neighbor_position: Dictionary[int, Vector3] = {
 			0: Vector3(-1, 0, -1),
 			2: Vector3(1, 0, -1),
 			6: Vector3(-1, 0, 1),
@@ -75,7 +75,7 @@ func generate_sneaking_collision() -> void:
 					invisible_wall_collider_base, neighbor_position[8], invisible_wall_distance,
 					neighbors[5], neighbors[7]
 				)
-		for wall_collider in invisible_wall_colliders:
+		for wall_collider: CollisionShape3D in invisible_wall_colliders:
 			invisible_wall.add_child(wall_collider)
 		invisible_wall.position = Vector3(highest_voxel_position_under_player) + Vector3.ONE * 0.5
 		get_parent().get_parent().add_child(invisible_wall)
@@ -106,7 +106,7 @@ func get_voxel_positions_under_player() -> Array[Vector3i]:
 	var raycast_result: VoxelRaycastResult = Game.voxel_tool.raycast(global_position + Vector3.DOWN * (player.player_area.size.y / 2), Vector3.DOWN, 1)
 	if raycast_result:
 		voxel_positions.append(raycast_result.position)
-	for corner in bottom_corners:
+	for corner: Vector3 in bottom_corners:
 		var raycast_origin: Vector3 = global_position + corner * (player.player_area.size / 2)
 		raycast_result = Game.voxel_tool.raycast(raycast_origin, Vector3.DOWN, 1)
 		if not raycast_result:
@@ -129,10 +129,10 @@ func get_voxel_position_standing_on_most() -> Vector3i:
 	feet_position -= Vector3.UP * 0.5
 	var feet_area := AABB(feet_position, player.player_area.size)
 	var index_of_greatest_intersection: int = 0
-	for voxel_position in voxel_positions:
+	for voxel_position: Vector3i in voxel_positions:
 		voxel_areas.append(AABB(Vector3(voxel_position) + Game.terrain.global_position, Vector3.ONE))
-	for voxel_area in voxel_areas:
+	for voxel_area: AABB in voxel_areas:
 		area_intersection_volumes.append(voxel_area.intersection(feet_area).get_volume())
-	largest_volume = area_intersection_volumes.reduce(func(accum, volume): return max(accum, volume))
+	largest_volume = area_intersection_volumes.reduce(func(last_largest: float, volume: float) -> float: return max(last_largest, volume))
 	index_of_greatest_intersection = area_intersection_volumes.find(largest_volume)
 	return voxel_positions[index_of_greatest_intersection]

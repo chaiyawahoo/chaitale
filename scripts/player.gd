@@ -261,7 +261,7 @@ func _input(event: InputEvent) -> void:
 	VoxelEditor.handle_input(event)
 
 
-func look_around(relative_motion: Vector2):
+func look_around(relative_motion: Vector2) -> void:
 	vertical_look = rad_to_deg(spring_arm.global_rotation.x)
 	var angle_change: Vector2 = -relative_motion * Settings.settings.controls.mouse_sensitivity * Settings.settings.controls.mouse_sensitivity_coefficient
 	horizontal_look += angle_change.x
@@ -312,7 +312,7 @@ func load_save() -> void:
 		is_new_to_save = true
 		return
 	var save_data: Dictionary = SaveEngine.save_data[player_name]
-	for key in save_data:
+	for key: String in save_data:
 		set(key, save_data[key])
 	loaded = true
 

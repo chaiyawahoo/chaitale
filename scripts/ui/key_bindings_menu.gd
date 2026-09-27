@@ -7,10 +7,10 @@ signal dirtied
 
 var is_rebinding := false
 var rebind_action_name := ""
-var action_buttons := {} # { String: Button }
-var revert_buttons := {} # { String: Button }
-var pending_rebinds := {} # { String: InputEvent }
-var custom_input_actions := {
+var action_buttons: Dictionary[String, Button] = {}
+var revert_buttons: Dictionary[String, Button] = {}
+var pending_rebinds: Dictionary[String, InputEvent] = {}
+var custom_input_actions: Dictionary[String, String] = {
 	"move_left": "Move Left",
 	"move_right": "Move Right",
 	"move_forward": "Move Forward",
@@ -56,10 +56,10 @@ func _input(event: InputEvent) -> void:
 		return
 
 func _populate_key_bindings_container() -> void:
-	for node in get_children():
+	for node: Node in get_children():
 		node.queue_free()
 	
-	for action_name in InputMap.get_actions():
+	for action_name: String in InputMap.get_actions():
 		if not custom_input_actions.has(action_name):
 			continue
 		
@@ -117,8 +117,8 @@ func get_action_event_name(action_name: String) -> String:
 
 
 func get_key_bindings_from_settings() -> void:
-	var key_bindings = Settings.settings.key_bindings
-	for action_name in key_bindings:
+	var key_bindings: Dictionary = Settings.settings.key_bindings
+	for action_name: String in key_bindings:
 		if key_bindings[action_name].type == "none":
 			InputMap.action_erase_events(action_name)
 			continue
@@ -139,7 +139,7 @@ func get_key_bindings_from_settings() -> void:
 
 
 func apply_key_bindings() -> void:
-	for action_name in custom_input_actions:
+	for action_name: String in custom_input_actions:
 		if not InputMap.has_action(action_name):
 			continue
 		
@@ -150,7 +150,7 @@ func apply_key_bindings() -> void:
 		if pending_rebinds.has(action_name):
 			input_event = pending_rebinds[action_name]
 		else:
-			var events = InputMap.action_get_events(action_name)
+			var events: Array[InputEvent] = InputMap.action_get_events(action_name)
 			if not events.is_empty():
 				input_event = events[0]
 		
@@ -211,11 +211,11 @@ func _on_revert_button_pressed(action_name: String) -> void:
 
 func _on_reset_button_pressed() -> void:
 	InputMap.load_from_project_settings()
-	for action_name in custom_input_actions:
+	for action_name: String in custom_input_actions:
 		if not InputMap.has_action(action_name):
 			continue
 		
-		var events = InputMap.action_get_events(action_name)
+		var events: Array[InputEvent] = InputMap.action_get_events(action_name)
 		if not events.is_empty():
 			pending_rebinds[action_name] = events[0]
 		

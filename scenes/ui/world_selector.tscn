@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bsstmt3aaq20g"]
+[gd_scene format=3 uid="uid://bsstmt3aaq20g"]
 
-[ext_resource type="Script" path="res://scripts/ui/world_selector.gd" id="1_locwo"]
+[ext_resource type="Script" uid="uid://dgykqkv5u2sxy" path="res://scripts/ui/world_selector.gd" id="1_locwo"]
 [ext_resource type="PackedScene" uid="uid://cqlr2xsuk3g46" path="res://scenes/ui/background.tscn" id="2_6qg74"]
 
-[node name="WorldSelector" type="Control"]
+[node name="WorldSelector" type="Control" unique_id=1525631786]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,10 +12,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_locwo")
 
-[node name="Background" parent="." instance=ExtResource("2_6qg74")]
+[node name="Background" parent="." unique_id=792416474 instance=ExtResource("2_6qg74")]
 layout_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=291529992]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,57 +27,57 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=893085208]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Control" type="Control" parent="MarginContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer" unique_id=310712002]
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer/Control"]
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer/Control" unique_id=1178733839]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_top = 4.0
 offset_right = 45.0
 offset_bottom = 35.0
 size_flags_horizontal = 0
 text = "Back"
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1774227688]
 layout_mode = 2
 theme_type_variation = &"Title"
 text = "Select World
 "
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=1173258680]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="WorldsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="WorldsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=1016527520]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=56925262]
 layout_mode = 2
 alignment = 1
 
-[node name="CreateButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="CreateButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=122939105]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Create New World"
 
-[node name="LoadButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="LoadButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1210549641]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Load World"
 
-[node name="HostButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="HostButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=2073793371]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6

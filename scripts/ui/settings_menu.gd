@@ -1,7 +1,7 @@
 extends Control
 
 
-var unapplied_settings: Dictionary = {
+var unapplied_settings: Dictionary[String, Dictionary] = {
 		video = {},
 		graphics = {},
 		controls = {},
@@ -84,7 +84,7 @@ func _bind_ui() -> void:
 	%InvertScrollCheck.toggled.connect(update_invert_scroll)
 	%ToggleSprintCheck.toggled.connect(update_toggle_sprint)
 	%ToggleSneakCheck.toggled.connect(update_toggle_sneak)
-	%KeyBindingsMenu.dirtied.connect(func(): dirty = true)
+	%KeyBindingsMenu.dirtied.connect(func() -> void: dirty = true)
 
 
 func _update_ui() -> void:
@@ -139,7 +139,7 @@ func update_window_mode() -> void:
 	dirty = true
 
 
-func update_fov(value = null) -> void:
+func update_fov(value: Variant = null) -> void:
 	if not value:
 		value = %FovInput.text
 	if not value is String:
@@ -163,7 +163,7 @@ func update_fps_cap(button_pressed: bool) -> void:
 	dirty = true
 
 
-func update_max_fps(value = null) -> void:
+func update_max_fps(value: Variant = null) -> void:
 	if not value:
 		value = %FpsInput.text
 	if not value is String:
@@ -202,7 +202,7 @@ func update_ssao_quality(index: int) -> void:
 	dirty = true
 
 
-func update_ssao_adaptive_target(value = null) -> void:
+func update_ssao_adaptive_target(value: Variant = null) -> void:
 	if not value:
 		value = %AdaptiveAOInput.text
 	if not value is String:
@@ -231,7 +231,7 @@ func update_ssil_quality(index: int) -> void:
 	dirty = true
 
 
-func update_ssil_adaptive_target(value = null) -> void:
+func update_ssil_adaptive_target(value: Variant = null) -> void:
 	if not value:
 		value = %AdaptiveILInput.text
 	if not value is String:
@@ -271,7 +271,7 @@ func update_use_debanding(button_pressed: bool) -> void:
 	dirty = true
 
 
-func update_sensitivity(value = null) -> void:
+func update_sensitivity(value: Variant = null) -> void:
 	if not value:
 		value = %SensitivityInput.text
 	if not value is String:
@@ -314,7 +314,7 @@ func reset_unapplied_settings() -> void:
 
 
 func back() -> void:
-	for section in unapplied_settings:
+	for section: String in unapplied_settings:
 		if unapplied_settings[section].size() > 0:
 			print("Unapplied settings.")
 			break
@@ -323,8 +323,8 @@ func back() -> void:
 
 
 func apply_changes() -> void:
-	for section in unapplied_settings:
-		for key in unapplied_settings[section]:
+	for section: String in unapplied_settings:
+		for key: String in unapplied_settings[section]:
 			Settings.settings[section][key] = unapplied_settings[section][key]
 	Settings.update_settings()
 	Settings.save_settings()

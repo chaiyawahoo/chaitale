@@ -1,29 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://dc5sqyjnwmpri"]
+[gd_scene format=3 uid="uid://dc5sqyjnwmpri"]
 
-[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_dt605"]
+[ext_resource type="Script" uid="uid://hrnl4q5fnt08" path="res://scripts/ui/main_menu.gd" id="1_dt605"]
 [ext_resource type="PackedScene" uid="uid://cqlr2xsuk3g46" path="res://scenes/ui/background.tscn" id="2_pryss"]
 
-[node name="MainMenu" type="CanvasLayer"]
+[node name="MainMenu" type="CanvasLayer" unique_id=1076191074]
 script = ExtResource("1_dt605")
 
-[node name="Background" parent="." instance=ExtResource("2_pryss")]
+[node name="Background" parent="." unique_id=1709190590 instance=ExtResource("2_pryss")]
 
-[node name="LoggedInAs" type="HBoxContainer" parent="."]
+[node name="LoggedInAs" type="HBoxContainer" parent="." unique_id=1919374817]
 unique_name_in_owner = true
 visible = false
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="LoggedInAs"]
+[node name="Label" type="Label" parent="LoggedInAs" unique_id=898378103]
 layout_mode = 2
 text = "Logged in as:"
 
-[node name="UsernameLabel" type="Label" parent="LoggedInAs"]
+[node name="UsernameLabel" type="Label" parent="LoggedInAs" unique_id=565480911]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Username"
 
-[node name="MenuSelect" type="VBoxContainer" parent="."]
+[node name="MenuSelect" type="VBoxContainer" parent="." unique_id=1588922339]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -31,7 +31,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="MenuSelect"]
+[node name="Label" type="Label" parent="MenuSelect" unique_id=683420630]
 layout_mode = 2
 size_flags_vertical = 6
 theme_type_variation = &"MainTitle"
@@ -39,72 +39,72 @@ text = "Chaitale"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MainContainer" type="VBoxContainer" parent="MenuSelect"]
+[node name="MainContainer" type="VBoxContainer" parent="MenuSelect" unique_id=980057033]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="SelectWorldButton" type="Button" parent="MenuSelect/MainContainer"]
+[node name="SelectWorldButton" type="Button" parent="MenuSelect/MainContainer" unique_id=486105451]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Select World"
 
-[node name="JoinWorldButton" type="Button" parent="MenuSelect/MainContainer"]
+[node name="JoinWorldButton" type="Button" parent="MenuSelect/MainContainer" unique_id=1029317753]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Join World"
 
-[node name="SettingsButton" type="Button" parent="MenuSelect/MainContainer"]
+[node name="SettingsButton" type="Button" parent="MenuSelect/MainContainer" unique_id=1226022369]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Settings"
 
-[node name="LogoutButton" type="Button" parent="MenuSelect/MainContainer"]
+[node name="LogoutButton" type="Button" parent="MenuSelect/MainContainer" unique_id=507018139]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Logout"
 
-[node name="UsernameInput" type="LineEdit" parent="MenuSelect/MainContainer"]
+[node name="UsernameInput" type="LineEdit" parent="MenuSelect/MainContainer" unique_id=1424823317]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 placeholder_text = "Username"
 alignment = 1
 
-[node name="LoginButton" type="Button" parent="MenuSelect/MainContainer"]
+[node name="LoginButton" type="Button" parent="MenuSelect/MainContainer" unique_id=815291646]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Login"
 
-[node name="QuitButton" type="Button" parent="MenuSelect/MainContainer"]
+[node name="QuitButton" type="Button" parent="MenuSelect/MainContainer" unique_id=1407537684]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Quit"
 
-[node name="JoinContainer" type="VBoxContainer" parent="MenuSelect"]
+[node name="JoinContainer" type="VBoxContainer" parent="MenuSelect" unique_id=2126533185]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="IPInput" type="LineEdit" parent="MenuSelect/JoinContainer"]
+[node name="IPInput" type="LineEdit" parent="MenuSelect/JoinContainer" unique_id=1702600345]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "127.0.0.1"
 alignment = 1
 
-[node name="ConnectButton" type="Button" parent="MenuSelect/JoinContainer"]
+[node name="ConnectButton" type="Button" parent="MenuSelect/JoinContainer" unique_id=1853719573]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Connect to Server"
 
-[node name="BackButton" type="Button" parent="MenuSelect/JoinContainer"]
+[node name="BackButton" type="Button" parent="MenuSelect/JoinContainer" unique_id=1356214173]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Back"

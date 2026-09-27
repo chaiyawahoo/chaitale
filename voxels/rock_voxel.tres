@@ -1,4 +1,4 @@
-[gd_resource type="VoxelBlockyModelCube" load_steps=2 format=3 uid="uid://unv37gd0hbgw"]
+[gd_resource type="VoxelBlockyModelCube" format=3 uid="uid://unv37gd0hbgw"]
 
 [ext_resource type="Material" uid="uid://buxeucso0b2xp" path="res://art/materials/solid_material.tres" id="1_b0nlu"]
 

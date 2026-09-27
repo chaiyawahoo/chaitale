@@ -1,21 +1,21 @@
-[gd_scene load_steps=6 format=3 uid="uid://gn02cc4ts62j"]
+[gd_scene format=3 uid="uid://gn02cc4ts62j"]
 
-[ext_resource type="Script" path="res://scripts/ui/ui.gd" id="1_j02qd"]
+[ext_resource type="Script" uid="uid://kifd1uyjwsji" path="res://scripts/ui/ui.gd" id="1_j02qd"]
 [ext_resource type="PackedScene" uid="uid://dc5sqyjnwmpri" path="res://scenes/ui/main_menu.tscn" id="2_vtbu2"]
 [ext_resource type="PackedScene" uid="uid://blled2qkl0icw" path="res://scenes/ui/hud.tscn" id="3_ikow0"]
 [ext_resource type="PackedScene" uid="uid://m85gfn7t4bfq" path="res://scenes/ui/pause_menu.tscn" id="4_nwas8"]
 [ext_resource type="PackedScene" uid="uid://ycrowe58chfj" path="res://scenes/ui/loading_screen.tscn" id="5_d1q7b"]
 
-[node name="UI" type="Node"]
+[node name="UI" type="Node" unique_id=2083341298]
 script = ExtResource("1_j02qd")
 
-[node name="MainMenu" parent="." instance=ExtResource("2_vtbu2")]
+[node name="MainMenu" parent="." unique_id=1634500881 instance=ExtResource("2_vtbu2")]
 
-[node name="HUD" parent="." instance=ExtResource("3_ikow0")]
+[node name="HUD" parent="." unique_id=906178959 instance=ExtResource("3_ikow0")]
 visible = false
 
-[node name="LoadingScreen" parent="." instance=ExtResource("5_d1q7b")]
+[node name="LoadingScreen" parent="." unique_id=67078823 instance=ExtResource("5_d1q7b")]
 visible = false
 
-[node name="PauseMenu" parent="." instance=ExtResource("4_nwas8")]
+[node name="PauseMenu" parent="." unique_id=848773746 instance=ExtResource("4_nwas8")]
 visible = false

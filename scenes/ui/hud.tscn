@@ -1,17 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://blled2qkl0icw"]
+[gd_scene format=3 uid="uid://blled2qkl0icw"]
 
-[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_ylnuo"]
-[ext_resource type="Shader" path="res://art/shaders/invert_canvas_shader.gdshader" id="2_kywoh"]
+[ext_resource type="Script" uid="uid://bax4hgcj5uwi" path="res://scripts/ui/hud.gd" id="1_ylnuo"]
+[ext_resource type="Shader" uid="uid://bb0vsv336oa2u" path="res://art/shaders/invert_canvas_shader.gdshader" id="2_kywoh"]
 [ext_resource type="Texture2D" uid="uid://bmofk27bci7k5" path="res://art/textures/pointer.png" id="2_vntbw"]
 [ext_resource type="PackedScene" uid="uid://63ww2o8hy0ee" path="res://scenes/ui/hotbar_slot.tscn" id="3_titdh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rfdsy"]
 shader = ExtResource("2_kywoh")
 
-[node name="HUD" type="CanvasLayer"]
+[node name="HUD" type="CanvasLayer" unique_id=1195893229]
 script = ExtResource("1_ylnuo")
 
-[node name="Pointer" type="TextureRect" parent="."]
+[node name="Pointer" type="TextureRect" parent="." unique_id=492365151]
 unique_name_in_owner = true
 modulate = Color(0, 0, 0, 1)
 material = SubResource("ShaderMaterial_rfdsy")
@@ -29,7 +29,7 @@ grow_vertical = 2
 texture = ExtResource("2_vntbw")
 stretch_mode = 2
 
-[node name="Debug" type="Control" parent="."]
+[node name="Debug" type="Control" parent="." unique_id=989255988]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -38,7 +38,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Debug"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Debug" unique_id=1688624363]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,21 +46,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="FPS" type="Label" parent="Debug/VBoxContainer"]
+[node name="FPS" type="Label" parent="Debug/VBoxContainer" unique_id=2126140662]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PositionLabel" type="Label" parent="Debug/VBoxContainer"]
+[node name="PositionLabel" type="Label" parent="Debug/VBoxContainer" unique_id=478192961]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="BlockSelector" type="Control" parent="."]
+[node name="BlockSelector" type="Control" parent="." unique_id=1082711797]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1830385535]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -71,35 +71,35 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="Hotbar" type="HBoxContainer" parent="MarginContainer"]
+[node name="Hotbar" type="HBoxContainer" parent="MarginContainer" unique_id=245556944]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
 alignment = 1
 
-[node name="HotbarSlot1" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+[node name="HotbarSlot1" parent="MarginContainer/Hotbar" unique_id=737812579 instance=ExtResource("3_titdh")]
 layout_mode = 2
 
-[node name="HotbarSlot2" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+[node name="HotbarSlot2" parent="MarginContainer/Hotbar" unique_id=2024345393 instance=ExtResource("3_titdh")]
 layout_mode = 2
 
-[node name="HotbarSlot3" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+[node name="HotbarSlot3" parent="MarginContainer/Hotbar" unique_id=530956662 instance=ExtResource("3_titdh")]
 layout_mode = 2
 
-[node name="HotbarSlot4" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+[node name="HotbarSlot4" parent="MarginContainer/Hotbar" unique_id=659548438 instance=ExtResource("3_titdh")]
 layout_mode = 2
 
-[node name="HotbarSlot5" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+[node name="HotbarSlot5" parent="MarginContainer/Hotbar" unique_id=1724692795 instance=ExtResource("3_titdh")]
 layout_mode = 2
 
-[node name="HotbarSlot6" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+[node name="HotbarSlot6" parent="MarginContainer/Hotbar" unique_id=883860667 instance=ExtResource("3_titdh")]
 layout_mode = 2
 
-[node name="HotbarSlot7" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+[node name="HotbarSlot7" parent="MarginContainer/Hotbar" unique_id=1387779541 instance=ExtResource("3_titdh")]
 layout_mode = 2
 
-[node name="HotbarSlot8" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+[node name="HotbarSlot8" parent="MarginContainer/Hotbar" unique_id=203977878 instance=ExtResource("3_titdh")]
 layout_mode = 2
 
-[node name="HotbarSlot9" parent="MarginContainer/Hotbar" instance=ExtResource("3_titdh")]
+[node name="HotbarSlot9" parent="MarginContainer/Hotbar" unique_id=1867193168 instance=ExtResource("3_titdh")]
 layout_mode = 2

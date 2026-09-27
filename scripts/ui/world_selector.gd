@@ -2,7 +2,7 @@ extends Control
 
 
 var world_selection_scene: PackedScene = preload("res://scenes/ui/world_selection.tscn")
-var world_button_group: ButtonGroup = ButtonGroup.new()
+var world_button_group := ButtonGroup.new()
 
 
 func _enter_tree() -> void:
@@ -24,7 +24,7 @@ func _ready() -> void:
 	%HostButton.pressed.connect(_on_button_host)
 	%LoadButton.pressed.connect(_on_button_load)
 	%BackButton.pressed.connect(_on_button_back)
-	for world in %WorldsContainer.get_children():
+	for world: Node in %WorldsContainer.get_children():
 		if not world is WorldSelection:
 			continue
 		world.double_clicked.connect(load_specific_world)
@@ -33,7 +33,7 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		back()
-		get_viewport().set_input_as_handled()
+		accept_event()
 
 
 func _on_button_back() -> void:

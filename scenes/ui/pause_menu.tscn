@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://m85gfn7t4bfq"]
+[gd_scene format=3 uid="uid://m85gfn7t4bfq"]
 
-[ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_sn0a7"]
+[ext_resource type="Script" uid="uid://ddnw8ogj3i3o1" path="res://scripts/ui/pause_menu.gd" id="1_sn0a7"]
 
-[node name="PauseMenu" type="CanvasLayer"]
+[node name="PauseMenu" type="CanvasLayer" unique_id=2070013981]
 script = ExtResource("1_sn0a7")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1065780687]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"TransparentPanel"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=51031773]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -23,17 +23,17 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="ResumeButton" type="Button" parent="VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="VBoxContainer" unique_id=959283953]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Resume"
 
-[node name="SettingsButton" type="Button" parent="VBoxContainer"]
+[node name="SettingsButton" type="Button" parent="VBoxContainer" unique_id=1757845271]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Settings"
 
-[node name="QuitButton" type="Button" parent="VBoxContainer"]
+[node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=928860075]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Quit"

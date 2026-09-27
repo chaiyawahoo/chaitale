@@ -4,14 +4,14 @@ extends Node
 signal player_connected(peer_id: int, player_info: String)
 signal player_disconnected(peer_id: int)
 signal server_disconnected
-signal connection_refused
+#signal connection_refused
 
 const PORT: int = 1004
 const MAX_PLAYERS: int = 8
 const DEFAULT_SERVER_ADDRESS := "127.0.0.1"
 
 var player_info := {name = ""}
-var players := {} # id: player_info
+var players: Dictionary[int, Dictionary] = {} # id: player_info
 
 
 func _ready() -> void:
@@ -29,7 +29,7 @@ func create_server(is_offline := true) -> Error:
 		return error
 	multiplayer.multiplayer_peer = peer
 	register_player(1, player_info)
-	multiplayer.refuse_new_connections = is_offline
+	peer.refuse_new_connections = is_offline
 	return OK
 
 
@@ -66,6 +66,7 @@ func _on_player_disconnected(peer_id: int) -> void:
 
 
 func _on_connected_ok() -> void:
+	print(multiplayer.refuse_new_connections)
 	register_player(multiplayer.get_unique_id(), player_info)
 
 

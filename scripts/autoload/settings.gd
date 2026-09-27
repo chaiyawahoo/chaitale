@@ -9,7 +9,7 @@ var place_voxel_hold_delay: float = 0.2
 var break_voxel_hold_delay: float = 0.2
 var voxel_interaction_reach: float = 6.0
 
-var settings: Dictionary = {
+var settings: Dictionary[String, Dictionary] = {
 	video = {
 		window_mode = Window.MODE_WINDOWED,
 		fov = 75.0,
@@ -66,8 +66,8 @@ func load_settings() -> Error:
 	if error != OK:
 		return error
 	
-	for section in config.get_sections():
-		for key in config.get_section_keys(section):
+	for section: String in config.get_sections():
+		for key: String in config.get_section_keys(section):
 			if settings.has(section):
 				settings[section][key] = config.get_value(section, key)
 
@@ -80,8 +80,8 @@ func load_settings() -> Error:
 func save_settings() -> void:
 	var config := ConfigFile.new()
 
-	for section in settings:
-		for key in settings[section]:
+	for section: String in settings:
+		for key: String in settings[section]:
 			config.set_value(section, key, settings[section][key])
 
 	config.save("user://settings.cfg")

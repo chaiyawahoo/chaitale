@@ -8,10 +8,6 @@
 
 config_version=5
 
-[animation]
-
-compatibility/default_parent_skeleton_in_mesh_instance_3d=true
-
 [application]
 
 config/name="Chaitale"
@@ -28,6 +24,10 @@ Settings="*res://scripts/autoload/settings.gd"
 Multiplayer="*res://scripts/autoload/multiplayer.gd"
 UI="*res://scenes/ui/ui.tscn"
 VoxelEditor="*res://scripts/autoload/voxel_editor.gd"
+
+[debug]
+
+gdscript/warnings/untyped_declaration=1
 
 [dotnet]
 

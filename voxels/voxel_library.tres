@@ -1,4 +1,4 @@
-[gd_resource type="VoxelBlockyLibrary" load_steps=7 format=3 uid="uid://dxeianmodrghp"]
+[gd_resource type="VoxelBlockyLibrary" format=3 uid="uid://dxeianmodrghp"]
 
 [ext_resource type="VoxelBlockyModelEmpty" uid="uid://doeiul13n1t5u" path="res://voxels/air_voxel.tres" id="1_ftb52"]
 [ext_resource type="VoxelBlockyModelCube" uid="uid://unv37gd0hbgw" path="res://voxels/rock_voxel.tres" id="2_3angj"]
