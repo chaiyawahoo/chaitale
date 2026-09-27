@@ -45,6 +45,9 @@ var settings: Dictionary = {
 	gameplay = {
 		
 	},
+	key_bindings = {
+		
+	},
 }
 
 
@@ -65,8 +68,8 @@ func load_settings() -> Error:
 	
 	for section in config.get_sections():
 		for key in config.get_section_keys(section):
-			if settings[section].has(key):
-				settings[section][key] = config.get_value(section, key, settings[section][key])
+			if settings.has(section):
+				settings[section][key] = config.get_value(section, key)
 
 	update_settings()
 	save_settings()

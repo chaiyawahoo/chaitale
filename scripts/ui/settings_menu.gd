@@ -32,7 +32,7 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		back()
-		get_viewport().set_input_as_handled()
+		accept_event()
 		return
 
 
@@ -84,6 +84,7 @@ func _bind_ui() -> void:
 	%InvertScrollCheck.toggled.connect(update_invert_scroll)
 	%ToggleSprintCheck.toggled.connect(update_toggle_sprint)
 	%ToggleSneakCheck.toggled.connect(update_toggle_sneak)
+	%KeyBindingsMenu.dirtied.connect(func(): dirty = true)
 
 
 func _update_ui() -> void:
@@ -300,6 +301,7 @@ func reset_unapplied_settings() -> void:
 		controls = {},
 		gameplay = {},
 	}
+	%KeyBindingsMenu.reset_all_key_bindings()
 	dirty = false
 
 
@@ -318,6 +320,7 @@ func apply_changes() -> void:
 			Settings.settings[section][key] = unapplied_settings[section][key]
 	Settings.update_settings()
 	Settings.save_settings()
+	%KeyBindingsMenu.apply_key_bindings()
 	reset_unapplied_settings()
 
 
