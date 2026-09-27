@@ -19,25 +19,49 @@ var sneaking_eye_level: float = 0.3
 
 var double_tap_speed: float = 0.25 # seconds before double tap resets
 var jump_double_tap_timer: float = 0
-var tapped_jump: bool = false
+var tapped_jump := false
 
-var raw_input_vector: Vector2 = Vector2.ZERO
-var input_direction: Vector3 = Vector3.ZERO
+var raw_input_vector := Vector2.ZERO
+var input_direction := Vector3.ZERO
 var speed: float = 0
 
-@export var external_velocity: Vector3 = Vector3.ZERO
-@export var input_velocity: Vector3 = Vector3.ZERO
+var sprint_input := false
 
-@export var jumping: bool = false
-@export var falling: bool = false
-@export var sneaking: bool = false
-@export var sprinting: bool = false
-@export var walking: bool = true
-@export var standing: bool = true
-@export var flying: bool = false
+@export var external_velocity := Vector3.ZERO
+@export var input_velocity := Vector3.ZERO
 
-var loaded = false
-var is_new_to_save = false
+@export var jumping := false
+@export var falling := false
+@export var sneaking := false:
+	set(value):
+		sneaking = value
+		if sneaking:
+			sprinting = false
+			walking = false
+@export var sprinting := false:
+	set(value):
+		sprinting = value
+		if sprinting:
+			sneaking = false
+			walking = false
+			standing = false
+@export var walking := true:
+	set(value):
+		walking = value
+		if walking:
+			sneaking = false
+			sprinting = false
+			standing = false
+@export var standing := true:
+	set(value):
+		standing = value
+		if standing:
+			sprinting = false
+			walking = false
+@export var flying := false
+
+var loaded := false
+var is_new_to_save := false
 
 @export var vertical_look: float = 0:
 	set(value):
@@ -115,7 +139,7 @@ func _process(delta: float) -> void:
 	if Game.is_paused:
 		speed = 0
 		sprinting = false
-		sneaking = false
+		sneaking = false if not Settings.settings.controls.toggle_sneak else sneaking
 		jumping = false
 		return
 	
@@ -152,19 +176,18 @@ func _process(delta: float) -> void:
 		speed_modifier *= sprint_speed_modifier
 	elif sneaking:
 		speed_modifier *= sneak_speed_modifier
-	else:
-		walking = true
 	speed = walk_speed * speed_modifier
 	
 	if velocity == Vector3.ZERO:
-		walking = false
 		standing = true
-		sprinting = false
 	
 	var forward_velocity: float = velocity.rotated(Vector3.UP, deg_to_rad(-horizontal_look)).x
 
 	if forward_velocity <= sprint_stop_threshold:
 		sprinting = false
+	else:
+		if not sprinting and not sneaking:
+			sprinting = sprint_input
 	
 	update_sprint_fov()
 	update_sneak_eye_level()
@@ -173,9 +196,13 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not (Game.is_paused and falling): # removed "and falling" once block drag is properly implmeneted
+	if not Game.is_paused:
 		input_velocity.x = input_direction.x * speed
 		input_velocity.z = input_direction.z * speed
+	else:
+		# TODO: preserve velocity
+		input_velocity.x = 0
+		input_velocity.z = 0
 	if falling:
 		external_velocity += Settings.gravity_axis * Settings.gravity_constant * delta
 	elif jumping: # (and not falling)
@@ -204,16 +231,20 @@ func _input(event: InputEvent) -> void:
 		jumping = event.is_pressed()
 		return
 		
-	if event.is_action("sneak"):
-		sneaking = event.is_pressed()
-		sprinting = false if sneaking else sprinting
-		walking = false if sneaking else walking
+	if event.is_action_pressed("sneak"):
+		sneaking = not sneaking if Settings.settings.controls.toggle_sneak else true
+		return
+	
+	if event.is_action_released("sneak"):
+		sneaking = sneaking if Settings.settings.controls.toggle_sneak else false
 		return
 	
 	if event.is_action_pressed("sprint"):
-		sprinting = true
-		sneaking = false
-		walking = false
+		sprint_input = not sprint_input if Settings.settings.controls.toggle_sprint else true
+		return
+	
+	if event.is_action_released("sprint"):
+		sprint_input = sprint_input if Settings.settings.controls.toggle_sprint else false
 		return
 	
 	if event.is_action_pressed("camera_mode"):

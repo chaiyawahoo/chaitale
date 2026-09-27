@@ -39,6 +39,8 @@ var settings: Dictionary = {
 		mouse_sensitivity_coefficient = 0.5,
 		mouse_sensitivity = 0.1,
 		invert_scroll = false,
+		toggle_sprint = true,
+		toggle_sneak = false,
 	},
 	gameplay = {
 		
@@ -63,7 +65,8 @@ func load_settings() -> Error:
 	
 	for section in config.get_sections():
 		for key in config.get_section_keys(section):
-			settings[section][key] = config.get_value(section, key, settings[section][key])
+			if settings[section].has(key):
+				settings[section][key] = config.get_value(section, key, settings[section][key])
 
 	update_settings()
 	save_settings()

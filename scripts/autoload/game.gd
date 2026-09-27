@@ -11,12 +11,12 @@ var hover_cube: MeshInstance3D
 var pause_menu: CanvasLayer
 var camera_raycast_result: VoxelRaycastResult
 
-var is_paused: bool = false:
+var is_paused := false:
 	get:
 		if UI.pause_menu:
 			return UI.pause_menu.visible
 		return false
-var is_server: bool = false
+var is_server := false
 
 
 func _process(_delta: float) -> void:
