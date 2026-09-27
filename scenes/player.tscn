@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cxytg2y538dbb"]
+[gd_scene load_steps=7 format=3 uid="uid://cxytg2y538dbb"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_joiro"]
+[ext_resource type="Environment" uid="uid://c7x65b0gqx275" path="res://art/environment/environment.tres" id="2_ignf1"]
 [ext_resource type="Script" path="res://scripts/sneak_collider_generator.gd" id="2_s5nsa"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_h15v2"]
@@ -64,6 +65,8 @@ spring_length = 0.0
 [node name="Camera3D" type="Camera3D" parent="Body/SpringArm3D"]
 unique_name_in_owner = true
 cull_mask = 1048573
+environment = ExtResource("2_ignf1")
+fov = 37.8493
 
 [node name="VoxelViewer" type="VoxelViewer" parent="Body/SpringArm3D/Camera3D"]
 unique_name_in_owner = true

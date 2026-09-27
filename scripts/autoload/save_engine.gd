@@ -13,18 +13,18 @@ var autosave_tick_interval: int = 1200 # one minute
 var autosave_tick_counter: int = 0
 
 var terrain_save_completion_tracker: VoxelSaveCompletionTracker
-var terrain_save_format: String = "./saves/%s/terrain.sql"
+var terrain_save_format := "./saves/%s/terrain.sql"
 
-var save_format: String = "./saves/%s/save.dat"
-var is_new_save: bool = false
-var save_data: Dictionary = {}
+var save_format := "./saves/%s/save.dat"
+var is_new_save := false
+var save_data := {}
 
 
 func _enter_tree() -> void:
 	TickEngine.ticked.connect(_on_tick)
 
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	track_terrain_save()
 
 
@@ -54,11 +54,11 @@ func save_game() -> void:
 
 	terrain_save_completion_tracker = Game.terrain.save_modified_blocks()
 	
-	var save_file: FileAccess = FileAccess.open(save_format % Game.save_name, FileAccess.WRITE)
+	var save_file := FileAccess.open(save_format % Game.save_name, FileAccess.WRITE)
 	save_file.store_var(save_data, true)
 
 
-func load_game(silent: bool = false) -> void:
+func load_game(silent := false) -> void:
 	if not multiplayer.is_server():
 		return
 
@@ -66,7 +66,7 @@ func load_game(silent: bool = false) -> void:
 	if not FileAccess.file_exists(save_format % Game.save_name):
 		return
 	
-	var save_file: FileAccess = FileAccess.open(save_format % Game.save_name, FileAccess.READ)
+	var save_file := FileAccess.open(save_format % Game.save_name, FileAccess.READ)
 	save_data = save_file.get_var(true)
 
 	if silent:

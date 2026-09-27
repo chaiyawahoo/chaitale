@@ -4,8 +4,9 @@ extends MarginContainer
 
 signal double_clicked(world_selection: WorldSelection)
 
+
 var world_seed: int = 1004
-var save_name: String = "world"
+var save_name := "world"
 var button_group: ButtonGroup
 
 

@@ -3,10 +3,11 @@ extends VoxelTerrain
 
 signal meshed
 
-var loaded: bool = false
-var highest_voxel_position: Vector3i = Vector3i.ZERO
 
-var save_name: String = "world"
+var loaded := false
+var highest_voxel_position := Vector3i.ZERO
+
+var save_name := "world"
 var world_seed: int = 1004
 
 
@@ -24,14 +25,14 @@ func _enter_tree() -> void:
 func wait_for_mesh_under_player(player: Player, peer_id: int = 1) -> void:
 	if peer_id != multiplayer.get_unique_id():
 		return
-	var result: Dictionary = {}
+	var result := {}
 	while result.size() == 0:
 		await TickEngine.ticked
 		var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 		var relative_ground_distance: float = 2
 		if player.falling or player.flying or player.is_new_to_save:
 			relative_ground_distance = player.position.y
-		var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(Vector3(player.position), Vector3(player.position.x, player.position.y - relative_ground_distance, player.position.z), 1)
+		var query := PhysicsRayQueryParameters3D.create(Vector3(player.position), Vector3(player.position.x, player.position.y - relative_ground_distance, player.position.z), 1)
 		result = space_state.intersect_ray(query)
 	if player.position.y - result.position.y < 1.5:
 		player.position.y = result.position.y + 1.5

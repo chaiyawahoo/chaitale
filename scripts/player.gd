@@ -12,32 +12,56 @@ extends CharacterBody3D
 
 var third_person_camera_distance: float = 3.0
 var sprint_fov: float:
-	get: return Settings.fov + 20
+	get: return Settings.settings.video.fov + 20
 var fov_change_time: float = 0.1
 var default_eye_level: float = 0.5
 var sneaking_eye_level: float = 0.3
 
 var double_tap_speed: float = 0.25 # seconds before double tap resets
 var jump_double_tap_timer: float = 0
-var tapped_jump: bool = false
+var tapped_jump := false
 
-var raw_input_vector: Vector2 = Vector2.ZERO
-var input_direction: Vector3 = Vector3.ZERO
+var raw_input_vector := Vector2.ZERO
+var input_direction := Vector3.ZERO
 var speed: float = 0
 
-@export var external_velocity: Vector3 = Vector3.ZERO
-@export var input_velocity: Vector3 = Vector3.ZERO
+var sprint_input := false
 
-@export var jumping: bool = false
-@export var falling: bool = false
-@export var sneaking: bool = false
-@export var sprinting: bool = false
-@export var walking: bool = true
-@export var standing: bool = true
-@export var flying: bool = false
+@export var external_velocity := Vector3.ZERO
+@export var input_velocity := Vector3.ZERO
 
-var loaded = false
-var is_new_to_save = false
+@export var jumping := false
+@export var falling := false
+@export var sneaking := false:
+	set(value):
+		sneaking = value
+		if sneaking:
+			sprinting = false
+			walking = false
+@export var sprinting := false:
+	set(value):
+		sprinting = value
+		if sprinting:
+			sneaking = false
+			walking = false
+			standing = false
+@export var walking := true:
+	set(value):
+		walking = value
+		if walking:
+			sneaking = false
+			sprinting = false
+			standing = false
+@export var standing := true:
+	set(value):
+		standing = value
+		if standing:
+			sprinting = false
+			walking = false
+@export var flying := false
+
+var loaded := false
+var is_new_to_save := false
 
 @export var vertical_look: float = 0:
 	set(value):
@@ -50,15 +74,16 @@ var is_new_to_save = false
 		if body_node:
 			body_node.rotation.y = deg_to_rad(value)
 
-@export var player_name: String = ""
+@export var player_name := ""
 
 @onready var body_node: Node3D = $Body
 @onready var camera: Camera3D = %Camera3D
+@onready var camera_attributes: CameraAttributesPractical = camera.attributes
 @onready var spring_arm: SpringArm3D = %SpringArm3D
 @onready var voxel_viewer: VoxelViewer = %VoxelViewer
 @onready var collider: CollisionShape3D = $BodyCollider
 @onready var sneaking_collider_generator: Node3D = $SneakingColliderGenerator
-@onready var player_area: AABB = AABB(Vector3.ZERO, collider.shape.size)
+@onready var player_area := AABB(Vector3.ZERO, collider.shape.size)
 
 
 func _enter_tree() -> void:
@@ -91,7 +116,7 @@ func _ready() -> void:
 	set_physics_process(is_multiplayer_authority())
 	set_process_input(is_multiplayer_authority())
 	if is_multiplayer_authority():
-		camera.fov = Settings.fov
+		camera.fov = Settings.settings.video.fov
 		%NameLabel.text = player_name
 		while is_new_to_save and not is_on_floor():
 			await TickEngine.ticked
@@ -114,7 +139,7 @@ func _process(delta: float) -> void:
 	if Game.is_paused:
 		speed = 0
 		sprinting = false
-		sneaking = false
+		sneaking = false if not Settings.settings.controls.toggle_sneak else sneaking
 		jumping = false
 		return
 	
@@ -151,19 +176,18 @@ func _process(delta: float) -> void:
 		speed_modifier *= sprint_speed_modifier
 	elif sneaking:
 		speed_modifier *= sneak_speed_modifier
-	else:
-		walking = true
 	speed = walk_speed * speed_modifier
 	
 	if velocity == Vector3.ZERO:
-		walking = false
 		standing = true
-		sprinting = false
 	
 	var forward_velocity: float = velocity.rotated(Vector3.UP, deg_to_rad(-horizontal_look)).x
 
 	if forward_velocity <= sprint_stop_threshold:
 		sprinting = false
+	else:
+		if not sprinting and not sneaking:
+			sprinting = sprint_input
 	
 	update_sprint_fov()
 	update_sneak_eye_level()
@@ -172,9 +196,13 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not (Game.is_paused and falling): # removed "and falling" once block drag is properly implmeneted
+	if not Game.is_paused:
 		input_velocity.x = input_direction.x * speed
 		input_velocity.z = input_direction.z * speed
+	else:
+		# TODO: preserve velocity
+		input_velocity.x = 0
+		input_velocity.z = 0
 	if falling:
 		external_velocity += Settings.gravity_axis * Settings.gravity_constant * delta
 	elif jumping: # (and not falling)
@@ -195,7 +223,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-func _input(event) -> void:
+func _input(event: InputEvent) -> void:
 	if Game.is_paused:
 		return
 	
@@ -203,16 +231,20 @@ func _input(event) -> void:
 		jumping = event.is_pressed()
 		return
 		
-	if event.is_action("sneak"):
-		sneaking = event.is_pressed()
-		sprinting = false if sneaking else sprinting
-		walking = false if sneaking else walking
+	if event.is_action_pressed("sneak"):
+		sneaking = not sneaking if Settings.settings.controls.toggle_sneak else true
+		return
+	
+	if event.is_action_released("sneak"):
+		sneaking = sneaking if Settings.settings.controls.toggle_sneak else false
 		return
 	
 	if event.is_action_pressed("sprint"):
-		sprinting = true
-		sneaking = false
-		walking = false
+		sprint_input = not sprint_input if Settings.settings.controls.toggle_sprint else true
+		return
+	
+	if event.is_action_released("sprint"):
+		sprint_input = sprint_input if Settings.settings.controls.toggle_sprint else false
 		return
 	
 	if event.is_action_pressed("camera_mode"):
@@ -231,7 +263,7 @@ func _input(event) -> void:
 
 func look_around(relative_motion: Vector2):
 	vertical_look = rad_to_deg(spring_arm.global_rotation.x)
-	var angle_change: Vector2 = -relative_motion * Settings.mouse_sensitivity * Settings.mouse_sensitivity_coefficient
+	var angle_change: Vector2 = -relative_motion * Settings.settings.controls.mouse_sensitivity * Settings.settings.controls.mouse_sensitivity_coefficient
 	horizontal_look += angle_change.x
 	if abs(angle_change.y + vertical_look) > 89:
 		return
@@ -245,7 +277,7 @@ func get_looking_raycast_result() -> VoxelRaycastResult:
 
 
 func update_sprint_fov() -> void:
-	var new_fov: float = sprint_fov if sprinting else Settings.fov
+	var new_fov: float = sprint_fov if sprinting else Settings.settings.video.fov
 	if new_fov == camera.fov:
 		return
 	Game.do_tween(camera, "fov", new_fov, fov_change_time, create_tween())
@@ -256,6 +288,7 @@ func update_sneak_eye_level() -> void:
 
 
 # source: Garbaj: "Fixing Jittery Movement In Godot" (https://www.youtube.com/watch?v=pqrD3B75yKo)
+# future: look at: https://docs.godotengine.org/en/stable/tutorials/physics/interpolation/using_physics_interpolation.html
 func smooth_player_movement(delta: float) -> void:
 	var fps: float = Engine.get_frames_per_second()
 	if fps > Settings.physics_ticks_per_second:	
@@ -285,7 +318,7 @@ func load_save() -> void:
 
 
 func get_save_data() -> Dictionary:
-	var save_data: Dictionary = {}
+	var save_data := {}
 	for key in SaveEngine.PLAYER_SAVE_KEYS:
 		save_data[key] = get(key)
 	return save_data
@@ -297,5 +330,5 @@ func send_save_data() -> void:
 	SaveEngine.save_data[player_name] = get_save_data()
  
 
-func _on_save_loaded():
+func _on_save_loaded() -> void:
 	load_save()
