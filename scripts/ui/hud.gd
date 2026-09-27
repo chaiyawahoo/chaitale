@@ -19,14 +19,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if not $Debug.visible:
-		return
-	fps_label.text = str(Engine.get_frames_per_second())
-	pointer.visible = not Game.is_paused
-	if not Game.player:
-		return
-	var position_string_format: String = "x: %.3f y: %.3f z: %.3f"
-	position_label.text = position_string_format % [Game.player.position.x, Game.player.position.y - Game.player.player_area.size.y / 2, Game.player.position.z]
+	_update_debug()
 
 
 func _input(event: InputEvent) -> void:
@@ -55,6 +48,17 @@ func _input(event: InputEvent) -> void:
 
 func _on_save_loaded() -> void:
 	load_save()
+
+
+func _update_debug() -> void:
+	if not $Debug.visible:
+		return
+	fps_label.text = str(Engine.get_frames_per_second())
+	pointer.visible = not Game.is_paused
+	if not Game.player:
+		return
+	var position_string_format := "x: %.3f y: %.3f z: %.3f"
+	position_label.text = position_string_format % [Game.player.position.x, Game.player.position.y - Game.player.player_area.size.y / 2, Game.player.position.z]
 
 
 func select_item(index: int) -> void:
@@ -86,7 +90,7 @@ func load_save() -> void:
 
 
 func send_save_data() -> void:
-	var save_data: Dictionary = {
+	var save_data := {
 		hotbar_index = current_hotbar_index
 	}
 	SaveEngine.save_data.hud = save_data

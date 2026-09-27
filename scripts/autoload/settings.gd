@@ -54,12 +54,12 @@ func _ready() -> void:
 	update_settings()
 
 
-func load_settings() -> void:
-	var config: ConfigFile = ConfigFile.new()
+func load_settings() -> Error:
+	var config := ConfigFile.new()
 	var error: Error = config.load("user://settings.cfg")
 
 	if error != OK:
-		return
+		return error
 	
 	for section in config.get_sections():
 		for key in config.get_section_keys(section):
@@ -67,10 +67,12 @@ func load_settings() -> void:
 
 	update_settings()
 	save_settings()
+	
+	return OK
 
 
 func save_settings() -> void:
-	var config: ConfigFile = ConfigFile.new()
+	var config := ConfigFile.new()
 
 	for section in settings:
 		for key in settings[section]:
@@ -78,8 +80,9 @@ func save_settings() -> void:
 
 	config.save("user://settings.cfg")
 
+
 func update_settings() -> void:
-	var viewport_rid = get_viewport().get_viewport_rid()
+	var viewport_rid: RID = get_viewport().get_viewport_rid()
 	get_viewport().get_window().mode = settings.video.window_mode
 	DisplayServer.window_set_vsync_mode(settings.video.vsync_mode)
 	Engine.max_fps = settings.video.max_fps if settings.video.cap_fps else 0

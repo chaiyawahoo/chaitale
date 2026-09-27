@@ -8,10 +8,10 @@ signal connection_refused
 
 const PORT: int = 1004
 const MAX_PLAYERS: int = 8
-const DEFAULT_SERVER_ADDRESS: String = "127.0.0.1"
+const DEFAULT_SERVER_ADDRESS := "127.0.0.1"
 
-var player_info: Dictionary = {name = ""}
-var players: Dictionary = {} # id: player_info
+var player_info := {name = ""}
+var players := {} # id: player_info
 
 
 func _ready() -> void:
@@ -22,8 +22,8 @@ func _ready() -> void:
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
-func create_server(is_offline: bool = true) -> Error:
-	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+func create_server(is_offline := true) -> Error:
+	var peer := ENetMultiplayerPeer.new()
 	var error: Error = peer.create_server(PORT, MAX_PLAYERS)
 	if error:
 		return error
@@ -33,9 +33,9 @@ func create_server(is_offline: bool = true) -> Error:
 	return OK
 
 
-func join_server(ip: String = "") -> Error:
+func join_server(ip := "") -> Error:
 	ip = DEFAULT_SERVER_ADDRESS if ip == "" else ip
-	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+	var peer := ENetMultiplayerPeer.new()
 	var error: Error = peer.create_client(ip, PORT)
 	if error:
 		return error

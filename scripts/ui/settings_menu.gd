@@ -7,6 +7,10 @@ var unapplied_settings: Dictionary = {
 		controls = {},
 		gameplay = {},
 	}
+var dirty := false:
+	set(value):
+		dirty = value
+		_refresh()
 
 @onready var video_settings: Dictionary = Settings.settings.video
 @onready var graphics_settings: Dictionary = Settings.settings.graphics
@@ -16,7 +20,6 @@ var unapplied_settings: Dictionary = {
 func _enter_tree() -> void:
 	%BackButton.pressed.connect(back)
 	%ApplyButton.pressed.connect(apply_changes)
-	%ApplyCloseButton.pressed.connect(apply_changes.bind(true))
 
 	%WindowMode.item_selected.connect(update_window_mode.unbind(1))
 	%FovSlider.value_changed.connect(update_fov)
@@ -87,6 +90,8 @@ func _ready() -> void:
 	%SensitivitySlider.value = controls_settings.mouse_sensitivity
 	%SensitivityInput.text = "%.3f" % controls_settings.mouse_sensitivity
 	%InvertScroll.button_pressed = controls_settings.invert_scroll
+	
+	dirty = false
 
 
 func _input(event: InputEvent) -> void:
@@ -95,21 +100,27 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
+func _refresh() -> void:
+	%ApplyButton.disabled = not dirty
+
+
 func update_window_mode() -> void:
-	var selected = %WindowMode.get_selected_id()
+	var selected: int = %WindowMode.get_selected_id()
 
 	unapplied_settings.video.window_mode = selected
+	dirty = true
 
 
-func update_fov(value: Variant) -> void:
+func update_fov(value) -> void:
 	if not value is String:
 		value = str(value)
-	var corrected_text: String = "%d" % roundi(clampf(float(value), video_settings.fov_minimum, video_settings.fov_maximum))
-	var corrected_float: float = float(corrected_text)
+	var corrected_text := "%d" % roundi(clampf(float(value), video_settings.fov_minimum, video_settings.fov_maximum))
+	var corrected_float := float(corrected_text)
 	%FovSlider.value = corrected_float
 	%FovInput.text = corrected_text
 
 	unapplied_settings.video.fov = corrected_float
+	dirty = true
 
 
 func update_fps_cap(button_pressed: bool) -> void:
@@ -118,29 +129,34 @@ func update_fps_cap(button_pressed: bool) -> void:
 	%FramerateLabel.theme_type_variation = "" if button_pressed else "DisabledLabel"
 
 	unapplied_settings.video.cap_fps = button_pressed
+	dirty = true
 
 
-func update_max_fps(value: Variant) -> void:
+func update_max_fps(value) -> void:
 	if not value is String:
 		value = str(value)
-	var corrected_text: String = "%d" % clampi(int(value), video_settings.fps_minimum, video_settings.fps_maximum)
-	var corrected_int: float = float(corrected_text)
+	var corrected_text := "%d" % clampi(int(value), video_settings.fps_minimum, video_settings.fps_maximum)
+	var corrected_int := float(corrected_text)
 	%FpsSlider.value = corrected_int
 	%FpsInput.text = corrected_text
 
 	unapplied_settings.video.max_fps = corrected_int
+	dirty = true
 
 
 func update_vsync(button_pressed: bool) -> void:
 	unapplied_settings.video.vsync_mode = DisplayServer.VSYNC_ENABLED if button_pressed else DisplayServer.VSYNC_DISABLED
+	dirty = true
 
 
 func update_shadow_filter_quality(index: int) -> void:
 	unapplied_settings.graphics.shadow_filter_quality = index
+	dirty = true
 
 
 func update_shadow_half_precision(button_pressed: bool) -> void:
 	unapplied_settings.graphics.shadow_half_precision = button_pressed
+	dirty = true
 
 
 func update_ssao_quality(index: int) -> void:
@@ -149,21 +165,24 @@ func update_ssao_quality(index: int) -> void:
 	%AdaptiveAOSlider.editable = index == 4
 
 	unapplied_settings.graphics.ssao_quality = index
+	dirty = true
 
 
-func update_ssao_adaptive_target(value: Variant) -> void:
+func update_ssao_adaptive_target(value) -> void:
 	if not value is String:
 		value = str(value)
-	var corrected_text: String = "%.3f" % clampf(float(value), 0, 1)
-	var corrected_float: float = float(corrected_text)
+	var corrected_text := "%.3f" % clampf(float(value), 0, 1)
+	var corrected_float := float(corrected_text)
 	%AdaptiveAOInput.text = corrected_text
 	%AdaptiveAOSlider.value = corrected_float
 
 	unapplied_settings.graphics.ssao_adaptive_target = corrected_float
+	dirty = true
 
 
 func update_ssao_half_size(button_pressed: bool) -> void:
 	unapplied_settings.graphics.ssao_half_size = button_pressed
+	dirty = true
 
 
 func update_ssil_quality(index: int) -> void:
@@ -172,52 +191,61 @@ func update_ssil_quality(index: int) -> void:
 	%AdaptiveILSlider.editable = index == 4
 
 	unapplied_settings.graphics.ssil_quality = index
+	dirty = true
 
 
-func update_ssil_adaptive_target(value: Variant) -> void:
+func update_ssil_adaptive_target(value) -> void:
 	if not value is String:
 		value = str(value)
-	var corrected_text: String = "%.3f" % clampf(float(value), 0, 1)
-	var corrected_float: float = float(corrected_text)
+	var corrected_text := "%.3f" % clampf(float(value), 0, 1)
+	var corrected_float := float(corrected_text)
 	%AdaptiveILInput.text = corrected_text
 	%AdaptiveILSlider.value = corrected_float
 
 	unapplied_settings.graphics.ssil_adaptive_target = corrected_float
+	dirty = true
 
 
 func update_ssil_half_size(button_pressed: bool) -> void:
 	unapplied_settings.graphics.ssil_half_size = button_pressed
+	dirty = true
 
 
 func update_msaa_samples(index: int) -> void:
 	unapplied_settings.graphics.msaa_samples = index
+	dirty = true
 
 
 func update_ssaa(index: int) -> void:
 	unapplied_settings.graphics.ssaa = index
+	dirty = true
 
 
 func update_use_taa(button_pressed: bool) -> void:
 	unapplied_settings.graphics.use_taa = button_pressed
+	dirty = true
 
 
 func update_use_debanding(button_pressed: bool) -> void:
 	unapplied_settings.graphics.use_debanding = button_pressed
+	dirty = true
 
 
-func update_sensitivity(value: Variant) -> void:
+func update_sensitivity(value) -> void:
 	if not value is String:
 		value = str(value)
-	var corrected_text: String = "%.3f" % clampf(float(value), 0, 10)
-	var corrected_float: float = float(corrected_text)
+	var corrected_text := "%.3f" % clampf(float(value), 0, 10)
+	var corrected_float := float(corrected_text)
 	%SensitivitySlider.value = corrected_float
 	%SensitivityInput.text = corrected_text
 
 	unapplied_settings.controls.mouse_sensitivity = corrected_float
+	dirty = true
 
 
 func update_invert_scroll(button_pressed: bool) -> void:
 	unapplied_settings.controls.invert_scroll = button_pressed
+	dirty = true
 
 
 func reset_unapplied_settings() -> void:
@@ -228,6 +256,7 @@ func reset_unapplied_settings() -> void:
 		controls = {},
 		gameplay = {},
 	}
+	dirty = false
 
 
 func back() -> void:
@@ -239,7 +268,7 @@ func back() -> void:
 	queue_free()
 
 
-func apply_changes(close: bool = false) -> void:
+func apply_changes() -> void:
 	update_window_mode()
 	update_sensitivity(%SensitivityInput.text)
 	update_fov(%FovInput.text)
@@ -252,5 +281,3 @@ func apply_changes(close: bool = false) -> void:
 	Settings.update_settings()
 	Settings.save_settings()
 	reset_unapplied_settings()
-	if close:
-		back()

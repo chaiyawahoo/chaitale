@@ -18,7 +18,7 @@ func handle_process() -> void:
 		place_voxel(current_voxel_id)
 
 
-func handle_input(event: InputEvent):
+func handle_input(event: InputEvent) -> void:
 	if event.is_action("left_click"):
 		if not event.is_pressed():
 			breaking = false
@@ -54,7 +54,7 @@ func add_voxel_at(voxel_position: Vector3i, voxel_id: int = 1) -> void:
 	Game.voxel_tool.set_voxel(voxel_position, voxel_id)
 
 
-func break_voxel(forced: bool = false) -> void:
+func break_voxel(forced := false) -> void:
 	if break_voxel_timer and not forced:
 		if break_voxel_timer.time_left > 0:
 			return
@@ -68,7 +68,7 @@ func break_voxel(forced: bool = false) -> void:
 	break_voxel_timer = get_tree().create_timer(Settings.break_voxel_hold_delay)
 
 
-func place_voxel(voxel_id: int = 1, forced: bool = false) -> void:
+func place_voxel(voxel_id: int = 1, forced := false) -> void:
 	if voxel_id > Game.voxel_types or voxel_id <= 0:
 		return
 	if place_voxel_timer and not forced:

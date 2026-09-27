@@ -50,7 +50,7 @@ var is_new_to_save = false
 		if body_node:
 			body_node.rotation.y = deg_to_rad(value)
 
-@export var player_name: String = ""
+@export var player_name := ""
 
 @onready var body_node: Node3D = $Body
 @onready var camera: Camera3D = %Camera3D
@@ -59,7 +59,7 @@ var is_new_to_save = false
 @onready var voxel_viewer: VoxelViewer = %VoxelViewer
 @onready var collider: CollisionShape3D = $BodyCollider
 @onready var sneaking_collider_generator: Node3D = $SneakingColliderGenerator
-@onready var player_area: AABB = AABB(Vector3.ZERO, collider.shape.size)
+@onready var player_area := AABB(Vector3.ZERO, collider.shape.size)
 
 
 func _enter_tree() -> void:
@@ -196,7 +196,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-func _input(event) -> void:
+func _input(event: InputEvent) -> void:
 	if Game.is_paused:
 		return
 	
@@ -257,6 +257,7 @@ func update_sneak_eye_level() -> void:
 
 
 # source: Garbaj: "Fixing Jittery Movement In Godot" (https://www.youtube.com/watch?v=pqrD3B75yKo)
+# future: look at: https://docs.godotengine.org/en/stable/tutorials/physics/interpolation/using_physics_interpolation.html
 func smooth_player_movement(delta: float) -> void:
 	var fps: float = Engine.get_frames_per_second()
 	if fps > Settings.physics_ticks_per_second:	
@@ -286,7 +287,7 @@ func load_save() -> void:
 
 
 func get_save_data() -> Dictionary:
-	var save_data: Dictionary = {}
+	var save_data := {}
 	for key in SaveEngine.PLAYER_SAVE_KEYS:
 		save_data[key] = get(key)
 	return save_data
@@ -298,5 +299,5 @@ func send_save_data() -> void:
 	SaveEngine.save_data[player_name] = get_save_data()
  
 
-func _on_save_loaded():
+func _on_save_loaded() -> void:
 	load_save()
