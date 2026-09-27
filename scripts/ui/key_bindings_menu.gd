@@ -48,7 +48,7 @@ func _input(event: InputEvent) -> void:
 		if event is InputEventMouseButton:
 			event.double_click = false
 		pending_rebinds[rebind_action_name] = event
-		action_buttons[rebind_action_name].text = event.as_text().trim_suffix(" (Physical)").trim_suffix(" - All Devices")
+		action_buttons[rebind_action_name].text = event.as_text().trim_suffix(" - Physical")
 		revert_buttons[rebind_action_name].disabled = false
 		is_rebinding = false
 		dirtied.emit()
@@ -113,7 +113,7 @@ func get_action_event_name(action_name: String) -> String:
 	if events.is_empty():
 		return "(Unset)"
 	
-	return events[0].as_text().trim_suffix(" (Physical)").trim_suffix(" - All Devices")
+	return events[0].as_text().trim_suffix(" - Physical")
 
 
 func get_key_bindings_from_settings() -> void:

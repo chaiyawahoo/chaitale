@@ -53,7 +53,7 @@ func _on_save_loaded() -> void:
 func _update_debug() -> void:
 	if not $Debug.visible:
 		return
-	fps_label.text = str(Engine.get_frames_per_second())
+	fps_label.text = str(int(Engine.get_frames_per_second()))
 	pointer.visible = not Game.is_paused
 	if not Game.player:
 		return

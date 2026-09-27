@@ -50,12 +50,12 @@ func _bind_ui() -> void:
 	%CapFpsCheck.toggled.connect(update_fps_cap)
 	%FpsInput.text_submitted.connect(update_max_fps)
 	%FpsInput.text_changed.connect(update_max_fps)
-	%FpsInput.focus_exited.connect(update_max_fps.bind(%FpsInput.text))
+	%FpsInput.focus_exited.connect(update_max_fps)
 	%FpsSlider.value_changed.connect(update_max_fps)
 	%VsyncCheck.toggled.connect(update_vsync)
 	%FovInput.text_submitted.connect(update_fov)
 	%FovInput.text_changed.connect(update_fov)
-	%FovInput.focus_exited.connect(update_fov.bind(%FovInput.text))
+	%FovInput.focus_exited.connect(update_fov)
 	%FovSlider.value_changed.connect(update_fov)
 
 	%ShadowFilterQualityOption.item_selected.connect(update_shadow_filter_quality)
@@ -63,13 +63,13 @@ func _bind_ui() -> void:
 	%SSAOQualityCheck.item_selected.connect(update_ssao_quality)
 	%AdaptiveAOInput.text_submitted.connect(update_ssao_adaptive_target)
 	%AdaptiveAOInput.text_changed.connect(update_ssao_adaptive_target)
-	%AdaptiveAOInput.focus_exited.connect(update_ssao_adaptive_target.bind(%AdaptiveAOInput.text))
+	%AdaptiveAOInput.focus_exited.connect(update_ssao_adaptive_target)
 	%AdaptiveAOSlider.value_changed.connect(update_ssao_adaptive_target)
 	%AOHalfSizeCheck.toggled.connect(update_ssao_half_size)
 	%SSILQualityOption.item_selected.connect(update_ssil_quality)
 	%AdaptiveILInput.text_submitted.connect(update_ssil_adaptive_target)
 	%AdaptiveILInput.text_changed.connect(update_ssil_adaptive_target)
-	%AdaptiveILInput.focus_exited.connect(update_ssil_adaptive_target.bind(%AdaptiveILInput.text))
+	%AdaptiveILInput.focus_exited.connect(update_ssil_adaptive_target)
 	%AdaptiveILSlider.value_changed.connect(update_ssil_adaptive_target)
 	%ILHalfSizeCheck.toggled.connect(update_ssil_half_size)
 	%MSAASamplesOption.item_selected.connect(update_msaa_samples)
@@ -79,7 +79,7 @@ func _bind_ui() -> void:
 
 	%SensitivityInput.text_submitted.connect(update_sensitivity)
 	%SensitivityInput.text_changed.connect(update_sensitivity)
-	%SensitivityInput.focus_exited.connect(update_sensitivity.bind(%SensitivityInput.text))
+	%SensitivityInput.focus_exited.connect(update_sensitivity)
 	%SensitivitySlider.value_changed.connect(update_sensitivity)
 	%InvertScrollCheck.toggled.connect(update_invert_scroll)
 	%ToggleSprintCheck.toggled.connect(update_toggle_sprint)
@@ -139,7 +139,7 @@ func update_window_mode() -> void:
 	dirty = true
 
 
-func update_fov(value) -> void:
+func update_fov(value = null) -> void:
 	if not value:
 		value = %FovInput.text
 	if not value is String:
@@ -163,11 +163,13 @@ func update_fps_cap(button_pressed: bool) -> void:
 	dirty = true
 
 
-func update_max_fps(value) -> void:
+func update_max_fps(value = null) -> void:
+	if not value:
+		value = %FpsInput.text
 	if not value is String:
 		value = str(value)
 	var corrected_text := "%d" % clampi(int(value), video_settings.fps_minimum, video_settings.fps_maximum)
-	var corrected_int := float(corrected_text)
+	var corrected_int := int(corrected_text)
 	if get_viewport().gui_get_focus_owner() != %FpsInput:
 		%FpsInput.text = corrected_text
 	%FpsSlider.value = corrected_int
@@ -200,7 +202,9 @@ func update_ssao_quality(index: int) -> void:
 	dirty = true
 
 
-func update_ssao_adaptive_target(value) -> void:
+func update_ssao_adaptive_target(value = null) -> void:
+	if not value:
+		value = %AdaptiveAOInput.text
 	if not value is String:
 		value = str(value)
 	var corrected_text := "%.3f" % clampf(float(value), 0, 1)
@@ -227,7 +231,9 @@ func update_ssil_quality(index: int) -> void:
 	dirty = true
 
 
-func update_ssil_adaptive_target(value) -> void:
+func update_ssil_adaptive_target(value = null) -> void:
+	if not value:
+		value = %AdaptiveILInput.text
 	if not value is String:
 		value = str(value)
 	var corrected_text := "%.3f" % clampf(float(value), 0, 1)
@@ -265,7 +271,9 @@ func update_use_debanding(button_pressed: bool) -> void:
 	dirty = true
 
 
-func update_sensitivity(value) -> void:
+func update_sensitivity(value = null) -> void:
+	if not value:
+		value = %SensitivityInput.text
 	if not value is String:
 		value = str(value)
 	var corrected_text := "%.3f" % clampf(float(value), 0, 10)
