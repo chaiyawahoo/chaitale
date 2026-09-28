@@ -9,7 +9,6 @@
 script = ExtResource("1_f3cq4")
 
 [node name="VoxelTerrain" parent="." unique_id=1499313511 instance=ExtResource("2_lq421")]
-bounds = AABB(-536870900, -256, -536870900, 1073739970, 512, 1073739970)
 
 [node name="HoverCube" parent="." unique_id=1067333563 instance=ExtResource("3_pk8n6")]
 

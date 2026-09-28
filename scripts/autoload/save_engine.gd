@@ -49,10 +49,11 @@ func save_game() -> void:
 	if multiplayer.multiplayer_peer:
 		if not multiplayer.is_server():
 			return
-
+	
 	update_before_save()
-
-	terrain_save_completion_tracker = Game.terrain.save_modified_blocks()
+	
+	if Game.terrain:
+		terrain_save_completion_tracker = Game.terrain.save_modified_blocks()
 	
 	var save_file := FileAccess.open(save_format % Game.save_name, FileAccess.WRITE)
 	save_file.store_var(save_data, true)

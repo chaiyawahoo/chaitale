@@ -61,7 +61,7 @@ func break_voxel(forced := false) -> void:
 	var result: VoxelRaycastResult = Game.camera_raycast_result
 	if not result:
 		return
-	if result.position.y == 0:
+	if result.position.y == -256: # harcoded for now but get voxel terrain min height
 		print("Cannot break bedrock!")
 		return
 	remove_voxel_at.rpc_id(1, result.position)

@@ -43,7 +43,7 @@ func _spawn(peer_id: int) -> Player:
 	var new_player: Player = player_scene.instantiate()
 	new_player.name = player_node_format % peer_id
 	new_player.set_multiplayer_authority(peer_id)
-	new_player.position = Vector3(0.5, 128, 0.5)
+	new_player.position = Vector3(0.5, 0, 0.5)
 	new_player.add_to_group("players")
 	return new_player
 

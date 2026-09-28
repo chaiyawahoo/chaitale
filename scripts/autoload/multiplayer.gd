@@ -22,14 +22,14 @@ func _ready() -> void:
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
-func create_server(is_offline := true) -> Error:
+func create_server() -> Error:
 	var peer := ENetMultiplayerPeer.new()
 	var error: Error = peer.create_server(PORT, MAX_PLAYERS)
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer
 	register_player(1, player_info)
-	peer.refuse_new_connections = is_offline
+	peer.refuse_new_connections = Game.is_offline
 	return OK
 
 

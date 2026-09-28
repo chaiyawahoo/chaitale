@@ -17,6 +17,7 @@ var is_paused := false:
 			return UI.pause_menu.visible
 		return false
 var is_server := false
+var is_offline := true
 
 
 func _process(_delta: float) -> void:

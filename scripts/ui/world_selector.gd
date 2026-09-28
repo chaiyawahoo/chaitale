@@ -41,23 +41,26 @@ func _on_button_back() -> void:
 
 
 func _on_button_create() -> void:
+	Game.is_offline = true # should separate creating world and loading into world... should also allow hosting after world is loaded
 	create_world()
 
 
 func _on_button_load() -> void:
+	Game.is_offline = true
 	load_world()
 
 
 func _on_button_host() -> void:
-	load_world(false)
+	Game.is_offline = false
+	load_world()
 
 
 func instanitate_world_in_list(directory_name: String) -> void:
 	var world_selection: WorldSelection = world_selection_scene.instantiate()
 	world_selection.name = directory_name
 	world_selection.save_name = directory_name
-	if not FileAccess.file_exists("./saves/%s/terrain.sql" % directory_name):
-		return
+	#if not FileAccess.file_exists("./saves/%s/terrain.sql" % directory_name):
+		#return
 	if FileAccess.file_exists("./saves/%s/seed.txt" % directory_name):
 		var seed_file := FileAccess.open("./saves/%s/seed.txt" % directory_name, FileAccess.READ)
 		world_selection.world_seed = int(str_to_var(seed_file.get_as_text()))
@@ -77,6 +80,7 @@ func create_world() -> void:
 	directory_access.make_dir("%d" % random_seed)
 	var seed_file := FileAccess.open("./saves/%d/seed.txt" % random_seed, FileAccess.WRITE)
 	seed_file.store_string("%d" % random_seed)
+	seed_file.close()
 	Game.save_name = "%d" % random_seed
 	Game.world_seed = random_seed
 	SaveEngine.is_new_save = true
@@ -84,14 +88,17 @@ func create_world() -> void:
 	Main.change_level()
 
 
-func load_world(is_offline := true) -> void:
-	load_specific_world(world_button_group.get_pressed_button().get_parent(), is_offline)
+func load_world() -> void:
+	if not world_button_group.get_pressed_button():
+		# TODO: throw error or warning? or disable load/host when no level selected
+		return
+	load_specific_world(world_button_group.get_pressed_button().get_parent())
 
 
-func load_specific_world(world_selection: WorldSelection, is_offline := true) -> void:
+func load_specific_world(world_selection: WorldSelection) -> void:
 	Game.save_name = world_selection.save_name
 	Game.world_seed = world_selection.world_seed
-	Multiplayer.create_server(is_offline)
+	Multiplayer.create_server()
 	Main.change_level()
 
 func back() -> void:

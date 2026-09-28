@@ -33,6 +33,7 @@ func _change_level(scene: PackedScene) -> void:
 func _close_level() -> void:
 	_remove_level()
 	Multiplayer.end_multiplayer_session()
+	Game.is_offline = true
 	UI.main_menu.visible = true
 	UI.hud.visible = false
 	UI.pause_menu.visible = false

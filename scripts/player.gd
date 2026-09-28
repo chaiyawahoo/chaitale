@@ -111,7 +111,7 @@ func _ready() -> void:
 	set_process_input(false)
 	if not Game.terrain.loaded:
 		Game.terrain.wait_for_mesh_under_player(self, get_multiplayer_authority())
-	await Game.terrain.meshed
+		await Game.terrain.meshed
 	set_process(is_multiplayer_authority())
 	set_physics_process(is_multiplayer_authority())
 	set_process_input(is_multiplayer_authority())
@@ -291,7 +291,7 @@ func update_sneak_eye_level() -> void:
 # future: look at: https://docs.godotengine.org/en/stable/tutorials/physics/interpolation/using_physics_interpolation.html
 func smooth_player_movement(delta: float) -> void:
 	var fps: float = Engine.get_frames_per_second()
-	if fps > Settings.physics_ticks_per_second:	
+	if fps > Settings.physics_ticks_per_second:
 		var lerp_interval: Vector3 = input_direction / fps
 		var lerp_position: Vector3 = global_position + lerp_interval
 		body_node.top_level = true
